@@ -1,13 +1,11 @@
 import Ball from "./Objects/Ball";
 import Breaker from "./Objects/Breaker";
 
-import withResistance from "./Behaviours/withResistance";
-import withAcceleration from "./Behaviours/withAcceleration";
-
 const CANVAS_WIDTH = window.innerWidth;
 const CANVAS_HEIGHT = window.innerHeight;
 
 const canvas = document.querySelector("canvas");
+
 canvas.width = CANVAS_WIDTH;
 canvas.height = CANVAS_HEIGHT;
 
@@ -21,8 +19,8 @@ const ball = new Ball(
     radius: 10,
     fillColor: "black",
     initialSpeed: {
-      x: 10,
-      y: -10,
+      x: 5,
+      y: -5,
     },
   },
   {
@@ -32,7 +30,7 @@ const ball = new Ball(
   }
 );
 
-const breaker = new (withResistance(withAcceleration(Breaker)))(
+const breaker = new Breaker(
   {
     type: "rect",
     x: CANVAS_WIDTH / 2 - 120,
@@ -40,17 +38,14 @@ const breaker = new (withResistance(withAcceleration(Breaker)))(
     width: 120,
     height: 15,
     fillColor: "crimson",
-    initialSpeed: 20,
-    acceleration: {
-      x: 10,
-      maxX: 20,
-    },
+    initialSpeed: 0,
+    maxSpeed: 15,
   },
   {
     ctx,
     width: CANVAS_WIDTH,
-		height: CANVAS_HEIGHT,
-		surfaceFriction: 1.2
+    height: CANVAS_HEIGHT,
+    surfaceFriction: 1.2,
   }
 );
 
@@ -62,15 +57,21 @@ function animate() {
   ball.update();
 
   breaker.move();
-	breaker.update();
-	console.log(breaker.dx)
+  breaker.update();
+  console.log(breaker.dx);
 }
 
 window.addEventListener("keydown", function (e) {
   if (e.which === 37) {
-    breaker.accelerate(-1);
+    breaker.goLeft();
   } else if (e.which === 39) {
-    breaker.accelerate(1);
+    breaker.goRight();
+  }
+});
+
+window.addEventListener("keyup", function (e) {
+  if (e.which === 37 || e.which === 39) {
+    breaker.stop();
   }
 });
 

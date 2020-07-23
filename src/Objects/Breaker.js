@@ -8,6 +8,7 @@ class Breaker {
       height,
       fillColor,
       initialSpeed,
+      maxSpeed,
       tyreRadius,
       ...options
     },
@@ -19,6 +20,8 @@ class Breaker {
     this.width = width;
     this.height = height;
     this.fillColor = fillColor;
+    this.u = initialSpeed;
+    this.v = maxSpeed;
     this.dx = initialSpeed;
     this.options = options;
     this.env = env;
@@ -45,6 +48,18 @@ class Breaker {
   move() {
     this.x += this.dx;
     this.validatePosition();
+  }
+
+  goLeft() {
+    this.dx = -this.v;
+  }
+
+  goRight() {
+    this.dx = this.v;
+  }
+
+  stop() {
+    this.dx = this.u;
   }
 
   draw() {

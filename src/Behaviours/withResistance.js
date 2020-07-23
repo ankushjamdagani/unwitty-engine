@@ -12,29 +12,21 @@ const withResistance = (ObjectModel) => {
   };
 
   const applyFluidResistance = function () {
-    if (this.dy > 0) {
-      this.dy -= this.env.fluidFriction;
-    } else if (this.dy < 0) {
-      this.dy += this.env.fluidFriction;
+    if (this.dy !== 0) {
+      this.dy *= this.env.fluidFriction;
     }
-    if (this.dx > 0) {
-      this.dx -= this.env.fluidFriction;
-    } else if (this.dx < 0) {
-      this.dx += this.env.fluidFriction;
+    if (this.dx !== 0) {
+      this.dx *= this.env.fluidFriction;
     }
   };
 
   const applySurfaceFriction = function () {
     if (this.isTouchingBorder()) {
-      if (this.dx > 0) {
-        this.dx -= this.env.surfaceFriction;
-      } else if (this.dx < 0) {
-        this.dx += this.env.surfaceFriction;
+      if (this.dx !== 0) {
+        this.dx *= this.env.surfaceFriction;
       }
-      if (this.dy > 0) {
-        this.dy -= this.env.surfaceFriction;
-      } else if (this.dy < 0) {
-        this.dy += this.env.surfaceFriction;
+      if (this.dy !== 0) {
+        this.dy *= this.env.surfaceFriction;
       }
     }
   };
