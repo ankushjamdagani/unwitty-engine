@@ -62,6 +62,8 @@ class Breaker {
     this.dx = this.u;
   }
 
+  start() {}
+
   draw() {
     const { x, y, width, height, fillColor } = this;
 

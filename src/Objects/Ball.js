@@ -1,6 +1,6 @@
 class Ball {
   constructor(
-    { type, x, y, radius, fillColor, initialSpeed, ...options },
+    { type, x, y, radius, fillColor, initialSpeed, maxSpeed, ...options },
     env
   ) {
     this.type = type;
@@ -8,6 +8,10 @@ class Ball {
     this.y = y;
     this.radius = radius;
     this.fillColor = fillColor;
+    this.ux = initialSpeed.x;
+    this.uy = initialSpeed.y;
+    this.vx = maxSpeed.x;
+    this.vy = maxSpeed.y;
     this.dx = initialSpeed.x;
     this.dy = initialSpeed.y;
     this.options = options;
@@ -48,9 +52,14 @@ class Ball {
     this.validatePosition();
   }
 
+  start() {
+    this.dx = this.vx;
+    this.dy = this.vy;
+  }
+
   stop() {
-    this.dx = 0;
-    this.dy = 0;
+    this.dx = this.ux;
+    this.dy = this.uy;
   }
 
   draw() {
