@@ -85,7 +85,8 @@ class PlaygroundScene {
     );
     if (collisionCoords) {
       this.ball.dy = -this.ball.dy;
-      console.log(collisionCoords);
+      const currScore = this.envApi.getScore();
+      this.envApi.changeScore(currScore + 1);
     } else if (this.ball.y > this.breaker.y) {
       this.stop();
       this.envApi.changeState(GAME_STATES.END);

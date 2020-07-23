@@ -53,7 +53,7 @@ class HomeScene {
     this.ctx.fillText(
       "Brick Breaker",
       this.width / 2 - 200,
-      this.height / 2 + 10
+      this.height / 2 - 10
     );
 
     this.ctx.fillStyle = "#000";
@@ -64,7 +64,7 @@ class HomeScene {
     this.ctx.fillStyle = "rgba(0,0,0,1)";
     this.ctx.font = "20px monospace";
     this.ctx.fillText(
-      "Press SPACE to play.",
+      "Press SPACE to start.",
       this.width / 2 - 195,
       this.height / 2 + 45
     );
