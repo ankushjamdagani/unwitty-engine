@@ -6,11 +6,13 @@ class ScoreBoardScene {
     this.envApi = envApi;
   }
 
-  start() {
-    this.envApi.changeScore(0);
-  }
+  start() {}
 
   stop() {}
+
+  reset() {
+    this.envApi.changeScore(0);
+  }
 
   update() {
     this.ctx.fillStyle = "rgba(0,0,0,.1)";

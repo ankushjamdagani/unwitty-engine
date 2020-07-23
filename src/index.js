@@ -3,6 +3,7 @@ import { GAME_STATES } from "./constants";
 import HomeScene from "./scenes/Home";
 import PlaygroundScene from "./scenes/Playground";
 import ScoreBoardScene from "./scenes/ScoreBoard";
+import ResultsScene from "./scenes/Results";
 
 const canvas = document.querySelector("canvas");
 canvas.width = window.innerWidth;
@@ -26,8 +27,10 @@ function changeState(state) {
   if (gameState === GAME_STATES.HOME) {
     homeSceneInstance.start();
   } else if (gameState === GAME_STATES.PLAY) {
-    playgroundSceneInstance.start();
-    scoreBoardSceneInstance.start();
+    playgroundSceneInstance.reset();
+    scoreBoardSceneInstance.reset();
+  } else if (gameState === GAME_STATES.END) {
+    resultsSceneInstance.start();
   }
 }
 
@@ -58,14 +61,25 @@ const scoreBoardSceneInstance = new ScoreBoardScene({
   envApi: ENV_API,
 });
 
+const resultsSceneInstance = new ResultsScene({
+  ctx,
+  width: canvas.width,
+  height: canvas.height,
+  envApi: ENV_API,
+});
+
 function startGame() {
   requestAnimationFrame(startGame);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   playgroundSceneInstance.update();
-  scoreBoardSceneInstance.update();
+  console.log(gameState);
   if (gameState === GAME_STATES.HOME) {
     homeSceneInstance.update();
+  } else if (gameState === GAME_STATES.PLAY) {
+    scoreBoardSceneInstance.update();
+  } else if (gameState === GAME_STATES.END) {
+    resultsSceneInstance.update();
   }
 }
 
@@ -74,6 +88,7 @@ window.GameAPI = {
     homeSceneInstance,
     playgroundSceneInstance,
     scoreBoardSceneInstance,
+    resultsSceneInstance,
   },
 };
 

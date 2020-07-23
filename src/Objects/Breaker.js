@@ -1,6 +1,6 @@
 class Breaker {
-  constructor(
-    {
+  constructor(initialConfig, env) {
+    const {
       type,
       x,
       y,
@@ -11,9 +11,9 @@ class Breaker {
       maxSpeed,
       tyreRadius,
       ...options
-    },
-    env
-  ) {
+    } = initialConfig;
+
+    this.initialConfig = initialConfig;
     this.type = type;
     this.x = x;
     this.y = y;
@@ -58,11 +58,16 @@ class Breaker {
     this.dx = this.v;
   }
 
+  start() {}
+
   stop() {
     this.dx = this.u;
   }
 
-  start() {}
+  reset() {
+    this.x = this.initialConfig.x;
+    this.y = this.initialConfig.y;
+  }
 
   draw() {
     const { x, y, width, height, fillColor } = this;

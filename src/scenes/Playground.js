@@ -107,6 +107,13 @@ class PlaygroundScene {
     this.ball.stop();
     this.breaker.stop();
   }
+
+  reset() {
+    this.ball.reset();
+    this.breaker.reset();
+
+    this.start();
+  }
 }
 
 export default PlaygroundScene;

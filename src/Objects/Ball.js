@@ -1,8 +1,17 @@
 class Ball {
-  constructor(
-    { type, x, y, radius, fillColor, initialSpeed, maxSpeed, ...options },
-    env
-  ) {
+  constructor(initialConfig, env) {
+    const {
+      type,
+      x,
+      y,
+      radius,
+      fillColor,
+      initialSpeed,
+      maxSpeed,
+      ...options
+    } = initialConfig;
+
+    this.initialConfig = initialConfig;
     this.type = type;
     this.x = x;
     this.y = y;
@@ -60,6 +69,11 @@ class Ball {
   stop() {
     this.dx = this.ux;
     this.dy = this.uy;
+  }
+
+  reset() {
+    this.x = this.initialConfig.x;
+    this.y = this.initialConfig.y;
   }
 
   draw() {
