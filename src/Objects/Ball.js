@@ -48,6 +48,11 @@ class Ball {
     this.validatePosition();
   }
 
+  stop() {
+    this.dx = 0;
+    this.dy = 0;
+  }
+
   draw() {
     const { x, y, radius, fillColor } = this;
 

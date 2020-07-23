@@ -1,6 +1,8 @@
 import Ball from "./Objects/Ball";
 import Breaker from "./Objects/Breaker";
 
+import CollisionHandler from "./Observers/CollisionHandler";
+
 const CANVAS_WIDTH = window.innerWidth;
 const CANVAS_HEIGHT = window.innerHeight;
 
@@ -50,26 +52,41 @@ const breaker = new Breaker(
 
 function animate() {
   requestAnimationFrame(animate);
+  const collisionCoords = CollisionHandler.isCircleCollidingRect(
+    ball,
+    breaker,
+    4
+  );
+  if (collisionCoords) {
+    ball.dy = -ball.dy;
+    console.log(collisionCoords);
+  } else if (ball.y > breaker.y) {
+    ball.stop();
+    breaker.stop();
+  }
+
   ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
   ball.update();
   breaker.update();
 }
 
-window.addEventListener("keydown", function (e) {
-  if (e.which === 37) {
-    breaker.goLeft();
-  } else if (e.which === 39) {
-    breaker.goRight();
-  }
-});
+function bindEvents() {
+  window.addEventListener("keydown", function (e) {
+    if (e.which === 37) {
+      breaker.goLeft();
+    } else if (e.which === 39) {
+      breaker.goRight();
+    }
+  });
+  window.addEventListener("keyup", function (e) {
+    if (e.which === 37 || e.which === 39) {
+      breaker.stop();
+    }
+  });
+}
 
-window.addEventListener("keyup", function (e) {
-  if (e.which === 37 || e.which === 39) {
-    breaker.stop();
-  }
-});
+window.GameAPI = { Objects: { ball, breaker } };
 
-window.GameObjects = { ball, breaker };
-
+bindEvents();
 animate();
