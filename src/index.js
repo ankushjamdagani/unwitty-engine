@@ -44,7 +44,7 @@ const envInstance = {
   ctx,
   width: canvas.width,
   height: canvas.height,
-  boundary: { x: false, y: true },
+  boundary: { x: true, y: true },
   envApi: ENV_API,
 };
 
