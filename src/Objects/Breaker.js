@@ -38,10 +38,18 @@ class Breaker {
 
   validatePosition() {
     const { x, width } = this;
-    if (x <= 0) {
-      this.x = 0;
-    } else if (x + width >= this.env.width) {
-      this.x = this.env.width - width;
+    if (this.env.boundary.x) {
+      if (x <= 0) {
+        this.x = 0;
+      } else if (x + width >= this.env.width) {
+        this.x = this.env.width - width;
+      }
+    } else {
+      if (x <= 0) {
+        this.x = this.env.width - width;
+      } else if (x + width >= this.env.width) {
+        this.x = 0;
+      }
     }
   }
 

@@ -6,7 +6,7 @@ import Breaker from "../objects/Breaker";
 import CollisionHandler from "../observers/CollisionHandler";
 
 class PlaygroundScene {
-  constructor({ ctx, width, height, envApi }) {
+  constructor({ ctx, width, height, boundary, envApi }) {
     const ball = new Ball(
       {
         type: "circle",
@@ -27,6 +27,7 @@ class PlaygroundScene {
         ctx,
         width,
         height,
+        boundary,
       }
     );
 
@@ -45,9 +46,11 @@ class PlaygroundScene {
         ctx,
         width,
         height,
+        boundary,
       }
     );
 
+    this.playing = false;
     this.ball = ball;
     this.breaker = breaker;
     this.envApi = envApi;
@@ -78,18 +81,20 @@ class PlaygroundScene {
   };
 
   update() {
-    const collisionCoords = CollisionHandler.isCircleCollidingRect(
-      this.ball,
-      this.breaker,
-      4
-    );
-    if (collisionCoords) {
-      this.ball.dy = -this.ball.dy;
-      const currScore = this.envApi.getScore();
-      this.envApi.changeScore(currScore + 1);
-    } else if (this.ball.y > this.breaker.y) {
-      this.stop();
-      this.envApi.changeState(GAME_STATES.END);
+    if (this.playing) {
+      const collisionCoords = CollisionHandler.isCircleCollidingRect(
+        this.ball,
+        this.breaker,
+        4
+      );
+      if (collisionCoords) {
+        this.ball.dy = -this.ball.dy;
+        const currScore = this.envApi.getScore();
+        this.envApi.changeScore(currScore + 1);
+      } else if (this.ball.y > this.breaker.y) {
+        this.stop();
+        this.envApi.changeState(GAME_STATES.END);
+      }
     }
 
     this.ball.update();
@@ -97,18 +102,23 @@ class PlaygroundScene {
   }
 
   start() {
-    this.bindEvents();
+    this.playing = true;
     this.ball.start();
     this.breaker.start();
+
+    this.bindEvents();
   }
 
   stop() {
-    this.unBindEvents();
+    this.playing = false;
     this.ball.stop();
     this.breaker.stop();
+
+    this.unBindEvents();
   }
 
   reset() {
+    this.playing = true;
     this.ball.reset();
     this.breaker.reset();
 

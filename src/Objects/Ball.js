@@ -38,20 +38,36 @@ class Ball {
 
   validatePosition() {
     const { x, y, radius } = this;
-    if (x - radius <= 0) {
-      this.x = radius;
-      this.dx = -this.dx;
-    } else if (x + radius >= this.env.width) {
-      this.x = this.env.width - radius;
-      this.dx = -this.dx;
+    if (this.env.boundary.x) {
+      if (x - radius <= 0) {
+        this.x = radius;
+        this.dx = -this.dx;
+      } else if (x + radius >= this.env.width) {
+        this.x = this.env.width - radius;
+        this.dx = -this.dx;
+      }
+    } else {
+      if (x - radius <= 0) {
+        this.x = this.env.width - radius;
+      } else if (x + radius >= this.env.width) {
+        this.x = radius;
+      }
     }
 
-    if (y - radius <= 0) {
-      this.y = radius;
-      this.dy = -this.dy;
-    } else if (y + radius >= this.env.height) {
-      this.y = this.env.height - radius;
-      this.dy = -this.dy;
+    if (this.env.boundary.y) {
+      if (y - radius <= 0) {
+        this.y = radius;
+        this.dy = -this.dy;
+      } else if (y + radius >= this.env.height) {
+        this.y = this.env.height - radius;
+        this.dy = -this.dy;
+      }
+    } else {
+      if (y - radius <= 0) {
+        this.y = this.env.height - radius;
+      } else if (y + radius >= this.env.height) {
+        this.y = radius;
+      }
     }
   }
 

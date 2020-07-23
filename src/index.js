@@ -40,40 +40,27 @@ const ENV_API = {
   getScore,
 };
 
-const playgroundSceneInstance = new PlaygroundScene({
+const envInstance = {
   ctx,
   width: canvas.width,
   height: canvas.height,
+  boundary: { x: false, y: true },
   envApi: ENV_API,
-});
+};
 
-const homeSceneInstance = new HomeScene({
-  ctx,
-  width: canvas.width,
-  height: canvas.height,
-  envApi: ENV_API,
-});
+const playgroundSceneInstance = new PlaygroundScene(envInstance);
 
-const scoreBoardSceneInstance = new ScoreBoardScene({
-  ctx,
-  width: canvas.width,
-  height: canvas.height,
-  envApi: ENV_API,
-});
+const homeSceneInstance = new HomeScene(envInstance);
 
-const resultsSceneInstance = new ResultsScene({
-  ctx,
-  width: canvas.width,
-  height: canvas.height,
-  envApi: ENV_API,
-});
+const scoreBoardSceneInstance = new ScoreBoardScene(envInstance);
+
+const resultsSceneInstance = new ResultsScene(envInstance);
 
 function startGame() {
   requestAnimationFrame(startGame);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   playgroundSceneInstance.update();
-  console.log(gameState);
   if (gameState === GAME_STATES.HOME) {
     homeSceneInstance.update();
   } else if (gameState === GAME_STATES.PLAY) {
