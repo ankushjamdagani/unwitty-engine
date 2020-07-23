@@ -60,6 +60,7 @@ class Ball {
   }
 
   update() {
+    this.move();
     this.draw();
   }
 }

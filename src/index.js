@@ -45,7 +45,6 @@ const breaker = new Breaker(
     ctx,
     width: CANVAS_WIDTH,
     height: CANVAS_HEIGHT,
-    surfaceFriction: 1.2,
   }
 );
 
@@ -53,12 +52,8 @@ function animate() {
   requestAnimationFrame(animate);
   ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-  ball.move();
   ball.update();
-
-  breaker.move();
   breaker.update();
-  console.log(breaker.dx);
 }
 
 window.addEventListener("keydown", function (e) {

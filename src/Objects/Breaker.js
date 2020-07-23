@@ -72,6 +72,7 @@ class Breaker {
   }
 
   update() {
+    this.move();
     this.draw();
   }
 }
