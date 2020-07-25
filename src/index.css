@@ -1,0 +1,18 @@
+@font-face {
+  font-family: primaryFont;
+  src: url("./assets/fonts/Press_Start_2P/PressStart2P-Regular.ttf")
+    format("truetype");
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+canvas {
+  background: #82787f;
+}

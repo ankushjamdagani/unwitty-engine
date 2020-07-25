@@ -1,3 +1,5 @@
+import "./index.css";
+
 import { GAME_STATES } from "./constants";
 
 import HomeScene from "./scenes/Home";

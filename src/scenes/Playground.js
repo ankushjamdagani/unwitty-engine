@@ -1,5 +1,13 @@
 import { GAME_STATES } from "../constants";
 
+import bg1 from "../assets/images/bg-1.png";
+import bg2 from "../assets/images/bg-2.png";
+import bg3 from "../assets/images/bg-3.png";
+
+import road from "../assets/images/road-2.png";
+import wall from "../assets/images/wall-1.png";
+import sky from "../assets/images/sky-1.png";
+
 import Ball from "../objects/Ball";
 import Breaker from "../objects/Breaker";
 
@@ -35,10 +43,9 @@ class PlaygroundScene {
       {
         type: "rect",
         x: width / 2 - 120,
-        y: height - 15,
+        y: height - 140,
         width: 120,
-        height: 15,
-        fillColor: "#ff5a3f",
+        height: 40,
         initialSpeed: 0,
         maxSpeed: 15,
       },
@@ -51,9 +58,29 @@ class PlaygroundScene {
     );
 
     this.playing = false;
+    this.ctx = ctx;
+    this.width = width;
+    this.height = height;
     this.ball = ball;
     this.breaker = breaker;
     this.envApi = envApi;
+    this.assets = {};
+
+    this.preload([
+      { key: "road", image: road },
+      { key: "wall", image: wall },
+      { key: "sky", image: sky },
+    ]);
+  }
+
+  preload(assets) {
+    assets.forEach((asset) => {
+      const assetImage = new Image();
+      assetImage.src = asset.image;
+      assetImage.onload = () => {
+        this.assets[asset.key] = assetImage;
+      };
+    });
   }
 
   bindEvents() {
@@ -95,6 +122,30 @@ class PlaygroundScene {
         this.stop();
         this.envApi.changeState(GAME_STATES.END);
       }
+    }
+
+    if (this.assets["sky"]) {
+      const pattern = this.ctx.createPattern(this.assets["sky"], "repeat");
+      this.ctx.fillStyle = pattern;
+      this.ctx.beginPath();
+      this.ctx.fillRect(0, 0, this.width, this.height);
+      this.ctx.closePath();
+    }
+
+    if (this.assets["wall"]) {
+      const pattern = this.ctx.createPattern(this.assets["wall"], "repeat");
+      this.ctx.fillStyle = pattern;
+      this.ctx.beginPath();
+      this.ctx.fillRect(0, 0, this.width, this.height);
+      this.ctx.closePath();
+    }
+
+    if (this.assets["road"]) {
+      const pattern = this.ctx.createPattern(this.assets["road"], "repeat");
+      this.ctx.fillStyle = pattern;
+      this.ctx.beginPath();
+      this.ctx.fillRect(0, 0, this.width, this.height);
+      this.ctx.closePath();
     }
 
     this.ball.update();

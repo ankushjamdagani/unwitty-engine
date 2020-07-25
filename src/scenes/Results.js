@@ -1,11 +1,20 @@
 import { GAME_STATES } from "../constants";
 
+import Animator from "../helpers/Animators";
+
 class ResultsScene {
   constructor({ ctx, width, height, envApi }) {
     this.width = width;
     this.height = height;
     this.ctx = ctx;
     this.envApi = envApi;
+    this.subTitleOpacityAnimator = new Animator({
+      startVal: 0,
+      minVal: 0,
+      maxVal: 1,
+      step: 0.1,
+      ticksInterval: 2,
+    });
   }
 
   bindEvents() {
@@ -33,26 +42,39 @@ class ResultsScene {
   }
 
   update() {
-    this.ctx.fillStyle = "#000";
-    this.ctx.font = "50px monospace";
+    const subTitleOpacity = this.subTitleOpacityAnimator.update();
+
+    this.ctx.fillStyle = "rgba(0,0,0,.2)";
+    this.ctx.beginPath();
+    this.ctx.fillRect(this.width / 2 - 230, this.height / 2 - 105, 500, 200);
+    this.ctx.closePath();
+
+    this.ctx.fillStyle = "#1c1d23";
+    this.ctx.fillStyle = "rgba(0,0,0,.2)";
+    this.ctx.beginPath();
+    this.ctx.fillRect(this.width / 2 - 250, this.height / 2 - 85, 500, 200);
+    this.ctx.closePath();
+
+    this.ctx.fillStyle = "#fff";
+    this.ctx.font = "30px primaryFont";
     this.ctx.fillText(
       "SCORE :: " + this.envApi.getScore(),
       this.width / 2 - 200,
-      this.height / 2 - 10
+      this.height / 2
     );
 
-    this.ctx.fillStyle = "#000";
-    this.ctx.beginPath();
-    this.ctx.fillRect(this.width / 2 - 200, this.height / 2 + 20, 400, 2);
-    this.ctx.closePath();
+    this.ctx.fillStyle = "#fff";
+    this.ctx.font = "30px primaryFont";
+    this.ctx.fillText("--------", this.width / 2 - 205, this.height / 2 + 30);
 
-    this.ctx.fillStyle = "rgba(0,0,0,1)";
-    this.ctx.font = "20px monospace";
+    this.ctx.fillStyle = `rgba(255,89,63,${subTitleOpacity})`;
+    this.ctx.font = "14px primaryFont";
     this.ctx.fillText(
       "Press SPACE to start.",
-      this.width / 2 - 195,
+      this.width / 2 - 200,
       this.height / 2 + 45
     );
+
   }
 }
 

@@ -15,17 +15,17 @@ class ScoreBoardScene {
   }
 
   update() {
-    this.ctx.fillStyle = "rgba(0,0,0,.1)";
+    this.ctx.fillStyle = "rgba(0,0,0,.2)";
     this.ctx.beginPath();
     this.ctx.fillRect(this.width - 210, 10, 200, 80);
     this.ctx.closePath();
 
-    this.ctx.fillStyle = "rgba(0,0,0,1)";
-    this.ctx.font = "20px monospace";
-    this.ctx.fillText("SCORE", this.width - 200, 36);
+    this.ctx.fillStyle = "#fff";
+    this.ctx.font = "14px primaryFont";
+    this.ctx.fillText("SCORE", this.width - 190, 40);
 
-    this.ctx.font = "40px monospace";
-    this.ctx.fillText(this.envApi.getScore(), this.width - 200, 74);
+    this.ctx.font = "30px primaryFont";
+    this.ctx.fillText(this.envApi.getScore(), this.width - 190, 80);
   }
 }
 

@@ -1,3 +1,7 @@
+import rover from "../assets/images/rover-1.png";
+
+import Animator from "../helpers/Animators";
+
 class Breaker {
   constructor(initialConfig, env) {
     const {
@@ -6,7 +10,6 @@ class Breaker {
       y,
       width,
       height,
-      fillColor,
       initialSpeed,
       maxSpeed,
       tyreRadius,
@@ -19,12 +22,25 @@ class Breaker {
     this.y = y;
     this.width = width;
     this.height = height;
-    this.fillColor = fillColor;
     this.u = initialSpeed;
     this.v = maxSpeed;
     this.dx = initialSpeed;
     this.options = options;
     this.env = env;
+
+    const roverImage = new Image();
+    roverImage.src = rover;
+    roverImage.onload = () => {
+      this.roverImage = roverImage;
+    };
+
+    this.floatingAnimator = new Animator({
+      startVal: 0,
+      minVal: 0,
+      maxVal: 10,
+      step: 0.1,
+      ticksInterval: 1,
+    });
   }
 
   isTouchingBorder() {
@@ -78,12 +94,17 @@ class Breaker {
   }
 
   draw() {
-    const { x, y, width, height, fillColor } = this;
+    const { x, y, width, height } = this;
+    const floatValue = this.floatingAnimator.update();
 
-    this.env.ctx.fillStyle = fillColor;
-    this.env.ctx.beginPath();
-    this.env.ctx.fillRect(x, y, width, height);
-    this.env.ctx.closePath();
+    this.roverImage &&
+      this.env.ctx.drawImage(
+        this.roverImage,
+        x,
+        y + floatValue,
+        width,
+        height - 15
+      );
   }
 
   update() {
