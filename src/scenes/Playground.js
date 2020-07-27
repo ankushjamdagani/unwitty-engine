@@ -129,7 +129,7 @@ class PlaygroundScene {
 
   mountBricks() {
     const unitWidth = this.width / 40;
-    const unitHeight = this.height / 30;
+    const unitHeight = (unitWidth * 15) / 13;
 
     let y = 0;
     this.brickMatrix.forEach((row) => {
@@ -160,16 +160,27 @@ class PlaygroundScene {
 
   update() {
     if (this.playing) {
-      const collisionCoords = CollisionHandler.isCircleCollidingRect(
+      const collisionVector = CollisionHandler.isCircleCollidingRect(
         this.ball,
-        this.breaker,
-        4
+        this.breaker
       );
-      if (collisionCoords) {
-        this.ball.dy = -this.ball.dy;
+      if (collisionVector) {
+        if (collisionVector[0]) {
+          this.ball.dy = this.ball.dy > 0 ? -this.ball.dy : this.ball.dy;
+        } else if (collisionVector[2]) {
+          this.ball.dy = this.ball.dy > 0 ? this.ball.dy : -this.ball.dy;
+        }
+        if (collisionVector[1]) {
+          this.ball.dx = this.ball.dx > 0 ? this.ball.dx : -this.ball.dx;
+        } else if (collisionVector[3]) {
+          this.ball.dx = this.ball.dx > 0 ? this.ball.dx : -this.ball.dx;
+        }
         const currScore = this.envApi.getScore();
         this.envApi.changeScore(currScore + 1);
-      } else if (this.ball.y > this.breaker.y) {
+      } else if (
+        this.ball.y + this.ball.radius >
+        this.breaker.y + this.breaker.height
+      ) {
         this.stop();
         this.envApi.changeState(GAME_STATES.END);
       }
