@@ -36,9 +36,9 @@ class PlaygroundScene {
     const breaker = new Breaker(
       {
         type: "rect",
-        x: width / 2 - 120,
+        x: width / 2 - 130,
         y: height - 40 - 100,
-        width: 120,
+        width: 130,
         height: 40,
         initialSpeed: 0,
         maxSpeed: 15,
@@ -90,8 +90,6 @@ class PlaygroundScene {
     this.breaker = breaker;
     this.bricks = [];
     this.ground = ground;
-
-    this.mountBricks();
   }
 
   preload(assets) {
@@ -248,8 +246,12 @@ class PlaygroundScene {
 
   start() {
     this.playing = true;
+    
     this.ball.start();
     this.breaker.start();
+    
+    this.bricks = [];
+    this.mountBricks();
 
     this.bindEvents();
   }

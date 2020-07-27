@@ -1,4 +1,4 @@
-import ball1 from "../assets/images/BallRotate5.svg";
+import ball1 from "../assets/images/BallRotate1.svg";
 import ball2 from "../assets/images/BallRotate2.svg";
 import ball3 from "../assets/images/BallRotate3.svg";
 import ball4 from "../assets/images/BallRotate4.svg";

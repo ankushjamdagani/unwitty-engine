@@ -1,26 +1,3 @@
-<svg id="Circle" xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10">
-  <rect id="Rectangle_15877" data-name="Rectangle 15877" width="1" height="1" transform="translate(1 3)"/>
-  <rect id="Rectangle_15878" data-name="Rectangle 15878" width="1" height="1" transform="translate(1 2)"/>
-  <rect id="Rectangle_15758" data-name="Rectangle 15758" width="1" height="1" transform="translate(9 5)"/>
-  <rect id="Rectangle_15879" data-name="Rectangle 15879" width="1" height="1" transform="translate(1 7)"/>
-  <rect id="Rectangle_15763" data-name="Rectangle 15763" width="1" height="1" transform="translate(8 3)"/>
-  <rect id="Rectangle_15864" data-name="Rectangle 15864" width="1" height="1" transform="translate(4 9)"/>
-  <rect id="Rectangle_15880" data-name="Rectangle 15880" width="1" height="1" transform="translate(1 6)"/>
-  <rect id="Rectangle_15774" data-name="Rectangle 15774" width="1" height="1" transform="translate(6 1)"/>
-  <rect id="Rectangle_15865" data-name="Rectangle 15865" width="1" height="1" transform="translate(2 1)"/>
-  <rect id="Rectangle_15869" data-name="Rectangle 15869" width="1" height="1" transform="translate(5)"/>
-  <rect id="Rectangle_15873" data-name="Rectangle 15873" width="1" height="1" transform="translate(4)"/>
-  <rect id="Rectangle_15838" data-name="Rectangle 15838" width="1" height="1" transform="translate(7 1)"/>
-  <rect id="Rectangle_15874" data-name="Rectangle 15874" width="1" height="1" transform="translate(3 1)"/>
-  <rect id="Rectangle_15875" data-name="Rectangle 15875" width="1" height="1" transform="translate(2 8)"/>
-  <rect id="Rectangle_15846" data-name="Rectangle 15846" width="1" height="1" transform="translate(8 6)"/>
-  <rect id="Rectangle_15848" data-name="Rectangle 15848" width="1" height="1" transform="translate(7 8)"/>
-  <rect id="Rectangle_15852" data-name="Rectangle 15852" width="1" height="1" transform="translate(9 4)"/>
-  <rect id="Rectangle_15876" data-name="Rectangle 15876" width="1" height="1" transform="translate(3 8)"/>
-  <rect id="Rectangle_15857" data-name="Rectangle 15857" width="1" height="1" transform="translate(8 2)"/>
-  <rect id="Rectangle_15859" data-name="Rectangle 15859" width="1" height="1" transform="translate(5 9)"/>
-  <rect id="Rectangle_15861" data-name="Rectangle 15861" width="1" height="1" transform="translate(8 7)"/>
-  <rect id="Rectangle_15863" data-name="Rectangle 15863" width="1" height="1" transform="translate(6 8)"/>
-  <rect id="Rectangle_15881" data-name="Rectangle 15881" width="1" height="1" transform="translate(0 5)"/>
-  <rect id="Rectangle_15882" data-name="Rectangle 15882" width="1" height="1" transform="translate(0 4)"/>
+<svg id="Circle" xmlns="http://www.w3.org/2000/svg" width="10.001" height="10" viewBox="0 0 10.001 10">
+  <path id="Union_14" data-name="Union 14" d="M-1989-66v-1h1v1Zm-1,0v-1h-1v-1h1v1h1v1Zm3-1h-1v-1h2v1Zm-5,0v-1h1v1Zm6-1v-1h1v1Zm-7,0v-2h-1v-2h1v2h1v2Zm7-1v-1h1v1Zm1-1v-2h1v2Zm-1-2v-2h1v2Zm-7,0v-2h1v2Zm6-2v-1h1v1Zm-1,0v-1h-2v-1h2v1h1v1Zm-3,0v-1h1v1Zm-1,0v-1h1v1Z" transform="translate(1994 76)"/>
 </svg>

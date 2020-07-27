@@ -1,10 +1,6 @@
-import bg from "../assets/images/Brick - Small - Strong.svg";
+// import bg from "../assets/images/Brick - Small - Strong.svg";
 // import bg from "../assets/images/Brick - Medium - Strong.svg";
-// import bg from "../assets/images/Brick - Large - Strong.svg";
-// import bg from "../assets/images/Ball1.svg";
-// import bg from "../assets/images/Circle.svg";
-// import bg from "../assets/images/Ice.svg";
-// import bg from "../assets/images/Pattern.svg";
+import bg from "../assets/images/Brick - Large - Strong.svg";
 
 class Ground {
   constructor(initialConfig, env) {
