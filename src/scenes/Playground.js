@@ -12,9 +12,9 @@ class PlaygroundScene {
     const ball = new Ball(
       {
         type: "circle",
-        x: 100,
+        x: 120,
         y: 100,
-        radius: 15,
+        radius: 12,
         fillColor: "#3f8aff",
         initialSpeed: {
           x: 0,
@@ -22,7 +22,7 @@ class PlaygroundScene {
         },
         maxSpeed: {
           x: 5,
-          y: -5,
+          y: 5,
         },
       },
       {
@@ -160,19 +160,19 @@ class PlaygroundScene {
 
   update() {
     if (this.playing) {
-      const collisionVector = CollisionHandler.isCircleCollidingRect(
+      const rectCollisionVector = CollisionHandler.isCircleCollidingRect(
         this.ball,
         this.breaker
       );
-      if (collisionVector) {
-        if (collisionVector[0]) {
+      if (rectCollisionVector) {
+        if (rectCollisionVector[0]) {
           this.ball.dy = this.ball.dy > 0 ? -this.ball.dy : this.ball.dy;
-        } else if (collisionVector[2]) {
+        } else if (rectCollisionVector[2]) {
           this.ball.dy = this.ball.dy > 0 ? this.ball.dy : -this.ball.dy;
         }
-        if (collisionVector[1]) {
+        if (rectCollisionVector[1]) {
           this.ball.dx = this.ball.dx > 0 ? this.ball.dx : -this.ball.dx;
-        } else if (collisionVector[3]) {
+        } else if (rectCollisionVector[3]) {
           this.ball.dx = this.ball.dx > 0 ? this.ball.dx : -this.ball.dx;
         }
         const currScore = this.envApi.getScore();
@@ -183,6 +183,29 @@ class PlaygroundScene {
       ) {
         this.stop();
         this.envApi.changeState(GAME_STATES.END);
+      } else {
+        for (let brIdx = 0; brIdx < this.bricks.length; brIdx++) {
+          const brick = this.bricks[brIdx];
+          const brickCollisionVector = CollisionHandler.isCircleCollidingRect(
+            this.ball,
+            brick
+          );
+
+          if (brickCollisionVector) {
+            if (brickCollisionVector[0]) {
+              this.ball.dy = this.ball.dy > 0 ? -this.ball.dy : this.ball.dy;
+            } else if (brickCollisionVector[2]) {
+              this.ball.dy = this.ball.dy > 0 ? this.ball.dy : -this.ball.dy;
+            }
+            if (brickCollisionVector[1]) {
+              this.ball.dx = this.ball.dx > 0 ? this.ball.dx : -this.ball.dx;
+            } else if (brickCollisionVector[3]) {
+              this.ball.dx = this.ball.dx > 0 ? -this.ball.dx : this.ball.dx;
+            }
+
+            break;
+          }
+        }
       }
     }
 

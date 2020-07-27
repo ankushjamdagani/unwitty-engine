@@ -19,7 +19,7 @@ function isCircleCollidingRect(circle, rect) {
     if (verticalDistance < 0) {
       collisionVector[0] = 1;
     } else {
-      collisionVector[1] = 1;
+      collisionVector[2] = 1;
     }
 
     return collisionVector;
@@ -44,7 +44,7 @@ function isCircleCollidingRect(circle, rect) {
     if (verticalDistance < 0) {
       collisionVector[0] = 1;
     } else {
-      collisionVector[1] = 1;
+      collisionVector[2] = 1;
     }
     if (horizontalDistance < 0) {
       collisionVector[3] = 1;
