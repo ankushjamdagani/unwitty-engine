@@ -1,15 +1,8 @@
 import { GAME_STATES } from "../constants";
 
-import bg1 from "../assets/images/bg-1.png";
-import bg2 from "../assets/images/bg-2.png";
-import bg3 from "../assets/images/bg-3.png";
-
-import road from "../assets/images/road-2.png";
-import wall from "../assets/images/wall-1.png";
-import sky from "../assets/images/sky-1.png";
-
 import Ball from "../objects/Ball";
 import Breaker from "../objects/Breaker";
+import Brick from "../objects/Brick";
 
 import CollisionHandler from "../observers/CollisionHandler";
 
@@ -20,7 +13,7 @@ class PlaygroundScene {
         type: "circle",
         x: 100,
         y: 100,
-        radius: 10,
+        radius: 15,
         fillColor: "#3f8aff",
         initialSpeed: {
           x: 0,
@@ -43,7 +36,7 @@ class PlaygroundScene {
       {
         type: "rect",
         x: width / 2 - 120,
-        y: height - 140,
+        y: height - 40,
         width: 120,
         height: 40,
         initialSpeed: 0,
@@ -57,20 +50,28 @@ class PlaygroundScene {
       }
     );
 
+    this.brickMatrix = [
+      [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1],
+      [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1],
+      [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1],
+      [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1],
+      [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1],
+      [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1],
+    ];
+
     this.playing = false;
     this.ctx = ctx;
     this.width = width;
     this.height = height;
-    this.ball = ball;
-    this.breaker = breaker;
     this.envApi = envApi;
     this.assets = {};
 
-    this.preload([
-      { key: "road", image: road },
-      { key: "wall", image: wall },
-      { key: "sky", image: sky },
-    ]);
+    this.ball = ball;
+    this.breaker = breaker;
+    this.bricks = [];
+
+    this.mountBricks();
   }
 
   preload(assets) {
@@ -106,6 +107,37 @@ class PlaygroundScene {
       this.breaker.stop();
     }
   };
+
+  mountBricks() {
+    const unitWidth = this.width / 40;
+    const unitHeight = this.height / 30;
+
+    let y = 0;
+    this.brickMatrix.forEach((row) => {
+      let x = 0;
+      y += unitHeight + 4;
+      row.forEach((colVal) => {
+        if (colVal) {
+          const brick = new Brick(
+            {
+              type: colVal - 1,
+              width: unitWidth * colVal,
+              height: unitHeight,
+              x,
+              y,
+            },
+            {
+              ctx: this.ctx,
+              width: this.width,
+              height: this.height,
+            }
+          );
+          this.bricks.push(brick);
+        }
+        x += unitWidth * (colVal || 1) + 4;
+      });
+    });
+  }
 
   update() {
     if (this.playing) {
@@ -148,6 +180,7 @@ class PlaygroundScene {
       this.ctx.closePath();
     }
 
+    this.bricks.forEach((br) => br.update());
     this.ball.update();
     this.breaker.update();
   }

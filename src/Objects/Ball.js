@@ -1,3 +1,9 @@
+import ball1 from "../assets/images/Ball1.svg";
+import ball2 from "../assets/images/Ball2.svg";
+import ball3 from "../assets/images/Ball3.svg";
+
+import Animator from "../helpers/Animators";
+
 class Ball {
   constructor(initialConfig, env) {
     const {
@@ -25,6 +31,31 @@ class Ball {
     this.dy = initialSpeed.y;
     this.options = options;
     this.env = env;
+    this.assets = {};
+
+    this.preload([
+      { key: 1, image: ball1 },
+      { key: 2, image: ball2 },
+      { key: 3, image: ball3 },
+    ]);
+
+    this.imageAnimator = new Animator({
+      startVal: 1,
+      minVal: 1,
+      maxVal: 3,
+      step: 1,
+      ticksInterval: 5,
+    });
+  }
+
+  preload(assets) {
+    assets.forEach((asset) => {
+      const assetImage = new Image();
+      assetImage.src = asset.image;
+      assetImage.onload = () => {
+        this.assets[asset.key] = assetImage;
+      };
+    });
   }
 
   isTouchingBorder() {
@@ -94,13 +125,16 @@ class Ball {
 
   draw() {
     const { x, y, radius, fillColor } = this;
+    const imageIndex = this.imageAnimator.update();
 
-    this.env.ctx.beginPath();
-    this.env.ctx.arc(x, y, radius, 0, Math.PI * 2);
-    this.env.ctx.closePath();
-
-    this.env.ctx.fillStyle = fillColor;
-    this.env.ctx.fill();
+    this.assets[1] &&
+      this.env.ctx.drawImage(
+        this.assets[1],
+        x - radius,
+        y - radius,
+        radius * 2,
+        radius * 2
+      );
   }
 
   update() {

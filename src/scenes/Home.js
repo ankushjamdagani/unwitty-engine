@@ -43,13 +43,13 @@ class HomeScene {
   update() {
     const subTitleOpacity = this.subTitleOpacityAnimator.update();
 
-    this.ctx.fillStyle = "rgba(0,0,0,.2)";
+    this.ctx.fillStyle = "rgba(0,0,0,1)";
     this.ctx.beginPath();
     this.ctx.fillRect(this.width / 2 - 230, this.height / 2 - 105, 500, 200);
     this.ctx.closePath();
 
     this.ctx.fillStyle = "#1c1d23";
-    this.ctx.fillStyle = "rgba(0,0,0,.2)";
+    this.ctx.fillStyle = "rgba(0,0,0,1)";
     this.ctx.beginPath();
     this.ctx.fillRect(this.width / 2 - 250, this.height / 2 - 85, 500, 200);
     this.ctx.closePath();
@@ -66,7 +66,7 @@ class HomeScene {
     this.ctx.font = "30px primaryFont";
     this.ctx.fillText("--------", this.width / 2 - 205, this.height / 2 + 30);
 
-    this.ctx.fillStyle = `rgba(255,89,63,${subTitleOpacity})`;
+    this.ctx.fillStyle = `rgba(255,255,255,${subTitleOpacity})`;
     this.ctx.font = "14px primaryFont";
     this.ctx.fillText(
       "Press SPACE to start.",

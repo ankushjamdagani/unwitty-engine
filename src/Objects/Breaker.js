@@ -1,6 +1,4 @@
-import rover from "../assets/images/rover-1.png";
-
-import Animator from "../helpers/Animators";
+import rover from "../assets/images/Board.svg";
 
 class Breaker {
   constructor(initialConfig, env) {
@@ -28,18 +26,18 @@ class Breaker {
     this.options = options;
     this.env = env;
 
-    const roverImage = new Image();
-    roverImage.src = rover;
-    roverImage.onload = () => {
-      this.roverImage = roverImage;
-    };
+    this.assets = {};
 
-    this.floatingAnimator = new Animator({
-      startVal: 0,
-      minVal: 0,
-      maxVal: 10,
-      step: 0.1,
-      ticksInterval: 1,
+    this.preload([{ key: "rover", image: rover }]);
+  }
+
+  preload(assets) {
+    assets.forEach((asset) => {
+      const assetImage = new Image();
+      assetImage.src = asset.image;
+      assetImage.onload = () => {
+        this.assets[asset.key] = assetImage;
+      };
     });
   }
 
@@ -95,16 +93,9 @@ class Breaker {
 
   draw() {
     const { x, y, width, height } = this;
-    const floatValue = this.floatingAnimator.update();
 
-    this.roverImage &&
-      this.env.ctx.drawImage(
-        this.roverImage,
-        x,
-        y + floatValue,
-        width,
-        height - 15
-      );
+    this.assets["rover"] &&
+      this.env.ctx.drawImage(this.assets["rover"], x, y, width, height);
   }
 
   update() {

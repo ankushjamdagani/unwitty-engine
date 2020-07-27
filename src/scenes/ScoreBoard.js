@@ -15,12 +15,12 @@ class ScoreBoardScene {
   }
 
   update() {
-    this.ctx.fillStyle = "rgba(0,0,0,.2)";
+    this.ctx.fillStyle = "rgba(0,0,0,.1)";
     this.ctx.beginPath();
     this.ctx.fillRect(this.width - 210, 10, 200, 80);
     this.ctx.closePath();
 
-    this.ctx.fillStyle = "#fff";
+    this.ctx.fillStyle = "#000 ";
     this.ctx.font = "14px primaryFont";
     this.ctx.fillText("SCORE", this.width - 190, 40);
 
