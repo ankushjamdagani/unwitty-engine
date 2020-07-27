@@ -69,6 +69,7 @@ class PlaygroundScene {
     );
 
     this.brickMatrix = [
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, [1,3], [2,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, [1,2], [1,2], [1,2], [2,2], [1,2], [1,2], [1,2], [1,2], 0, 0, 0, [1,2]],
       [0, 0, 0, 0, 0, 0, 0, 0, [1,2], [1,2], [1,2], [3,1], [1,2], [1,2], [1,2], [1,2], 0, 0, 0, [1,2]],
@@ -128,13 +129,12 @@ class PlaygroundScene {
   };
 
   mountBricks() {
-    const unitWidth = this.width / 40;
+    const unitWidth = this.width / 30;
     const unitHeight = (unitWidth * 15) / 13;
 
     let y = 0;
     this.brickMatrix.forEach((row) => {
       let x = 0;
-      y += unitHeight + 4;
       row.forEach((colVal) => {
         if (colVal) {
           const brick = new Brick(
@@ -156,6 +156,7 @@ class PlaygroundScene {
         }
         x += unitWidth * ((colVal && colVal[0]) || 1) + 4;
       });
+      y += unitHeight + 4;
     });
   }
 
@@ -176,8 +177,6 @@ class PlaygroundScene {
         } else if (rectCollisionVector[3]) {
           this.ball.dx = this.ball.dx > 0 ? this.ball.dx : -this.ball.dx;
         }
-        const currScore = this.envApi.getScore();
-        this.envApi.changeScore(currScore + 1);
       } else if (
         this.ball.y + this.ball.radius >
         this.breaker.y + this.breaker.height
@@ -206,6 +205,9 @@ class PlaygroundScene {
             } else if (brickCollisionVector[3]) {
               this.ball.dx = this.ball.dx > 0 ? -this.ball.dx : this.ball.dx;
             }
+
+            const currScore = this.envApi.getScore();
+            this.envApi.changeScore(currScore + 1);
 
             brick.onCollision();
             break;
