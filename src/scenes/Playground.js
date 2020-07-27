@@ -69,13 +69,13 @@ class PlaygroundScene {
     );
 
     this.brickMatrix = [
-      [0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 1, 1, 1, 1, 1, 1, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2, 1, 1, 1, 1, 0, 0, 0, 1],
-      [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 3, 1, 1, 1, 1, 0, 0, 0, 1],
-      [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 3, 1, 1, 0, 0, 0, 1],
-      [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1],
-      [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1],
-      [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1],
+      [0, 0, 0, 0, 0, 0, 0, 0, [1,3], [2,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, [1,2], [1,2], [1,2], [2,2], [1,2], [1,2], [1,2], [1,2], 0, 0, 0, [1,2]],
+      [0, 0, 0, 0, 0, 0, 0, 0, [1,2], [1,2], [1,2], [3,1], [1,2], [1,2], [1,2], [1,2], 0, 0, 0, [1,2]],
+      [0, 0, 0, 0, 0, 0, 0, [1,2], [1,2], [1,2], [1,2], [1,2], [3,1], [1,2], [1,2], 0, 0, 0, [1,2]],
+      [0, 0, 0, 0, 0, 0, 0, 0, [1,2], [1,2], [1,2], [1,2], [1,2], [1,1], [1,1], [1,1], 0, 0, 0, [1,1]],
+      [0, 0, 0, 0, 0, 0, 0, [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], 0, 0, 0, [1,3]],
+      [0, 0, 0, 0, 0, 0, 0, 0, [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], 0, 0, 0, [1,3]],
     ];
 
     this.playing = false;
@@ -139,8 +139,9 @@ class PlaygroundScene {
         if (colVal) {
           const brick = new Brick(
             {
-              type: colVal - 1,
-              width: unitWidth * colVal,
+              size: colVal[0] - 1,
+              strength: colVal[1] - 1,
+              width: unitWidth * colVal[0],
               height: unitHeight,
               x,
               y,
@@ -153,7 +154,7 @@ class PlaygroundScene {
           );
           this.bricks.push(brick);
         }
-        x += unitWidth * (colVal || 1) + 4;
+        x += unitWidth * ((colVal && colVal[0]) || 1) + 4;
       });
     });
   }
@@ -186,6 +187,9 @@ class PlaygroundScene {
       } else {
         for (let brIdx = 0; brIdx < this.bricks.length; brIdx++) {
           const brick = this.bricks[brIdx];
+          if(brick.disabled) {
+            continue;
+          }
           const brickCollisionVector = CollisionHandler.isCircleCollidingRect(
             this.ball,
             brick
@@ -203,6 +207,7 @@ class PlaygroundScene {
               this.ball.dx = this.ball.dx > 0 ? -this.ball.dx : this.ball.dx;
             }
 
+            brick.onCollision();
             break;
           }
         }

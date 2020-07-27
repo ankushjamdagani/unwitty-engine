@@ -16,11 +16,18 @@ const ImageSizeMap = [
   [BrickLarge3, BrickLarge2, BrickLarge1],
 ];
 
+const ImageStrenghtMap = {
+  0: "weakest",
+  1: "weak",
+  2: "strong",
+};
+
 class Brick {
   constructor(initialConfig, env) {
-    const { type, x, y, width, height, ...options } = initialConfig;
+    const { size, strength, x, y, width, height, ...options } = initialConfig;
 
     this.initialConfig = initialConfig;
+    this.strength = strength;
     this.x = x;
     this.y = y;
     this.width = width;
@@ -33,15 +40,15 @@ class Brick {
     this.preload([
       {
         key: "strong",
-        image: ImageSizeMap[type][0],
+        image: ImageSizeMap[size][0],
       },
       {
         key: "weak",
-        image: ImageSizeMap[type][1],
+        image: ImageSizeMap[size][1],
       },
       {
         key: "weakest",
-        image: ImageSizeMap[type][2],
+        image: ImageSizeMap[size][2],
       },
     ]);
   }
@@ -63,10 +70,19 @@ class Brick {
   reset() {}
 
   draw() {
-    const { x, y, width, height } = this;
+    const { x, y, width, height, strength } = this;
 
-    this.assets["strong"] &&
-      this.env.ctx.drawImage(this.assets["strong"], x, y, width, height);
+    const image = this.assets[ImageStrenghtMap[strength]];
+
+    image && this.env.ctx.drawImage(image, x, y, width, height);
+  }
+
+  onCollision() {
+    this.strength -= 1;
+
+    if (this.strength < 0) {
+      this.disabled = true;
+    }
   }
 
   update() {
