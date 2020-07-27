@@ -3,6 +3,7 @@ import { GAME_STATES } from "../constants";
 import Ball from "../objects/Ball";
 import Breaker from "../objects/Breaker";
 import Brick from "../objects/Brick";
+import Ground from "../objects/Ground";
 
 import CollisionHandler from "../observers/CollisionHandler";
 
@@ -36,7 +37,7 @@ class PlaygroundScene {
       {
         type: "rect",
         x: width / 2 - 120,
-        y: height - 40,
+        y: height - 40 - 100,
         width: 120,
         height: 40,
         initialSpeed: 0,
@@ -50,11 +51,28 @@ class PlaygroundScene {
       }
     );
 
+    const ground = new Ground(
+      {
+        x: 0,
+        y: height - 100,
+        width: width,
+        height: 100,
+        initialSpeed: 0,
+        maxSpeed: 15,
+      },
+      {
+        ctx,
+        width,
+        height,
+        boundary,
+      }
+    );
+
     this.brickMatrix = [
-      [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1],
-      [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1],
-      [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1],
+      [0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 1, 1, 1, 1, 1, 1, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2, 1, 1, 1, 1, 0, 0, 0, 1],
+      [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 3, 1, 1, 1, 1, 0, 0, 0, 1],
+      [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 3, 1, 1, 0, 0, 0, 1],
       [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1],
       [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1],
       [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1],
@@ -70,6 +88,7 @@ class PlaygroundScene {
     this.ball = ball;
     this.breaker = breaker;
     this.bricks = [];
+    this.ground = ground;
 
     this.mountBricks();
   }
@@ -180,6 +199,7 @@ class PlaygroundScene {
       this.ctx.closePath();
     }
 
+    this.ground.update();
     this.bricks.forEach((br) => br.update());
     this.ball.update();
     this.breaker.update();

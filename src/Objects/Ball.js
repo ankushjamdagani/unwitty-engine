@@ -1,6 +1,8 @@
-import ball1 from "../assets/images/Ball1.svg";
-import ball2 from "../assets/images/Ball2.svg";
-import ball3 from "../assets/images/Ball3.svg";
+import ball1 from "../assets/images/BallRotate5.svg";
+import ball2 from "../assets/images/BallRotate2.svg";
+import ball3 from "../assets/images/BallRotate3.svg";
+import ball4 from "../assets/images/BallRotate4.svg";
+import ball5 from "../assets/images/BallRotate5.svg";
 
 import Animator from "../helpers/Animators";
 
@@ -37,14 +39,17 @@ class Ball {
       { key: 1, image: ball1 },
       { key: 2, image: ball2 },
       { key: 3, image: ball3 },
+      { key: 4, image: ball4 },
+      { key: 5, image: ball5 },
     ]);
 
     this.imageAnimator = new Animator({
       startVal: 1,
       minVal: 1,
-      maxVal: 3,
+      maxVal: 5,
       step: 1,
-      ticksInterval: 5,
+      ticksInterval: 10,
+      direction: "straight",
     });
   }
 
@@ -127,9 +132,9 @@ class Ball {
     const { x, y, radius, fillColor } = this;
     const imageIndex = this.imageAnimator.update();
 
-    this.assets[1] &&
+    this.assets[imageIndex] &&
       this.env.ctx.drawImage(
-        this.assets[1],
+        this.assets[imageIndex],
         x - radius,
         y - radius,
         radius * 2,

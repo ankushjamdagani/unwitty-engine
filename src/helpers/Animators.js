@@ -4,6 +4,7 @@ function Animator({
   maxVal = 1,
   step = 0.1,
   ticksInterval = 1,
+  direction = "alternate", // straight | alternate
 }) {
   this.activeVal =
     startVal === null || startVal === undefined ? minVal : startVal;
@@ -25,11 +26,15 @@ function Animator({
     } else {
       this.referenceTick = this.currentTick;
     }
-
-    if (this.activeVal > this.maxVal || this.activeVal < this.minVal) {
-      this.step = -this.step;
-    }
     this.activeVal += this.step;
+
+    if (this.activeVal >= this.maxVal || this.activeVal <= this.minVal) {
+      if (direction === "alternate") {
+        this.step = -this.step;
+      } else if (direction === "straight") {
+        this.activeVal = this.minVal;
+      }
+    }
     return this.activeVal;
   };
 
