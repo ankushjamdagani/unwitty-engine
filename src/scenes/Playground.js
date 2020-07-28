@@ -221,22 +221,20 @@ class PlaygroundScene extends Component {
       }
     );
 
-    const ground = new Ground(
-      {
-        x: 0,
-        y: height - 100,
-        width: width,
-        height: 100,
-        initialSpeed: 0,
-        maxSpeed: 15,
-      },
-      {
+    const ground = new Ground({
+      x: 0,
+      y: height - 100,
+      width: width,
+      height: 100,
+      initialSpeed: 0,
+      maxSpeed: 15,
+      env: {
         ctx,
         width,
         height,
         boundary,
-      }
-    );
+      },
+    });
 
     this.setElements({
       ball,
