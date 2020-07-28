@@ -385,15 +385,15 @@ class PlaygroundScene {
   start() {
     const { ball, breaker } = this.elements;
 
+    ball.start();
+    breaker.start();
+
     this.setState({
       playing: true,
     });
     this.setElements({
       bricks: [],
     });
-
-    ball.start();
-    breaker.start();
 
     this.mountBricks();
     this.bindEvents();
@@ -402,12 +402,12 @@ class PlaygroundScene {
   stop() {
     const { ball, breaker } = this.elements;
 
+    ball.stop();
+    breaker.stop();
+
     this.setState({
       playing: false,
     });
-
-    ball.stop();
-    breaker.stop();
 
     this.unBindEvents();
   }
@@ -415,12 +415,12 @@ class PlaygroundScene {
   reset() {
     const { ball, breaker } = this.elements;
 
+    ball.reset();
+    breaker.reset();
+
     this.setState({
       playing: true,
     });
-
-    ball.reset();
-    breaker.reset();
 
     this.start();
   }
