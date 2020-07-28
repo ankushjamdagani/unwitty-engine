@@ -1,5 +1,6 @@
 import { GAME_STATES } from "../constants";
-import Animator from "../helpers/Animators";
+import Animator from "../helpers/Animator";
+import { CreatRect, CreateText } from "../helpers/Creator";
 
 class HomeScene {
   constructor({ ctx, width, height, envApi }) {
@@ -43,36 +44,59 @@ class HomeScene {
   update() {
     const subTitleOpacity = this.subTitleOpacityAnimator.update();
 
-    this.ctx.fillStyle = "#000";
-    this.ctx.beginPath();
-    this.ctx.fillRect(this.width / 2 - 230, this.height / 2 - 105, 500, 200);
-    this.ctx.closePath();
+    CreatRect({
+      ctx: this.ctx,
+      x: this.width / 2 - 260,
+      y: this.height / 2 - 85,
+      width: 20,
+      height: 200,
+      fillColor: "#000",
+    });
 
-    this.ctx.fillStyle = "#1c1d23";
-    this.ctx.fillStyle = "#000";
-    this.ctx.beginPath();
-    this.ctx.fillRect(this.width / 2 - 250, this.height / 2 - 85, 500, 200);
-    this.ctx.closePath();
+    CreatRect({
+      ctx: this.ctx,
+      x: this.width / 2 - 260,
+      y: this.height / 2 + 104,
+      width: 500,
+      height: 20,
+      fillColor: "#000",
+    });
 
-    this.ctx.fillStyle = "#fff";
-    this.ctx.font = "30px primaryFont";
-    this.ctx.fillText(
-      "Bricks Breaker",
-      this.width / 2 - 200,
-      this.height / 2
-    );
+    CreatRect({
+      ctx: this.ctx,
+      x: this.width / 2 - 230,
+      y: this.height / 2 - 105,
+      width: 500,
+      height: 200,
+      fillColor: "#000",
+    });
 
-    this.ctx.fillStyle = "#fff";
-    this.ctx.font = "30px primaryFont";
-    this.ctx.fillText("--------", this.width / 2 - 205, this.height / 2 + 30);
+    CreateText({
+      ctx: this.ctx,
+      x: this.width / 2 - 190,
+      y: this.height / 2,
+      text: "Bricks Breaker",
+      font: "30px primaryFont",
+      fontColor: "#fff",
+    });
 
-    this.ctx.fillStyle = `rgba(255,255,255,${subTitleOpacity})`;
-    this.ctx.font = "14px primaryFont";
-    this.ctx.fillText(
-      "Press SPACE to start.",
-      this.width / 2 - 200,
-      this.height / 2 + 45
-    );
+    CreateText({
+      ctx: this.ctx,
+      x: this.width / 2 - 235,
+      y: this.height / 2 + 70,
+      text: "-----------------",
+      font: "30px primaryFont",
+      fontColor: "#fff",
+    });
+
+    CreateText({
+      ctx: this.ctx,
+      x: this.width / 2 - 140,
+      y: this.height / 2 + 84,
+      text: "Press SPACE to start.",
+      font: "14px primaryFont",
+      fontColor: `rgba(255,255,255,${subTitleOpacity})`,
+    });
   }
 }
 

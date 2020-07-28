@@ -4,7 +4,7 @@ import ball3 from "../assets/images/BallRotate3.svg";
 import ball4 from "../assets/images/BallRotate4.svg";
 import ball5 from "../assets/images/BallRotate5.svg";
 
-import Animator from "../helpers/Animators";
+import Animator from "../helpers/Animator";
 
 class Ball {
   constructor(initialConfig, env) {
@@ -49,7 +49,8 @@ class Ball {
       maxVal: 5,
       step: 1,
       ticksInterval: 10,
-      direction: "straight",
+      direction: "normal",
+      // iterationCount: 10
     });
   }
 

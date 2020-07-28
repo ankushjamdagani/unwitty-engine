@@ -7,8 +7,192 @@ import Ground from "../objects/Ground";
 
 import CollisionHandler from "../observers/CollisionHandler";
 
+const BRICK_MATRIX = {
+  1: [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      [1, 3],
+      [2, 2],
+      [1, 1],
+      [1, 1],
+      [1, 1],
+      [1, 1],
+      [1, 1],
+      [1, 1],
+      0,
+      0,
+      0,
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      [1, 2],
+      [1, 2],
+      [1, 2],
+      [2, 2],
+      [1, 2],
+      [1, 2],
+      [1, 2],
+      [1, 2],
+      0,
+      0,
+      0,
+      [1, 2],
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      [1, 2],
+      [1, 2],
+      [1, 2],
+      [3, 1],
+      [1, 2],
+      [1, 2],
+      [1, 2],
+      [1, 2],
+      0,
+      0,
+      0,
+      [1, 2],
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      [1, 2],
+      [1, 2],
+      [1, 2],
+      [1, 2],
+      [1, 2],
+      [3, 1],
+      [1, 2],
+      [1, 2],
+      0,
+      0,
+      0,
+      [1, 2],
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      [1, 2],
+      [1, 2],
+      [1, 2],
+      [1, 2],
+      [1, 2],
+      [1, 1],
+      [1, 1],
+      [1, 1],
+      0,
+      0,
+      0,
+      [1, 1],
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      [1, 3],
+      [1, 3],
+      [1, 3],
+      [1, 3],
+      [1, 3],
+      [1, 3],
+      [1, 3],
+      [1, 3],
+      0,
+      0,
+      0,
+      [1, 3],
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      [1, 3],
+      [1, 3],
+      [1, 3],
+      [1, 3],
+      [1, 3],
+      [1, 3],
+      [1, 3],
+      [1, 3],
+      0,
+      0,
+      0,
+      [1, 3],
+    ],
+  ],
+};
+
 class PlaygroundScene {
-  constructor({ ctx, width, height, boundary, envApi }) {
+  // { ctx, width, height, boundary, envApi }
+  constructor(props) {
+    this.props = props;
+    this.state = {
+      assets: {},
+      playing: false,
+      level: 1,
+    };
+    this.elements = {};
+
+    this.initElements();
+  }
+
+  setState(state = {}) {
+    this.state = {
+      ...this.state,
+      ...state,
+    };
+  }
+
+  setElements(elements = {}) {
+    this.elements = {
+      ...this.elements,
+      ...elements,
+    };
+  }
+
+  initElements() {
+    const { ctx, width, height, boundary } = this.props;
     const ball = new Ball(
       {
         type: "circle",
@@ -68,38 +252,12 @@ class PlaygroundScene {
       }
     );
 
-    this.brickMatrix = [
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, [1,3], [2,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, [1,2], [1,2], [1,2], [2,2], [1,2], [1,2], [1,2], [1,2], 0, 0, 0, [1,2]],
-      [0, 0, 0, 0, 0, 0, 0, 0, [1,2], [1,2], [1,2], [3,1], [1,2], [1,2], [1,2], [1,2], 0, 0, 0, [1,2]],
-      [0, 0, 0, 0, 0, 0, 0, [1,2], [1,2], [1,2], [1,2], [1,2], [3,1], [1,2], [1,2], 0, 0, 0, [1,2]],
-      [0, 0, 0, 0, 0, 0, 0, 0, [1,2], [1,2], [1,2], [1,2], [1,2], [1,1], [1,1], [1,1], 0, 0, 0, [1,1]],
-      [0, 0, 0, 0, 0, 0, 0, [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], 0, 0, 0, [1,3]],
-      [0, 0, 0, 0, 0, 0, 0, 0, [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], 0, 0, 0, [1,3]],
-    ];
-
-    this.playing = false;
-    this.ctx = ctx;
-    this.width = width;
-    this.height = height;
-    this.envApi = envApi;
-    this.assets = {};
-
-    this.ball = ball;
-    this.breaker = breaker;
-    this.bricks = [];
-    this.ground = ground;
-  }
-
-  preload(assets) {
-    assets.forEach((asset) => {
-      const assetImage = new Image();
-      assetImage.src = asset.image;
-      assetImage.onload = () => {
-        this.assets[asset.key] = assetImage;
-      };
-    });
+    this.elements = {
+      ball,
+      breaker,
+      ground,
+      bricks: [],
+    };
   }
 
   bindEvents() {
@@ -114,24 +272,27 @@ class PlaygroundScene {
 
   listenArrowKeysDown = (e) => {
     if (e.which === 37) {
-      this.breaker.goLeft();
+      this.elements.breaker.goLeft();
     } else if (e.which === 39) {
-      this.breaker.goRight();
+      this.elements.breaker.goRight();
     }
   };
 
   listenArrowKeysUp = (e) => {
     if (e.which === 37 || e.which === 39) {
-      this.breaker.stop();
+      this.elements.breaker.stop();
     }
   };
 
   mountBricks() {
-    const unitWidth = this.width / 34;
+    const { width, height, ctx } = this.props;
+    const { level } = this.state;
+
+    const unitWidth = width / 34;
     const unitHeight = (unitWidth * 15) / 13;
 
     let y = 0;
-    this.brickMatrix.forEach((row) => {
+    BRICK_MATRIX[level].forEach((row) => {
       let x = 0;
       row.forEach((colVal) => {
         if (colVal) {
@@ -145,12 +306,12 @@ class PlaygroundScene {
               y,
             },
             {
-              ctx: this.ctx,
-              width: this.width,
-              height: this.height,
+              ctx,
+              width,
+              height,
             }
           );
-          this.bricks.push(brick);
+          this.elements.bricks.push(brick);
         }
         x += unitWidth * ((colVal && colVal[0]) || 1) + 4;
       });
@@ -159,53 +320,54 @@ class PlaygroundScene {
   }
 
   update() {
-    if (this.playing) {
+    const { envApi } = this.props;
+    const { playing } = this.state;
+    const { ball, breaker, ground, bricks } = this.elements;
+
+    if (playing) {
       const rectCollisionVector = CollisionHandler.isCircleCollidingRect(
-        this.ball,
-        this.breaker
+        ball,
+        breaker
       );
       if (rectCollisionVector) {
         if (rectCollisionVector[0]) {
-          this.ball.dy = this.ball.dy > 0 ? -this.ball.dy : this.ball.dy;
+          ball.dy = ball.dy > 0 ? -ball.dy : ball.dy;
         } else if (rectCollisionVector[2]) {
-          this.ball.dy = this.ball.dy > 0 ? this.ball.dy : -this.ball.dy;
+          ball.dy = ball.dy > 0 ? ball.dy : -ball.dy;
         }
         if (rectCollisionVector[1]) {
-          this.ball.dx = this.ball.dx > 0 ? this.ball.dx : -this.ball.dx;
+          ball.dx = ball.dx > 0 ? ball.dx : -ball.dx;
         } else if (rectCollisionVector[3]) {
-          this.ball.dx = this.ball.dx > 0 ? this.ball.dx : -this.ball.dx;
+          ball.dx = ball.dx > 0 ? ball.dx : -ball.dx;
         }
-      } else if (
-        this.ball.y + this.ball.radius >
-        this.breaker.y + this.breaker.height
-      ) {
+      } else if (ball.y + ball.radius > breaker.y + breaker.height) {
         this.stop();
-        this.envApi.changeState(GAME_STATES.END);
+        envApi.changeState(GAME_STATES.END);
       } else {
-        for (let brIdx = 0; brIdx < this.bricks.length; brIdx++) {
-          const brick = this.bricks[brIdx];
-          if(brick.disabled) {
+        for (let brIdx = 0; brIdx < bricks.length; brIdx++) {
+          const brick = bricks[brIdx];
+          if (brick.disabled) {
             continue;
           }
           const brickCollisionVector = CollisionHandler.isCircleCollidingRect(
-            this.ball,
+            ball,
             brick
           );
 
           if (brickCollisionVector) {
             if (brickCollisionVector[0]) {
-              this.ball.dy = this.ball.dy > 0 ? -this.ball.dy : this.ball.dy;
+              ball.dy = ball.dy > 0 ? -ball.dy : ball.dy;
             } else if (brickCollisionVector[2]) {
-              this.ball.dy = this.ball.dy > 0 ? this.ball.dy : -this.ball.dy;
+              ball.dy = ball.dy > 0 ? ball.dy : -ball.dy;
             }
             if (brickCollisionVector[1]) {
-              this.ball.dx = this.ball.dx > 0 ? this.ball.dx : -this.ball.dx;
+              ball.dx = ball.dx > 0 ? ball.dx : -ball.dx;
             } else if (brickCollisionVector[3]) {
-              this.ball.dx = this.ball.dx > 0 ? -this.ball.dx : this.ball.dx;
+              ball.dx = ball.dx > 0 ? -ball.dx : ball.dx;
             }
 
-            const currScore = this.envApi.getScore();
-            this.envApi.changeScore(currScore + 1);
+            const currScore = envApi.getScore();
+            envApi.changeScore(currScore + 1);
 
             brick.onCollision();
             break;
@@ -214,60 +376,51 @@ class PlaygroundScene {
       }
     }
 
-    if (this.assets["sky"]) {
-      const pattern = this.ctx.createPattern(this.assets["sky"], "repeat");
-      this.ctx.fillStyle = pattern;
-      this.ctx.beginPath();
-      this.ctx.fillRect(0, 0, this.width, this.height);
-      this.ctx.closePath();
-    }
-
-    if (this.assets["wall"]) {
-      const pattern = this.ctx.createPattern(this.assets["wall"], "repeat");
-      this.ctx.fillStyle = pattern;
-      this.ctx.beginPath();
-      this.ctx.fillRect(0, 0, this.width, this.height);
-      this.ctx.closePath();
-    }
-
-    if (this.assets["road"]) {
-      const pattern = this.ctx.createPattern(this.assets["road"], "repeat");
-      this.ctx.fillStyle = pattern;
-      this.ctx.beginPath();
-      this.ctx.fillRect(0, 0, this.width, this.height);
-      this.ctx.closePath();
-    }
-
-    this.ground.update();
-    this.bricks.forEach((br) => br.update());
-    this.ball.update();
-    this.breaker.update();
+    ground.update();
+    bricks.forEach((br) => br.update());
+    ball.update();
+    breaker.update();
   }
 
   start() {
-    this.playing = true;
-    
-    this.ball.start();
-    this.breaker.start();
-    
-    this.bricks = [];
-    this.mountBricks();
+    const { ball, breaker } = this.elements;
 
+    this.setState({
+      playing: true,
+    });
+    this.setElements({
+      bricks: [],
+    });
+
+    ball.start();
+    breaker.start();
+
+    this.mountBricks();
     this.bindEvents();
   }
 
   stop() {
-    this.playing = false;
-    this.ball.stop();
-    this.breaker.stop();
+    const { ball, breaker } = this.elements;
+
+    this.setState({
+      playing: false,
+    });
+
+    ball.stop();
+    breaker.stop();
 
     this.unBindEvents();
   }
 
   reset() {
-    this.playing = true;
-    this.ball.reset();
-    this.breaker.reset();
+    const { ball, breaker } = this.elements;
+
+    this.setState({
+      playing: true,
+    });
+
+    ball.reset();
+    breaker.reset();
 
     this.start();
   }

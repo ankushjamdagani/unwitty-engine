@@ -1,6 +1,6 @@
 import { GAME_STATES } from "../constants";
 
-import Animator from "../helpers/Animators";
+import Animator from "../helpers/Animator";
 
 class ResultsScene {
   constructor({ ctx, width, height, envApi }) {
