@@ -27,8 +27,8 @@ class Breaker extends Component {
   }
 
   validatePosition() {
-    const { x, width } = this.state;
-    const { env } = this.props;
+    const { x } = this.state;
+    const { width, env } = this.props;
 
     if (env.boundary.x) {
       if (x <= 0) {
