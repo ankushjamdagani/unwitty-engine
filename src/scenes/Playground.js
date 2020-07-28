@@ -238,12 +238,12 @@ class PlaygroundScene extends Component {
       }
     );
 
-    this.elements = {
+    this.setElements({
       ball,
       breaker,
       ground,
       bricks: [],
-    };
+    });
   }
 
   bindEvents() {
