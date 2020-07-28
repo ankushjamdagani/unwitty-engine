@@ -1,4 +1,4 @@
-import rover from "../assets/images/Board.svg";
+import rover from "../assets/images/Board3.svg";
 
 class Breaker {
   constructor(initialConfig, env) {

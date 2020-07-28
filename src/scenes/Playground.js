@@ -36,9 +36,9 @@ class PlaygroundScene {
     const breaker = new Breaker(
       {
         type: "rect",
-        x: width / 2 - 130,
-        y: height - 40 - 100,
-        width: 130,
+        x: width / 2 - 150,
+        y: height - 44 - 100,
+        width: 150,
         height: 40,
         initialSpeed: 0,
         maxSpeed: 15,
@@ -127,7 +127,7 @@ class PlaygroundScene {
   };
 
   mountBricks() {
-    const unitWidth = this.width / 30;
+    const unitWidth = this.width / 34;
     const unitHeight = (unitWidth * 15) / 13;
 
     let y = 0;
