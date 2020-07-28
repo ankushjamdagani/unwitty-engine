@@ -7,7 +7,7 @@ import Breaker from "../objects/Breaker";
 import Brick from "../objects/Brick";
 import Ground from "../objects/Ground";
 
-import CollisionHandler from "../observers/CollisionHandler";
+import CollisionHandler from "../helpers/CollisionHandler";
 
 const BRICK_MATRIX = {
   1: [
