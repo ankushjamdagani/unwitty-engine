@@ -1,3 +1,7 @@
+import Component from "../HOC/Component";
+
+import { CreateImage } from "../helpers/Creator";
+
 import BrickSmall3 from "../assets/images/Brick - Small - Strong.svg";
 import BrickSmall2 from "../assets/images/Brick - Small - Weak.svg";
 import BrickSmall1 from "../assets/images/Brick - Small - Weakest.svg";
@@ -22,20 +26,13 @@ const ImageStrenghtMap = {
   2: "strong",
 };
 
-class Brick {
-  constructor(initialConfig, env) {
-    const { size, strength, x, y, width, height, ...options } = initialConfig;
+class Brick extends Component {
+  constructor(props) {
+    super(props);
 
-    this.initialConfig = initialConfig;
-    this.strength = strength;
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
-    this.options = options;
-    this.env = env;
-
-    this.assets = {};
+    this.state = {
+      strength: props.strength,
+    };
 
     this.preload([
       {
@@ -53,40 +50,31 @@ class Brick {
     ]);
   }
 
-  preload(assets) {
-    assets.forEach((asset) => {
-      const assetImage = new Image();
-      assetImage.src = asset.image;
-      assetImage.onload = () => {
-        this.assets[asset.key] = assetImage;
-      };
+  onCollision() {
+    const { strength } = this.state;
+    this.setState({ strength: strength - 1 }, (state) => {
+      if (state.strength < 0) {
+        // @todo how to handle this???
+        this.disabled = true;
+      }
     });
   }
 
-  start() {}
-
-  stop() {}
-
-  reset() {}
-
-  draw() {
-    const { x, y, width, height, strength } = this;
+  update() {
+    const { x, y, width, height, env } = this.props;
+    const { strength } = this.state;
 
     const image = this.assets[ImageStrenghtMap[strength]];
 
-    image && this.env.ctx.drawImage(image, x, y, width, height);
-  }
-
-  onCollision() {
-    this.strength -= 1;
-
-    if (this.strength < 0) {
-      this.disabled = true;
-    }
-  }
-
-  update() {
-    this.draw();
+    image &&
+      CreateImage({
+        ctx: env.ctx,
+        image,
+        x,
+        y,
+        width,
+        height,
+      });
   }
 }
 

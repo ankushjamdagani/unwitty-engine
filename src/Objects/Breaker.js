@@ -1,106 +1,119 @@
+import Component from "../HOC/Component";
+
+import { CreateImage } from "../helpers/Creator";
+
 import rover from "../assets/images/Board3.svg";
 
-class Breaker {
-  constructor(initialConfig, env) {
-    const {
-      type,
-      x,
-      y,
-      width,
-      height,
-      initialSpeed,
-      maxSpeed,
-      tyreRadius,
-      ...options
-    } = initialConfig;
+class Breaker extends Component {
+  constructor(props) {
+    super(props);
 
-    this.initialConfig = initialConfig;
-    this.type = type;
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
-    this.u = initialSpeed;
-    this.v = maxSpeed;
-    this.dx = initialSpeed;
-    this.options = options;
-    this.env = env;
-
-    this.assets = {};
+    this.state = {
+      x: props.x,
+      y: props.y,
+      dx: props.initialSpeed,
+    };
 
     this.preload([{ key: "rover", image: rover }]);
   }
 
-  preload(assets) {
-    assets.forEach((asset) => {
-      const assetImage = new Image();
-      assetImage.src = asset.image;
-      assetImage.onload = () => {
-        this.assets[asset.key] = assetImage;
-      };
-    });
-  }
-
   isTouchingBorder() {
+    const { x, y, width, height } = this.state;
+    const { env } = this.props;
+
     return (
-      this.x === 0 ||
-      this.y === 0 ||
-      this.x + this.width === this.env.width ||
-      this.y + this.height === this.env.height
+      x === 0 || y === 0 || x + width === env.width || y + height === env.height
     );
   }
 
   validatePosition() {
-    const { x, width } = this;
-    if (this.env.boundary.x) {
+    const { x, width } = this.state;
+    const { env } = this.props;
+
+    if (env.boundary.x) {
       if (x <= 0) {
-        this.x = 0;
-      } else if (x + width >= this.env.width) {
-        this.x = this.env.width - width;
+        this.setState({
+          x: 0,
+        });
+      } else if (x + width >= env.width) {
+        this.setState({
+          x: env.width - width,
+        });
       }
     } else {
       if (x <= 0) {
-        this.x = this.env.width - width;
-      } else if (x + width >= this.env.width) {
-        this.x = 0;
+        this.setState({
+          x: env.width - width,
+        });
+      } else if (x + width >= env.width) {
+        this.setState({
+          x: 0,
+        });
       }
     }
   }
 
   move() {
-    this.x += this.dx;
+    const { x, dx } = this.state;
+
+    this.setState({
+      x: x + dx,
+    });
+
     this.validatePosition();
   }
 
   goLeft() {
-    this.dx = -this.v;
+    const { maxSpeed } = this.props;
+
+    this.setState({
+      dx: -maxSpeed,
+    });
   }
 
   goRight() {
-    this.dx = this.v;
-  }
+    const { maxSpeed } = this.props;
 
-  start() {}
-
-  stop() {
-    this.dx = this.u;
-  }
-
-  reset() {
-    this.x = this.initialConfig.x;
-    this.y = this.initialConfig.y;
+    this.setState({
+      dx: maxSpeed,
+    });
   }
 
   draw() {
-    const { x, y, width, height } = this;
+    const { env, width, height } = this.props;
+    const { x, y } = this.state;
 
     this.assets["rover"] &&
-      this.env.ctx.drawImage(this.assets["rover"], x, y, width, height);
+      CreateImage({
+        ctx: env.ctx,
+        image: this.assets["rover"],
+        x,
+        y,
+        width,
+        height,
+      });
   }
 
   update() {
     this.move();
     this.draw();
+  }
+
+  stop() {
+    const { initialSpeed } = this.props;
+
+    this.setState({
+      dx: initialSpeed,
+    });
+  }
+
+  reset() {
+    const { x, y } = this.props;
+
+    this.setState({
+      x,
+      y,
+    });
   }
 }
 

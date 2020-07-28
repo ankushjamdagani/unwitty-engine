@@ -22,10 +22,14 @@ function CreateRect({
   ctx.closePath();
 }
 
-function CreateText({ ctx, x, y, text, fontColor, font }) {
+function CreateText({ ctx, text, x, y, fontColor, font }) {
   ctx.fillStyle = fontColor;
   ctx.font = font;
   ctx.fillText(text, x, y);
 }
 
-export { CreateRect, CreateText };
+function CreateImage({ ctx, image, x, y, width, height }) {
+  ctx.drawImage(image, x, y, width, height);
+}
+
+export { CreateRect, CreateText, CreateImage };

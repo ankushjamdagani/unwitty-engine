@@ -16,25 +16,31 @@ class Component {
     });
   }
 
-  setState(state = {}) {
+  setState(state = {}, cb) {
     this.state = {
       ...this.state,
       ...state,
     };
+
+    cb && cb();
   }
 
-  setAssets(assets = {}) {
+  setAssets(assets = {}, cb) {
     this.assets = {
       ...this.assets,
       ...assets,
     };
+
+    cb && cb();
   }
 
-  setElements(elements = {}) {
+  setElements(elements = {}, cb) {
     this.elements = {
       ...this.elements,
       ...elements,
     };
+
+    cb && cb();
   }
 
   start() {}

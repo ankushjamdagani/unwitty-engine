@@ -1,39 +1,24 @@
+import Component from "../HOC/Component";
+
+import { CreateImage } from "../helpers/Creator";
+import Animator from "../helpers/Animator";
+
 import ball1 from "../assets/images/BallRotate1.svg";
 import ball2 from "../assets/images/BallRotate2.svg";
 import ball3 from "../assets/images/BallRotate3.svg";
 import ball4 from "../assets/images/BallRotate4.svg";
 import ball5 from "../assets/images/BallRotate5.svg";
 
-import Animator from "../helpers/Animator";
+class Ball extends Component {
+  constructor(props) {
+    super(props);
 
-class Ball {
-  constructor(initialConfig, env) {
-    const {
-      type,
-      x,
-      y,
-      radius,
-      fillColor,
-      initialSpeed,
-      maxSpeed,
-      ...options
-    } = initialConfig;
-
-    this.initialConfig = initialConfig;
-    this.type = type;
-    this.x = x;
-    this.y = y;
-    this.radius = radius;
-    this.fillColor = fillColor;
-    this.ux = initialSpeed.x;
-    this.uy = initialSpeed.y;
-    this.vx = maxSpeed.x;
-    this.vy = maxSpeed.y;
-    this.dx = initialSpeed.x;
-    this.dy = initialSpeed.y;
-    this.options = options;
-    this.env = env;
-    this.assets = {};
+    this.state = {
+      x: props.x,
+      y: props.y,
+      dx: props.initialSpeed.x,
+      dy: props.initialSpeed.y,
+    };
 
     this.preload([
       { key: 1, image: ball1 },
@@ -50,97 +35,124 @@ class Ball {
       step: 1,
       ticksInterval: 10,
       direction: "normal",
-      // iterationCount: 10
-    });
-  }
-
-  preload(assets) {
-    assets.forEach((asset) => {
-      const assetImage = new Image();
-      assetImage.src = asset.image;
-      assetImage.onload = () => {
-        this.assets[asset.key] = assetImage;
-      };
     });
   }
 
   isTouchingBorder() {
+    const { x, y, radius } = this.state;
+    const { env } = this.props;
+
     return (
-      this.x - this.radius == 0 ||
-      this.x + this.radius === this.env.width ||
-      this.y - this.radius == 0 ||
-      this.y + this.radius === this.env.height
+      x - radius == 0 ||
+      x + radius === env.width ||
+      y - radius == 0 ||
+      y + radius === env.height
     );
   }
 
   validatePosition() {
-    const { x, y, radius } = this;
-    if (this.env.boundary.x) {
+    const { x, y, dx, dy } = this.state;
+    const { env, radius } = this.props;
+
+    if (env.boundary.x) {
       if (x - radius <= 0) {
-        this.x = radius;
-        this.dx = -this.dx;
-      } else if (x + radius >= this.env.width) {
-        this.x = this.env.width - radius;
-        this.dx = -this.dx;
+        this.setState({
+          x: radius,
+          dx: -dx,
+        });
+      } else if (x + radius >= env.width) {
+        this.setState({
+          x: env.width - radius,
+          dx: -dx,
+        });
       }
     } else {
       if (x - radius <= 0) {
-        this.x = this.env.width - radius;
-      } else if (x + radius >= this.env.width) {
-        this.x = radius;
+        this.setState({
+          x: env.width - radius,
+        });
+      } else if (x + radius >= env.width) {
+        this.setState({
+          x: radius,
+        });
       }
     }
 
-    if (this.env.boundary.y) {
+    if (env.boundary.y) {
       if (y - radius <= 0) {
-        this.y = radius;
-        this.dy = -this.dy;
-      } else if (y + radius >= this.env.height) {
-        this.y = this.env.height - radius;
-        this.dy = -this.dy;
+        this.setState({
+          y: radius,
+          dy: -dy,
+        });
+      } else if (y + radius >= env.height) {
+        this.setState({
+          y: env.height - radius,
+          dy: -dy,
+        });
       }
     } else {
       if (y - radius <= 0) {
-        this.y = this.env.height - radius;
-      } else if (y + radius >= this.env.height) {
-        this.y = radius;
+        this.setState({
+          y: env.height - radius,
+        });
+      } else if (y + radius >= env.height) {
+        this.setState({
+          y: radius,
+        });
       }
     }
   }
 
   move() {
-    this.x += this.dx;
-    this.y += this.dy;
+    const { x, y, dx, dy } = this.state;
+
+    this.setState({
+      x: x + dx,
+      y: y + dy,
+    });
+
     this.validatePosition();
   }
 
   start() {
-    this.dx = this.vx;
-    this.dy = this.vy;
+    const { maxSpeed } = this.props;
+    this.setState({
+      dx: maxSpeed.x,
+      dy: maxSpeed.y,
+    });
   }
 
   stop() {
-    this.dx = this.ux;
-    this.dy = this.uy;
+    const { initialSpeed } = this.props;
+    this.setState({
+      dx: initialSpeed.x,
+      dy: initialSpeed.y,
+    });
   }
 
   reset() {
-    this.x = this.initialConfig.x;
-    this.y = this.initialConfig.y;
+    const { x, y } = this.props;
+    this.setState({
+      x: x,
+      y: y,
+    });
   }
 
   draw() {
-    const { x, y, radius, fillColor } = this;
+    const { radius, env } = this.props;
+    const { x, y } = this.state;
+
     const imageIndex = this.imageAnimator.update();
 
     this.assets[imageIndex] &&
-      this.env.ctx.drawImage(
-        this.assets[imageIndex],
-        x - radius,
-        y - radius,
-        radius * 2,
-        radius * 2
-      );
+      CreateImage({
+        ctx: env.ctx,
+        image: this.assets[imageIndex],
+        x: x - radius,
+        y: y - radius,
+        width: radius * 2,
+        height: radius * 2,
+      });
   }
 
   update() {

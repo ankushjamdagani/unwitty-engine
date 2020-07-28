@@ -179,47 +179,43 @@ class PlaygroundScene extends Component {
 
   initElements() {
     const { ctx, width, height, boundary } = this.props;
-    const ball = new Ball(
-      {
-        type: "circle",
-        x: 120,
-        y: 100,
-        radius: 12,
-        fillColor: "#3f8aff",
-        initialSpeed: {
-          x: 0,
-          y: 0,
-        },
-        maxSpeed: {
-          x: 5,
-          y: 5,
-        },
+    const ball = new Ball({
+      type: "circle",
+      x: 120,
+      y: 100,
+      radius: 12,
+      fillColor: "#3f8aff",
+      initialSpeed: {
+        x: 0,
+        y: 0,
       },
-      {
+      maxSpeed: {
+        x: 5,
+        y: 5,
+      },
+      env: {
         ctx,
         width,
         height,
         boundary,
-      }
-    );
+      },
+    });
 
-    const breaker = new Breaker(
-      {
-        type: "rect",
-        x: width / 2 - 150,
-        y: height - 44 - 100,
-        width: 150,
-        height: 40,
-        initialSpeed: 0,
-        maxSpeed: 15,
-      },
-      {
+    const breaker = new Breaker({
+      type: "rect",
+      x: width / 2 - 150,
+      y: height - 44 - 100,
+      width: 150,
+      height: 40,
+      initialSpeed: 0,
+      maxSpeed: 15,
+      env: {
         ctx,
         width,
         height,
         boundary,
-      }
-    );
+      },
+    });
 
     const ground = new Ground({
       x: 0,
@@ -280,21 +276,19 @@ class PlaygroundScene extends Component {
       let x = 0;
       row.forEach((colVal) => {
         if (colVal) {
-          const brick = new Brick(
-            {
-              size: colVal[0] - 1,
-              strength: colVal[1] - 1,
-              width: unitWidth * colVal[0],
-              height: unitHeight,
-              x,
-              y,
-            },
-            {
+          const brick = new Brick({
+            size: colVal[0] - 1,
+            strength: colVal[1] - 1,
+            width: unitWidth * colVal[0],
+            height: unitHeight,
+            x,
+            y,
+            env: {
               ctx,
               width,
               height,
-            }
-          );
+            },
+          });
           this.elements.bricks.push(brick);
         }
         x += unitWidth * ((colVal && colVal[0]) || 1) + 4;
