@@ -37,15 +37,15 @@ class Brick extends Component {
     this.preload([
       {
         key: "strong",
-        image: ImageSizeMap[size][0],
+        image: ImageSizeMap[props.size][0],
       },
       {
         key: "weak",
-        image: ImageSizeMap[size][1],
+        image: ImageSizeMap[props.size][1],
       },
       {
         key: "weakest",
-        image: ImageSizeMap[size][2],
+        image: ImageSizeMap[props.size][2],
       },
     ]);
   }

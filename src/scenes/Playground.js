@@ -268,6 +268,8 @@ class PlaygroundScene extends Component {
     const { width, height, ctx } = this.props;
     const { level } = this.state;
 
+    const bricks = [];
+
     const unitWidth = width / 34;
     const unitHeight = (unitWidth * 15) / 13;
 
@@ -289,11 +291,15 @@ class PlaygroundScene extends Component {
               height,
             },
           });
-          this.elements.bricks.push(brick);
+          bricks.push(brick);
         }
         x += unitWidth * ((colVal && colVal[0]) || 1) + 4;
       });
       y += unitHeight + 4;
+    });
+
+    this.setElements({
+      bricks,
     });
   }
 
@@ -304,21 +310,41 @@ class PlaygroundScene extends Component {
 
     if (playing) {
       const rectCollisionVector = CollisionHandler.isCircleCollidingRect(
-        ball,
-        breaker
+        {
+          x: ball.state.x,
+          y: ball.state.y,
+          radius: ball.props.radius,
+        },
+        {
+          x: breaker.state.x,
+          y: breaker.state.y,
+          width: breaker.props.width,
+          height: breaker.props.height,
+        }
       );
       if (rectCollisionVector) {
         if (rectCollisionVector[0]) {
-          ball.dy = ball.dy > 0 ? -ball.dy : ball.dy;
+          ball.setState({
+            dy: ball.state.dy > 0 ? -ball.state.dy : ball.state.dy,
+          });
         } else if (rectCollisionVector[2]) {
-          ball.dy = ball.dy > 0 ? ball.dy : -ball.dy;
+          ball.setState({
+            dy: ball.state.dy > 0 ? ball.state.dy : -ball.state.dy,
+          });
         }
         if (rectCollisionVector[1]) {
-          ball.dx = ball.dx > 0 ? ball.dx : -ball.dx;
+          ball.setState({
+            dx: ball.state.dx > 0 ? ball.state.dx : -ball.state.dx,
+          });
         } else if (rectCollisionVector[3]) {
-          ball.dx = ball.dx > 0 ? ball.dx : -ball.dx;
+          ball.setState({
+            dx: ball.state.dx > 0 ? -ball.state.dx : ball.state.dx,
+          });
         }
-      } else if (ball.y + ball.radius > breaker.y + breaker.height) {
+      } else if (
+        ball.state.y + ball.props.radius >
+        breaker.state.y + breaker.props.height
+      ) {
         this.stop();
         envApi.changeState(GAME_STATES.END);
       } else {
@@ -328,20 +354,37 @@ class PlaygroundScene extends Component {
             continue;
           }
           const brickCollisionVector = CollisionHandler.isCircleCollidingRect(
-            ball,
-            brick
+            {
+              x: ball.state.x,
+              y: ball.state.y,
+              radius: ball.props.radius,
+            },
+            {
+              x: brick.props.x,
+              y: brick.props.y,
+              width: brick.props.width,
+              height: brick.props.height,
+            }
           );
 
           if (brickCollisionVector) {
             if (brickCollisionVector[0]) {
-              ball.dy = ball.dy > 0 ? -ball.dy : ball.dy;
+              ball.setState({
+                dy: ball.state.dy > 0 ? -ball.state.dy : ball.state.dy,
+              });
             } else if (brickCollisionVector[2]) {
-              ball.dy = ball.dy > 0 ? ball.dy : -ball.dy;
+              ball.setState({
+                dy: ball.state.dy > 0 ? ball.state.dy : -ball.state.dy,
+              });
             }
             if (brickCollisionVector[1]) {
-              ball.dx = ball.dx > 0 ? ball.dx : -ball.dx;
+              ball.setState({
+                dx: ball.state.dx > 0 ? ball.state.dx : -ball.state.dx,
+              });
             } else if (brickCollisionVector[3]) {
-              ball.dx = ball.dx > 0 ? -ball.dx : ball.dx;
+              ball.setState({
+                dx: ball.state.dx > 0 ? -ball.state.dx : ball.state.dx,
+              });
             }
 
             const currScore = envApi.getScore();

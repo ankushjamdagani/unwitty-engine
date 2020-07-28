@@ -22,7 +22,7 @@ class Component {
       ...state,
     };
 
-    cb && cb();
+    cb && cb(this.state);
   }
 
   setAssets(assets = {}, cb) {
@@ -31,7 +31,7 @@ class Component {
       ...assets,
     };
 
-    cb && cb();
+    cb && cb(this.assets);
   }
 
   setElements(elements = {}, cb) {
@@ -40,7 +40,7 @@ class Component {
       ...elements,
     };
 
-    cb && cb();
+    cb && cb(this.elements);
   }
 
   start() {}
