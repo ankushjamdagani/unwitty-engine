@@ -1,48 +1,43 @@
-import ball1 from "../assets/images/Ball1.svg";
+import Component from "../HOC/Component";
 
-class ScoreBoardScene {
-  constructor({ ctx, width, height, envApi }) {
-    this.width = width;
-    this.height = height;
-    this.ctx = ctx;
-    this.envApi = envApi;
+import { CreateRect, CreateText } from "../helpers/Creator";
 
-    this.assets = {};
-
-    this.preload([{ key: 1, image: ball1 }]);
-  }
-
-  preload(assets) {
-    assets.forEach((asset) => {
-      const assetImage = new Image();
-      assetImage.src = asset.image;
-      assetImage.onload = () => {
-        this.assets[asset.key] = assetImage;
-      };
-    });
-  }
-
-  start() {}
-
-  stop() {}
-
+class ScoreBoardScene extends Component {
   reset() {
-    this.envApi.changeScore(0);
+    const { envApi } = this.props;
+    envApi.changeScore(0);
   }
 
   update() {
-    this.ctx.strokeStyle = "rgba(0,0,0,1)";
-    this.ctx.lineWidth = 4;
-    this.ctx.beginPath();
-    this.ctx.strokeRect(this.width - 210, 10, 200, 80);
-    this.ctx.closePath();
+    const { ctx, envApi, width } = this.props;
 
-    this.ctx.fillStyle = "#000 ";
-    this.ctx.font = "14px primaryFont";
-    this.ctx.fillText("SCORE", this.width - 190, 40);
+    CreateRect({
+      ctx,
+      x: width - 210,
+      y: 10,
+      width: 200,
+      height: 80,
+      strokeSize: 4,
+      strokeColor: "rgba(0,0,0,1)",
+    });
 
-    this.ctx.font = "30px primaryFont";
-    this.ctx.fillText(this.envApi.getScore(), this.width - 190, 80);
+    CreateText({
+      ctx,
+      x: width - 190,
+      y: 40,
+      text: "SCORE",
+      font: "14px primaryFont",
+      fontColor: "#000",
+    });
+
+    CreateText({
+      ctx,
+      x: width - 190,
+      y: 80,
+      text: envApi.getScore(),
+      font: "30px primaryFont",
+      fontColor: "#000",
+    });
   }
 }
 

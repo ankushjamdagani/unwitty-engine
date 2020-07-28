@@ -1,11 +1,14 @@
 import { GAME_STATES } from "../constants";
 
+import Component from "../HOC/Component";
+
 import Animator from "../helpers/Animator";
 import { CreateRect, CreateText } from "../helpers/Creator";
 
-class ResultsScene {
+class ResultsScene extends Component {
   constructor(props) {
-    this.props = props;
+    super(props);
+    
     this.subTitleOpacityAnimator = new Animator({
       startVal: 0,
       minVal: 0,

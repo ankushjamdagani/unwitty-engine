@@ -1,5 +1,7 @@
 import { GAME_STATES } from "../constants";
 
+import Component from "../HOC/Component";
+
 import Ball from "../objects/Ball";
 import Breaker from "../objects/Breaker";
 import Brick from "../objects/Brick";
@@ -163,32 +165,16 @@ const BRICK_MATRIX = {
   ],
 };
 
-class PlaygroundScene {
-  // { ctx, width, height, boundary, envApi }
+class PlaygroundScene extends Component {
   constructor(props) {
-    this.props = props;
+    super(props);
+
     this.state = {
-      assets: {},
       playing: false,
       level: 1,
     };
-    this.elements = {};
 
     this.initElements();
-  }
-
-  setState(state = {}) {
-    this.state = {
-      ...this.state,
-      ...state,
-    };
-  }
-
-  setElements(elements = {}) {
-    this.elements = {
-      ...this.elements,
-      ...elements,
-    };
   }
 
   initElements() {
