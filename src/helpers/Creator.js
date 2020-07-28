@@ -1,4 +1,4 @@
-function CreatRect({
+function CreateRect({
   ctx,
   x,
   y,
@@ -28,4 +28,4 @@ function CreateText({ ctx, x, y, text, fontColor, font }) {
   ctx.fillText(text, x, y);
 }
 
-export { CreatRect, CreateText };
+export { CreateRect, CreateText };

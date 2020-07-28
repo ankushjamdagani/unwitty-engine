@@ -1,6 +1,7 @@
 import { GAME_STATES } from "../constants";
+
 import Animator from "../helpers/Animator";
-import { CreatRect, CreateText } from "../helpers/Creator";
+import { CreateRect, CreateText } from "../helpers/Creator";
 
 class HomeScene {
   constructor(props) {
@@ -46,7 +47,7 @@ class HomeScene {
     const { ctx, width, height } = this.props;
     const subTitleOpacity = this.subTitleOpacityAnimator.update();
 
-    CreatRect({
+    CreateRect({
       ctx,
       x: width / 2 - 260,
       y: height / 2 - 85,
@@ -55,7 +56,7 @@ class HomeScene {
       fillColor: "#000",
     });
 
-    CreatRect({
+    CreateRect({
       ctx,
       x: width / 2 - 260,
       y: height / 2 + 104,
@@ -64,7 +65,7 @@ class HomeScene {
       fillColor: "#000",
     });
 
-    CreatRect({
+    CreateRect({
       ctx,
       x: width / 2 - 230,
       y: height / 2 - 105,
