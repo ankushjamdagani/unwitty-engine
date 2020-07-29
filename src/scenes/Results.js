@@ -8,7 +8,7 @@ import { CreateRect, CreateText } from "../helpers/Creator";
 class ResultsScene extends Component {
   constructor(props) {
     super(props);
-    
+
     this.subTitleOpacityAnimator = new Animator({
       startVal: 0,
       minVal: 0,
@@ -27,10 +27,10 @@ class ResultsScene extends Component {
   }
 
   listenKeysUp = (e) => {
-    const { envApi } = this.props;
+    const { gameInstance } = this.props;
     e.preventDefault();
     if (e.which === 32 || e.keyCode === 32) {
-      envApi.changeState(GAME_STATES.PLAY);
+      gameInstance.changeState(GAME_STATES.PLAY);
       this.stop();
     }
   };
@@ -44,7 +44,7 @@ class ResultsScene extends Component {
   }
 
   update() {
-    const { ctx, width, height, envApi } = this.props;
+    const { ctx, width, height, gameInstance } = this.props;
     const subTitleOpacity = this.subTitleOpacityAnimator.update();
 
     CreateRect({
@@ -78,7 +78,7 @@ class ResultsScene extends Component {
       ctx,
       x: width / 2 - 190,
       y: height / 2,
-      text: "SCORE :: " + envApi.getScore(),
+      text: "SCORE :: " + gameInstance.getScore(),
       font: "30px primaryFont",
       fontColor: "#fff",
     });

@@ -1,15 +1,23 @@
 import Component from "../HOC/Component";
 
-import { CreateRect, CreateText } from "../helpers/Creator";
+import HeartFilled from "../assets/images/HeartFilled.svg";
+
+import { CreateRect, CreateText, CreateImage } from "../helpers/Creator";
 
 class ScoreBoardScene extends Component {
+  constructor(props) {
+    super(props);
+
+    this.preload([{ key: "HeartFilled", src: HeartFilled }]);
+  }
+
   reset() {
-    const { envApi } = this.props;
-    envApi.changeScore(0);
+    const { gameInstance } = this.props;
+    gameInstance.changeScore(0);
   }
 
   update() {
-    const { ctx, envApi, width } = this.props;
+    const { ctx, gameInstance, width } = this.props;
 
     CreateRect({
       ctx,
@@ -34,10 +42,39 @@ class ScoreBoardScene extends Component {
       ctx,
       x: width - 190,
       y: 80,
-      text: envApi.getScore(),
+      text: gameInstance.getScore(),
       font: "30px primaryFont",
       fontColor: "#000",
     });
+
+    if (this.assets["HeartFilled"]) {
+      CreateImage({
+        ctx,
+        image: this.assets["HeartFilled"],
+        x: width - 190,
+        y: 110,
+        width: 32,
+        height: 32,
+      });
+
+      CreateImage({
+        ctx,
+        image: this.assets["HeartFilled"],
+        x: width - 130,
+        y: 110,
+        width: 32,
+        height: 32,
+      });
+
+      CreateImage({
+        ctx,
+        image: this.assets["HeartFilled"],
+        x: width - 70,
+        y: 110,
+        width: 32,
+        height: 32,
+      });
+    }
   }
 }
 

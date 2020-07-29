@@ -2,6 +2,8 @@ import "./index.css";
 
 import { GAME_STATES } from "./constants";
 
+import Component from "./HOC/Component";
+
 import HomeScene from "./scenes/Home";
 import PlaygroundScene from "./scenes/Playground";
 import ScoreBoardScene from "./scenes/ScoreBoard";
@@ -9,82 +11,107 @@ import ResultsScene from "./scenes/Results";
 
 import AudioHandler from "./objects/AudioHandler";
 
-const canvas = document.querySelector("canvas");
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+const WIDTH = window.innerWidth;
+const HEIGHT = window.innerHeight;
 
-const ctx = canvas.getContext("2d");
-const audioHandler = new AudioHandler();
+class GameEngine extends Component {
+  constructor(props) {
+    super(props);
+    const canvas = document.querySelector("canvas");
+    canvas.width = WIDTH;
+    canvas.height = HEIGHT;
 
-let gameState = GAME_STATES.HOME;
-let gameScore = 0;
+    const ctx = canvas.getContext("2d");
+    const audioHandler = new AudioHandler();
 
-function changeScore(score) {
-  gameScore = score;
-}
+    const env = {
+      ctx,
+      audioHandler,
+      width: canvas.width,
+      height: canvas.height,
+      boundary: { x: true, y: true },
+      gameInstance: this,
+    };
 
-function getScore() {
-  return gameScore;
-}
+    const playgroundSceneInstance = new PlaygroundScene(env);
+    const homeSceneInstance = new HomeScene(env);
+    const scoreBoardSceneInstance = new ScoreBoardScene(env);
+    const resultsSceneInstance = new ResultsScene(env);
 
-function changeState(state) {
-  gameState = state !== undefined ? state : gameState;
-  if (gameState === GAME_STATES.HOME) {
-    homeSceneInstance.start();
-  } else if (gameState === GAME_STATES.PLAY) {
-    playgroundSceneInstance.reset();
-    scoreBoardSceneInstance.reset();
-  } else if (gameState === GAME_STATES.END) {
-    resultsSceneInstance.start();
+    this.state = {
+      activeState: GAME_STATES.HOME,
+      score: 0,
+      level: 1,
+      lives: 3,
+      env,
+    };
+
+    this.elements = {
+      homeSceneInstance,
+      playgroundSceneInstance,
+      scoreBoardSceneInstance,
+      resultsSceneInstance,
+    };
   }
+
+  init = () => {
+    this.changeState();
+    this.startGame();
+  };
+
+  changeScore = (score) => {
+    this.setState({
+      score,
+    });
+  };
+
+  getScore = () => {
+    return this.state.score;
+  };
+
+  getState = () => {
+    return this.state.activeState;
+  };
+
+  getLevel = () => {
+    return this.state.level;
+  };
+
+  changeState = (state) => {
+    const { activeState } = this.state;
+    const newState = state !== undefined ? state : activeState;
+    this.setState({
+      activeState: newState,
+    });
+
+    if (newState === GAME_STATES.HOME) {
+      this.elements.homeSceneInstance.start();
+    } else if (newState === GAME_STATES.PLAY) {
+      this.elements.playgroundSceneInstance.reset();
+      this.elements.scoreBoardSceneInstance.reset();
+    } else if (newState === GAME_STATES.END) {
+      this.elements.resultsSceneInstance.start();
+    }
+  };
+
+  startGame = () => {
+    const { env, activeState } = this.state;
+    requestAnimationFrame(this.startGame);
+
+    env.ctx.clearRect(0, 0, WIDTH, HEIGHT);
+
+    this.elements.playgroundSceneInstance.update();
+    if (activeState === GAME_STATES.HOME) {
+      this.elements.homeSceneInstance.update();
+    } else if (activeState === GAME_STATES.PLAY) {
+      this.elements.scoreBoardSceneInstance.update();
+    } else if (activeState === GAME_STATES.END) {
+      this.elements.resultsSceneInstance.update();
+    }
+  };
 }
 
-const ENV_API = {
-  changeState,
-  changeScore,
-  getScore,
-};
+const gameEngine = new GameEngine();
+gameEngine.init();
 
-const envInstance = {
-  ctx,
-  width: canvas.width,
-  height: canvas.height,
-  boundary: { x: true, y: true },
-  audioHandler,
-  envApi: ENV_API,
-};
-
-const playgroundSceneInstance = new PlaygroundScene(envInstance);
-
-const homeSceneInstance = new HomeScene(envInstance);
-
-const scoreBoardSceneInstance = new ScoreBoardScene(envInstance);
-
-const resultsSceneInstance = new ResultsScene(envInstance);
-
-function startGame() {
-  requestAnimationFrame(startGame);
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  playgroundSceneInstance.update();
-  if (gameState === GAME_STATES.HOME) {
-    homeSceneInstance.update();
-  } else if (gameState === GAME_STATES.PLAY) {
-    scoreBoardSceneInstance.update();
-  } else if (gameState === GAME_STATES.END) {
-    resultsSceneInstance.update();
-  }
-}
-
-window.GameAPI = {
-  Scenes: {
-    homeSceneInstance,
-    playgroundSceneInstance,
-    scoreBoardSceneInstance,
-    resultsSceneInstance,
-    audioHandler,
-  },
-};
-
-changeState();
-startGame();
+window.GameEngineApi = gameEngine;

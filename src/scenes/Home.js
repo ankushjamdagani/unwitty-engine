@@ -27,11 +27,11 @@ class HomeScene extends Component {
   }
 
   listenKeysUp = (e) => {
-    const { envApi } = this.props;
+    const { gameInstance } = this.props;
 
     e.preventDefault();
     if (e.which === 32 || e.keyCode === 32) {
-      envApi.changeState(GAME_STATES.PLAY);
+      gameInstance.changeState(GAME_STATES.PLAY);
       this.stop();
     }
   };

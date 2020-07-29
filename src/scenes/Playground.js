@@ -169,11 +169,6 @@ class PlaygroundScene extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      playing: false,
-      level: 1,
-    };
-
     this.initElements();
   }
 
@@ -266,8 +261,9 @@ class PlaygroundScene extends Component {
   };
 
   mountBricks() {
-    const { width, height, ctx, audioHandler } = this.props;
-    const { level } = this.state;
+    const { gameInstance, width, height, ctx, audioHandler } = this.props;
+
+    const level = gameInstance.getLevel();
 
     const bricks = [];
 
@@ -306,11 +302,12 @@ class PlaygroundScene extends Component {
   }
 
   update() {
-    const { envApi, audioHandler } = this.props;
-    const { playing } = this.state;
+    const { gameInstance, audioHandler } = this.props;
     const { ball, breaker, ground, bricks } = this.elements;
 
-    if (playing) {
+    const activeState = gameInstance.getState();
+
+    if (activeState === GAME_STATES.PLAY) {
       const rectCollisionVector = CollisionHandler.isCircleCollidingRect(
         {
           x: ball.state.x,
@@ -349,7 +346,7 @@ class PlaygroundScene extends Component {
         breaker.state.y + breaker.props.height
       ) {
         this.stop();
-        envApi.changeState(GAME_STATES.END);
+        gameInstance.changeState(GAME_STATES.END);
         audioHandler.play("OnGameEnd");
       } else {
         for (let brIdx = 0; brIdx < bricks.length; brIdx++) {
@@ -391,8 +388,8 @@ class PlaygroundScene extends Component {
               });
             }
 
-            const currScore = envApi.getScore();
-            envApi.changeScore(currScore + 1);
+            const currScore = gameInstance.getScore();
+            gameInstance.changeScore(currScore + 1);
 
             brick.onCollision();
             break;
@@ -413,9 +410,6 @@ class PlaygroundScene extends Component {
     ball.start();
     breaker.start();
 
-    this.setState({
-      playing: true,
-    });
     this.setElements({
       bricks: [],
     });
@@ -433,10 +427,6 @@ class PlaygroundScene extends Component {
     ball.stop();
     breaker.stop();
 
-    this.setState({
-      playing: false,
-    });
-
     this.unBindEvents();
 
     this.props.audioHandler.stop("OnGameBg");
@@ -447,10 +437,6 @@ class PlaygroundScene extends Component {
 
     ball.reset();
     breaker.reset();
-
-    this.setState({
-      playing: true,
-    });
 
     this.start();
   }
