@@ -60,13 +60,13 @@ class Ball extends Component {
           x: radius,
           dx: -dx,
         });
-        env.audioHandler.play("OnBounce", { volume: 0.6 });
+        env.audioHandler.play("OnWallBounce", { volume: 0.6 });
       } else if (x + radius >= env.width) {
         this.setState({
           x: env.width - radius,
           dx: -dx,
         });
-        env.audioHandler.play("OnBounce", { volume: 0.6 });
+        env.audioHandler.play("OnWallBounce", { volume: 0.6 });
       }
     } else {
       if (x - radius <= 0) {
@@ -86,13 +86,13 @@ class Ball extends Component {
           y: radius,
           dy: -dy,
         });
-        env.audioHandler.play("OnBounce", { volume: 0.6 });
+        env.audioHandler.play("OnWallBounce", { volume: 0.6 });
       } else if (y + radius >= env.height) {
         this.setState({
           y: env.height - radius,
           dy: -dy,
         });
-        env.audioHandler.play("OnBounce", { volume: 0.6 });
+        env.audioHandler.play("OnWallBounce", { volume: 0.6 });
       }
     } else {
       if (y - radius <= 0) {

@@ -4,8 +4,18 @@ import OnGameStart from "../assets/sounds/retro_43.mp3";
 import OnGameEnd from "../assets/sounds/retro_11.mp3";
 import OnGameBg from "../assets/sounds/retro_47.mp3";
 
-import OnPoints from "../assets/sounds/Impact8.mp3";
-import OnBounce from "../assets/sounds/Impact5.mp3";
+// Bounce
+// retro_jump_24, retro_jump_26
+
+// Laser
+// sfx_wpn_laser7, sfx_wpn_laser6, sfx_wpn_laser5
+
+// Canon
+// sfx_wpn_cannon1, sfx_wpn_cannon4, sfx_weapon_singleshot13
+
+import OnPoints from "../assets/sounds/sfx_wpn_cannon4.wav";
+import OnWallBounce from "../assets/sounds/sfx_wpn_laser7.wav";
+import OnBreakerBounce from "../assets/sounds/sfx_wpn_laser5.wav";
 
 class AudioHandler extends Component {
   constructor(props) {
@@ -22,7 +32,8 @@ class AudioHandler extends Component {
         { key: "OnGameBg", src: OnGameBg, type: "audio" },
         { key: "OnGameStart", src: OnGameStart, type: "audio" },
         { key: "OnPoints", src: OnPoints, type: "audio" },
-        { key: "OnBounce", src: OnBounce, type: "audio" },
+        { key: "OnWallBounce", src: OnWallBounce, type: "audio" },
+        { key: "OnBreakerBounce", src: OnBreakerBounce, type: "audio" },
         { key: "OnGameEnd", src: OnGameEnd, type: "audio" },
       ],
       this.bindToContext

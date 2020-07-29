@@ -343,7 +343,7 @@ class PlaygroundScene extends Component {
             dx: ball.state.dx > 0 ? -ball.state.dx : ball.state.dx,
           });
         }
-        audioHandler.play("OnBounce");
+        audioHandler.play("OnBreakerBounce");
       } else if (
         ball.state.y + ball.props.radius >
         breaker.state.y + breaker.props.height
