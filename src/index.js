@@ -7,11 +7,14 @@ import PlaygroundScene from "./scenes/Playground";
 import ScoreBoardScene from "./scenes/ScoreBoard";
 import ResultsScene from "./scenes/Results";
 
+import AudioHandler from "./objects/AudioHandler";
+
 const canvas = document.querySelector("canvas");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 const ctx = canvas.getContext("2d");
+const audioHandler = new AudioHandler();
 
 let gameState = GAME_STATES.HOME;
 let gameScore = 0;
@@ -47,6 +50,7 @@ const envInstance = {
   width: canvas.width,
   height: canvas.height,
   boundary: { x: true, y: true },
+  audioHandler,
   envApi: ENV_API,
 };
 
@@ -78,6 +82,7 @@ window.GameAPI = {
     playgroundSceneInstance,
     scoreBoardSceneInstance,
     resultsSceneInstance,
+    audioHandler,
   },
 };
 

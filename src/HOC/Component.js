@@ -6,13 +6,25 @@ class Component {
     this.elements = {};
   }
 
-  preload(assets) {
+  preload(assets, cb) {
     assets.forEach((asset) => {
-      const assetImage = new Image();
-      assetImage.src = asset.image;
-      assetImage.onload = () => {
-        this.setAssets({ [asset.key]: assetImage });
-      };
+      if (asset.type && asset.type === "audio") {
+        const assetAudio = new Audio(asset.src);
+        assetAudio.addEventListener("canplaythrough", () => {
+          if (this.assets[asset.key]) {
+            return;
+          }
+          this.setAssets({ [asset.key]: assetAudio });
+          cb && cb(asset.key, assetAudio);
+        });
+      } else {
+        const assetImage = new Image();
+        assetImage.src = asset.src;
+        assetImage.onload = () => {
+          this.setAssets({ [asset.key]: assetImage });
+          cb && cb(asset.key, assetImage);
+        };
+      }
     });
   }
 

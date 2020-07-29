@@ -20,10 +20,10 @@ const ImageSizeMap = [
   [BrickLarge3, BrickLarge2, BrickLarge1],
 ];
 
-const ImageStrenghtMap = {
-  0: "weakest",
-  1: "weak",
-  2: "strong",
+const ImageStrengthMap = {
+  0: "Weakest",
+  1: "Weak",
+  2: "Strong",
 };
 
 class Brick extends Component {
@@ -36,22 +36,25 @@ class Brick extends Component {
 
     this.preload([
       {
-        key: "strong",
-        image: ImageSizeMap[props.size][0],
+        key: "Strong",
+        src: ImageSizeMap[props.size][0],
       },
       {
-        key: "weak",
-        image: ImageSizeMap[props.size][1],
+        key: "Weak",
+        src: ImageSizeMap[props.size][1],
       },
       {
-        key: "weakest",
-        image: ImageSizeMap[props.size][2],
+        key: "Weakest",
+        src: ImageSizeMap[props.size][2],
       },
     ]);
   }
 
   onCollision() {
+    const { env } = this.props;
     const { strength } = this.state;
+
+    env.audioHandler.play("OnPoints");
     this.setState({ strength: strength - 1 }, (state) => {
       if (state.strength < 0) {
         // @todo how to handle this???
@@ -64,7 +67,7 @@ class Brick extends Component {
     const { x, y, width, height, env } = this.props;
     const { strength } = this.state;
 
-    const image = this.assets[ImageStrenghtMap[strength]];
+    const image = this.assets[ImageStrengthMap[strength]];
 
     image &&
       CreateImage({

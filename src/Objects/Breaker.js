@@ -14,7 +14,7 @@ class Breaker extends Component {
       dx: props.initialSpeed,
     };
 
-    this.preload([{ key: "rover", image: rover }]);
+    this.preload([{ key: "rover", src: rover }]);
   }
 
   isTouchingBorder() {

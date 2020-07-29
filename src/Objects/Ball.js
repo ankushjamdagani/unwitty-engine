@@ -21,11 +21,11 @@ class Ball extends Component {
     };
 
     this.preload([
-      { key: 1, image: ball1 },
-      { key: 2, image: ball2 },
-      { key: 3, image: ball3 },
-      { key: 4, image: ball4 },
-      { key: 5, image: ball5 },
+      { key: 1, src: ball1 },
+      { key: 2, src: ball2 },
+      { key: 3, src: ball3 },
+      { key: 4, src: ball4 },
+      { key: 5, src: ball5 },
     ]);
 
     this.imageAnimator = new Animator({
@@ -60,11 +60,13 @@ class Ball extends Component {
           x: radius,
           dx: -dx,
         });
+        env.audioHandler.play("OnBounce", { volume: 0.6 });
       } else if (x + radius >= env.width) {
         this.setState({
           x: env.width - radius,
           dx: -dx,
         });
+        env.audioHandler.play("OnBounce", { volume: 0.6 });
       }
     } else {
       if (x - radius <= 0) {
@@ -84,11 +86,13 @@ class Ball extends Component {
           y: radius,
           dy: -dy,
         });
+        env.audioHandler.play("OnBounce", { volume: 0.6 });
       } else if (y + radius >= env.height) {
         this.setState({
           y: env.height - radius,
           dy: -dy,
         });
+        env.audioHandler.play("OnBounce", { volume: 0.6 });
       }
     } else {
       if (y - radius <= 0) {

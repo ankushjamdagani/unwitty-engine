@@ -178,7 +178,7 @@ class PlaygroundScene extends Component {
   }
 
   initElements() {
-    const { ctx, width, height, boundary } = this.props;
+    const { ctx, width, height, boundary, audioHandler } = this.props;
     const ball = new Ball({
       type: "circle",
       x: 120,
@@ -195,6 +195,7 @@ class PlaygroundScene extends Component {
       },
       env: {
         ctx,
+        audioHandler,
         width,
         height,
         boundary,
@@ -265,7 +266,7 @@ class PlaygroundScene extends Component {
   };
 
   mountBricks() {
-    const { width, height, ctx } = this.props;
+    const { width, height, ctx, audioHandler } = this.props;
     const { level } = this.state;
 
     const bricks = [];
@@ -287,6 +288,7 @@ class PlaygroundScene extends Component {
             y,
             env: {
               ctx,
+              audioHandler,
               width,
               height,
             },
@@ -304,7 +306,7 @@ class PlaygroundScene extends Component {
   }
 
   update() {
-    const { envApi } = this.props;
+    const { envApi, audioHandler } = this.props;
     const { playing } = this.state;
     const { ball, breaker, ground, bricks } = this.elements;
 
@@ -341,12 +343,14 @@ class PlaygroundScene extends Component {
             dx: ball.state.dx > 0 ? -ball.state.dx : ball.state.dx,
           });
         }
+        audioHandler.play("OnBounce");
       } else if (
         ball.state.y + ball.props.radius >
         breaker.state.y + breaker.props.height
       ) {
         this.stop();
         envApi.changeState(GAME_STATES.END);
+        audioHandler.play("OnGameEnd");
       } else {
         for (let brIdx = 0; brIdx < bricks.length; brIdx++) {
           const brick = bricks[brIdx];
@@ -418,6 +422,9 @@ class PlaygroundScene extends Component {
 
     this.mountBricks();
     this.bindEvents();
+
+    this.props.audioHandler.play("OnGameStart");
+    this.props.audioHandler.play("OnGameBg", { loop: true, volume: 0.6 });
   }
 
   stop() {
@@ -431,6 +438,8 @@ class PlaygroundScene extends Component {
     });
 
     this.unBindEvents();
+
+    this.props.audioHandler.stop("OnGameBg");
   }
 
   reset() {

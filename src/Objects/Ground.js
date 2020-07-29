@@ -11,7 +11,7 @@ class Ground extends Component {
     this.preload([
       {
         key: "bg",
-        image: bg,
+        src: bg,
       },
     ]);
   }
