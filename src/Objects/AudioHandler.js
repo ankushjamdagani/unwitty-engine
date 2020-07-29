@@ -72,6 +72,10 @@ class AudioHandler extends Component {
     this.assets[assetKey].currentTime = 0;
     this.assets[assetKey].pause();
   }
+
+  mute() {
+    console.log("Muting");
+  }
 }
 
 export default AudioHandler;

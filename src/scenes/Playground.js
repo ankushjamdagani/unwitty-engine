@@ -345,9 +345,7 @@ class PlaygroundScene extends Component {
         ball.state.y + ball.props.radius >
         breaker.state.y + breaker.props.height
       ) {
-        this.stop();
         gameInstance.changeState(GAME_STATES.END);
-        audioHandler.play("OnGameEnd");
       } else {
         for (let brIdx = 0; brIdx < bricks.length; brIdx++) {
           const brick = bricks[brIdx];
@@ -410,10 +408,6 @@ class PlaygroundScene extends Component {
     ball.start();
     breaker.start();
 
-    this.setElements({
-      bricks: [],
-    });
-
     this.mountBricks();
     this.bindEvents();
 
@@ -429,7 +423,32 @@ class PlaygroundScene extends Component {
 
     this.unBindEvents();
 
+    this.props.audioHandler.stop("OnGameStart");
     this.props.audioHandler.stop("OnGameBg");
+    this.props.audioHandler.play("OnGameEnd");
+  }
+
+  pause() {
+    const { ball, breaker } = this.elements;
+
+    ball.pause();
+    breaker.pause();
+
+    this.unBindEvents();
+
+    this.props.audioHandler.stop("OnGameStart");
+    this.props.audioHandler.stop("OnGameBg");
+  }
+
+  resume() {
+    const { ball, breaker } = this.elements;
+
+    ball.resume();
+    breaker.resume();
+
+    this.bindEvents();
+
+    this.props.audioHandler.play("OnGameBg", { loop: true, volume: 0.6 });
   }
 
   reset() {

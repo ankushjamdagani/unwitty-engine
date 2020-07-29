@@ -18,32 +18,6 @@ class HomeScene extends Component {
     });
   }
 
-  bindEvents() {
-    window.addEventListener("keyup", this.listenKeysUp);
-  }
-
-  unBindEvents() {
-    window.removeEventListener("keyup", this.listenKeysUp);
-  }
-
-  listenKeysUp = (e) => {
-    const { gameInstance } = this.props;
-
-    e.preventDefault();
-    if (e.which === 32 || e.keyCode === 32) {
-      gameInstance.changeState(GAME_STATES.PLAY);
-      this.stop();
-    }
-  };
-
-  start() {
-    this.bindEvents();
-  }
-
-  stop() {
-    this.unBindEvents();
-  }
-
   update() {
     const { ctx, width, height } = this.props;
     const subTitleOpacity = this.subTitleOpacityAnimator.update();
@@ -97,7 +71,7 @@ class HomeScene extends Component {
       ctx,
       x: width / 2 - 140,
       y: height / 2 + 84,
-      text: "Press SPACE to start.",
+      text: "Press SPACE to play.",
       font: "14px primaryFont",
       fontColor: `rgba(255,255,255,${subTitleOpacity})`,
     });

@@ -115,6 +115,15 @@ class Breaker extends Component {
       y,
     });
   }
+
+  pause() {
+    this.stop();
+    this.prevState = this.state;
+  }
+
+  resume() {
+    this.setState(this.prevState);
+  }
 }
 
 export default Breaker;

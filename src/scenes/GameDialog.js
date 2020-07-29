@@ -5,7 +5,7 @@ import Component from "../HOC/Component";
 import Animator from "../helpers/Animator";
 import { CreateRect, CreateText } from "../helpers/Creator";
 
-class ResultsScene extends Component {
+class GameDialogScene extends Component {
   constructor(props) {
     super(props);
 
@@ -19,7 +19,7 @@ class ResultsScene extends Component {
   }
 
   update() {
-    const { ctx, width, height, gameInstance } = this.props;
+    const { ctx, width, height } = this.props;
     const subTitleOpacity = this.subTitleOpacityAnimator.update();
 
     CreateRect({
@@ -51,15 +51,6 @@ class ResultsScene extends Component {
 
     CreateText({
       ctx,
-      x: width / 2 - 190,
-      y: height / 2,
-      text: "SCORE :: " + gameInstance.getScore(),
-      font: "30px primaryFont",
-      fontColor: "#fff",
-    });
-
-    CreateText({
-      ctx,
       x: width / 2 - 235,
       y: height / 2 + 70,
       text: "-----------------",
@@ -71,11 +62,11 @@ class ResultsScene extends Component {
       ctx,
       x: width / 2 - 140,
       y: height / 2 + 84,
-      text: "Press SPACE to play.",
+      text: "Press SPACE to continue.",
       font: "14px primaryFont",
       fontColor: `rgba(255,255,255,${subTitleOpacity})`,
     });
   }
 }
 
-export default ResultsScene;
+export default GameDialogScene;

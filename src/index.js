@@ -7,6 +7,7 @@ import Component from "./HOC/Component";
 import HomeScene from "./scenes/Home";
 import PlaygroundScene from "./scenes/Playground";
 import ScoreBoardScene from "./scenes/ScoreBoard";
+import GameDialogScene from "./scenes/GameDialog";
 import ResultsScene from "./scenes/Results";
 
 import AudioHandler from "./objects/AudioHandler";
@@ -36,6 +37,7 @@ class GameEngine extends Component {
     const playgroundSceneInstance = new PlaygroundScene(env);
     const homeSceneInstance = new HomeScene(env);
     const scoreBoardSceneInstance = new ScoreBoardScene(env);
+    const gameDialogSceneInstance = new GameDialogScene(env);
     const resultsSceneInstance = new ResultsScene(env);
 
     this.state = {
@@ -50,6 +52,7 @@ class GameEngine extends Component {
       homeSceneInstance,
       playgroundSceneInstance,
       scoreBoardSceneInstance,
+      gameDialogSceneInstance,
       resultsSceneInstance,
     };
   }
@@ -57,12 +60,31 @@ class GameEngine extends Component {
   init = () => {
     this.changeState();
     this.startGame();
+    this.bindEvents();
   };
 
-  changeScore = (score) => {
-    this.setState({
-      score,
-    });
+  bindEvents() {
+    window.addEventListener("keyup", this.listenKeysUp);
+  }
+
+  unBindEvents() {
+    window.removeEventListener("keyup", this.listenKeysUp);
+  }
+
+  listenKeysUp = (e) => {
+    e.preventDefault();
+    const { env, activeState } = this.state;
+    if (e.which === 27 || e.keyCode === 27) {
+      if (activeState !== GAME_STATES.PAUSE) {
+        this.changeState(GAME_STATES.PAUSE);
+      }
+    } else if (e.which === 32 || e.keyCode === 32) {
+      if (activeState !== GAME_STATES.PLAY) {
+        this.changeState(GAME_STATES.PLAY);
+      }
+    } else if (e.which === 32 || e.keyCode === 32) {
+      env.audioHandler.mute();
+    }
   };
 
   getScore = () => {
@@ -77,8 +99,14 @@ class GameEngine extends Component {
     return this.state.level;
   };
 
+  changeScore = (score) => {
+    this.setState({
+      score,
+    });
+  };
+
   changeState = (state) => {
-    const { activeState } = this.state;
+    const { activeState, env } = this.state;
     const newState = state !== undefined ? state : activeState;
     this.setState({
       activeState: newState,
@@ -87,10 +115,16 @@ class GameEngine extends Component {
     if (newState === GAME_STATES.HOME) {
       this.elements.homeSceneInstance.start();
     } else if (newState === GAME_STATES.PLAY) {
-      this.elements.playgroundSceneInstance.reset();
-      this.elements.scoreBoardSceneInstance.reset();
+      if (activeState === GAME_STATES.PAUSE) {
+        this.elements.playgroundSceneInstance.resume();
+      } else {
+        this.elements.playgroundSceneInstance.reset();
+        this.elements.scoreBoardSceneInstance.reset();
+      }
     } else if (newState === GAME_STATES.END) {
-      this.elements.resultsSceneInstance.start();
+      this.elements.playgroundSceneInstance.stop();
+    } else if (newState === GAME_STATES.PAUSE) {
+      this.elements.playgroundSceneInstance.pause();
     }
   };
 
@@ -107,6 +141,9 @@ class GameEngine extends Component {
       this.elements.scoreBoardSceneInstance.update();
     } else if (activeState === GAME_STATES.END) {
       this.elements.resultsSceneInstance.update();
+    } else if (activeState === GAME_STATES.PAUSE) {
+      this.elements.scoreBoardSceneInstance.update();
+      this.elements.gameDialogSceneInstance.update();
     }
   };
 }

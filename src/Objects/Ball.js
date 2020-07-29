@@ -142,6 +142,19 @@ class Ball extends Component {
     });
   }
 
+  pause() {
+    this.prevState = this.state;
+
+    this.setState({
+      dx: 0,
+      dy: 0,
+    });
+  }
+
+  resume() {
+    this.setState(this.prevState);
+  }
+
   draw() {
     const { radius, env } = this.props;
     const { x, y } = this.state;
