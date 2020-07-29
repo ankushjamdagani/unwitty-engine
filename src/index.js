@@ -75,7 +75,7 @@ class GameEngine extends Component {
     e.preventDefault();
     const { env, activeState } = this.state;
     if (e.which === 27 || e.keyCode === 27) {
-      if (activeState !== GAME_STATES.PAUSE) {
+      if (activeState === GAME_STATES.PLAY) {
         this.changeState(GAME_STATES.PAUSE);
       }
     } else if (e.which === 32 || e.keyCode === 32) {
