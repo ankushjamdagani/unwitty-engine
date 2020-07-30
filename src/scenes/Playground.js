@@ -1,36 +1,51 @@
-import { GAME_STATES } from "../constants";
+import { GAME_STATES, KEY_CODES } from "../constants";
 
 import Component from "../HOC/Component";
+
+import withResistance from '../behaviours/withResistance';
 
 import Ball from "../objects/Ball";
 import Breaker from "../objects/Breaker";
 import Brick from "../objects/Brick";
-import Ground from "../objects/Ground";
 
 import CollisionHandler from "../helpers/CollisionHandler";
 
 const BRICK_MATRIX = {
-  1: [
+  0: [
     [0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2]],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], 0, 0, 0, 0, 0, 0, 0, [1,1], [1,1], [1,1], [1,1], [1,2]],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], 0, 0, 0, [1,3], 0, 0, 0, [1,1], [1,1], [1,1], [1,1], [1,2]],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], 0, 0, [1,3], [1,3], 0, 0, 0, [1,1], [1,1], [1,1], [1,1], [1,2]],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], 0, 0, 0, [1,3], 0, 0, 0, [1,1], [1,1], [1,1], [1,1], [1,2]],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], 0, 0, [1,3], [1,3], [1,3], 0, 0, [1,1], [1,1], [1,1], [1,1], [1,2]],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], 0, 0, 0, 0, 0, 0, 0, [1,1], [1,1], [1,1], [1,1], [1,2]],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2]],
+    [0],
+    [0],
+    [0],
+    [0, 0, 0, 0, 0, 0, 0, [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], 0],
+    [0, 0, 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], 0, 0, 0, 0, 0, 0, 0, [1,1], [1,1], [1,1], [1,2]],
+    [0, 0, 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], 0, 0, 0, [1,3], 0, 0, 0, [1,1], [1,1], [1,1], [1,2]],
+    [0, 0, 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], 0, 0, [1,3], [1,3], 0, 0, 0, [1,1], [1,1], [1,1], [1,2]],
+    [0, 0, 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], 0, 0, 0, [1,3], 0, 0, 0, [1,1], [1,1], [1,1], [1,2]],
+    [0, 0, 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], 0, 0, [1,3], [1,3], [1,3], 0, 0, [1,1], [1,1], [1,1], [1,2]],
+    [0, 0, 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], 0, 0, 0, 0, 0, 0, 0, [1,1], [1,1], [1,1], [1,2]],
+    [0, 0, 0, 0, 0, 0, 0, [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], 0],
+  ],
+  1: [
+    [0, [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], 0],
+    [[1,2], [1,1], [1,1], [1,1], 0, 0, 0, 0, 0, 0, 0, [1,1], [1,1], [1,1], [1,2]],
+    [[1,2], [1,1], [1,1], [1,1], 0, 0, 0, [1,3], 0, 0, 0, [1,1], [1,1], [1,1], [1,2]],
+    [[1,2], [1,1], [1,1], [1,1], 0, 0, [1,3], [1,3], 0, 0, 0, [1,1], [1,1], [1,1], [1,2]],
+    [[1,2], [1,1], [1,1], [1,1], 0, 0, 0, [1,3], 0, 0, 0, [1,1], [1,1], [1,1], [1,2]],
+    [[1,2], [1,1], [1,1], [1,1], 0, 0, [1,3], [1,3], [1,3], 0, 0, [1,1], [1,1], [1,1], [1,2]],
+    [[1,2], [1,1], [1,1], [1,1], 0, 0, 0, 0, 0, 0, 0, [1,1], [1,1], [1,1], [1,2]],
+    [0, [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], 0],
   ],
   2: [
     [0],
-    [0, 0, 0, 0, 0, 0, [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], 0, 0, 0, 0, [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2]],
-    [0, 0, 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2], 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2]],
-    [0, 0, 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2], 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2]],
-    [0, 0, 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2], 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2]],
-    [0, 0, 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2], 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2]],
-    [0, 0, 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2], 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2]],
-    [0, 0, 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2], 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2]],
-    [0, 0, 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2], 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2]],
+    [0],
+    [0, 0, 0, [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], 0, 0, 0, 0, [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2]],
+    [0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2], 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2]],
+    [0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2], 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2]],
+    [0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2], 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2]],
+    [0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2], 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2]],
+    [0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2], 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2]],
+    [0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2], 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2]],
+    [0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2], 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2]],
   ],
   3: [
     [0],
@@ -54,7 +69,7 @@ class PlaygroundScene extends Component {
 
   initElements() {
     const { ctx, width, height, boundary, audioHandler } = this.props;
-    const ball = new Ball({
+    const ball = new (withResistance(Ball))({
       type: "circle",
       x: 120,
       y: 100,
@@ -74,68 +89,64 @@ class PlaygroundScene extends Component {
         width,
         height,
         boundary,
+        // fluidFriction: .9
       },
     });
 
-    const breaker = new Breaker({
+    const breaker = new (withResistance(Breaker))({
       type: "rect",
-      x: width / 2 - 140,
-      y: height - 34 - 100,
-      width: 140,
-      height: 30,
-      initialSpeed: 0,
-      maxSpeed: 15,
-      env: {
-        ctx,
-        width,
-        height,
-        boundary,
+      x: width / 2 - 120,
+      y: height - 20,
+      width: 120,
+      height: 20,
+      initialSpeed: {
+        x: 0,
+        y: 0,
       },
-    });
-
-    const ground = new Ground({
-      x: 0,
-      y: height - 100,
-      width: width,
-      height: 100,
-      initialSpeed: 0,
-      maxSpeed: 15,
+      maxSpeed: {
+        x: 15,
+        y: 15,
+      },
       env: {
         ctx,
         width,
         height,
         boundary,
+        gravity: 4,
       },
     });
 
     this.setElements({
       ball,
       breaker,
-      ground,
       bricks: [],
     });
   }
 
   bindEvents() {
-    window.addEventListener("keydown", this.listenArrowKeysDown);
-    window.addEventListener("keyup", this.listenArrowKeysUp);
+    window.addEventListener("keydown", this.listenKeysDown);
+    window.addEventListener("keyup", this.listenKeysUp);
   }
 
   unBindEvents() {
-    window.removeEventListener("keydown", this.listenArrowKeysDown);
-    window.removeEventListener("keyup", this.listenArrowKeysUp);
+    window.removeEventListener("keydown", this.listenKeysDown);
+    window.removeEventListener("keyup", this.listenKeysUp);
   }
 
-  listenArrowKeysDown = (e) => {
-    if (e.which === 37) {
+  listenKeysDown = (e) => {
+    const key = e.key.toLowerCase()
+    if (key === KEY_CODES.LEFT) {
       this.elements.breaker.goLeft();
-    } else if (e.which === 39) {
+    } else if (key === KEY_CODES.RIGHT) {
       this.elements.breaker.goRight();
+    } else if (key === KEY_CODES.SPACE) {
+      this.elements.breaker.jump();
     }
   };
 
-  listenArrowKeysUp = (e) => {
-    if (e.which === 37 || e.which === 39) {
+  listenKeysUp = (e) => {
+    const key = e.key.toLowerCase()
+    if (key === KEY_CODES.LEFT || key === KEY_CODES.RIGHT) {
       this.elements.breaker.stop();
     }
   };
@@ -143,16 +154,21 @@ class PlaygroundScene extends Component {
   mountBricks() {
     const { gameInstance, width, height, ctx, audioHandler } = this.props;
 
+    // [20, 30]; // must be dynamic. based on screen size, 15 : 13 brick size
+    const gridDims = [17, 34]; 
     const level = gameInstance.getLevel();
+    const bricksMatrix = BRICK_MATRIX[level];
+    const leftOffset = Math.floor((gridDims[1] - bricksMatrix[0].length) / 2);
+    const topOffset = Math.floor((gridDims[0] - bricksMatrix.length) / 2);
 
+    const unitWidth = width / gridDims[1];
+    // const unitHeight = (unitWidth * 15) / 13;
+    const unitHeight = height / gridDims[0];
+    
     const bricks = [];
-
-    const unitWidth = width / 38;
-    const unitHeight = (unitWidth * 15) / 13;
-
-    let y = 0;
-    BRICK_MATRIX[level].forEach((row) => {
-      let x = 0;
+    let y = topOffset * unitHeight;
+    bricksMatrix.forEach((row) => {
+      let x = leftOffset * unitWidth;
       row.forEach((colVal) => {
         if (colVal) {
           const brick = new Brick({
@@ -182,8 +198,8 @@ class PlaygroundScene extends Component {
   }
 
   update() {
-    const { gameInstance, audioHandler } = this.props;
-    const { ball, breaker, ground, bricks } = this.elements;
+    const { height, gameInstance, audioHandler } = this.props;
+    const { ball, breaker, bricks } = this.elements;
 
     const activeState = gameInstance.getState();
 
@@ -222,8 +238,7 @@ class PlaygroundScene extends Component {
         }
         audioHandler.play("OnBreakerBounce");
       } else if (
-        ball.state.y + ball.props.radius >
-        breaker.state.y + breaker.props.height
+        ball.state.y + ball.props.radius >= height
       ) {
         gameInstance.changeState(GAME_STATES.END);
       } else {
@@ -276,7 +291,6 @@ class PlaygroundScene extends Component {
       }
     }
 
-    ground.update();
     bricks.forEach((br) => br.update());
     ball.update();
     breaker.update();

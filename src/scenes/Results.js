@@ -1,5 +1,3 @@
-import { GAME_STATES } from "../constants";
-
 import Component from "../HOC/Component";
 
 import Animator from "../helpers/Animator";
@@ -71,7 +69,7 @@ class ResultsScene extends Component {
       ctx,
       x: width / 2 - 140,
       y: height / 2 + 84,
-      text: "Press SPACE to play.",
+      text: "Press ENTER to play.",
       font: "14px primaryFont",
       fontColor: `rgba(255,255,255,${subTitleOpacity})`,
     });

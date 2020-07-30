@@ -1,6 +1,6 @@
 import Component from "../HOC/Component";
 
-import { CreateImage } from "../helpers/Creator";
+import { CreateRect } from "../helpers/Creator";
 
 import rover from "../assets/images/Board3.svg";
 
@@ -11,7 +11,8 @@ class Breaker extends Component {
     this.state = {
       x: props.x,
       y: props.y,
-      dx: props.initialSpeed,
+      dx: props.initialSpeed.x,
+      dy: props.initialSpeed.y,
     };
 
     this.preload([{ key: "rover", src: rover }]);
@@ -27,8 +28,8 @@ class Breaker extends Component {
   }
 
   validatePosition() {
-    const { x } = this.state;
-    const { width, env } = this.props;
+    const { x, y, dy } = this.state;
+    const { width, height, env } = this.props;
 
     if (env.boundary.x) {
       if (x <= 0) {
@@ -51,13 +52,38 @@ class Breaker extends Component {
         });
       }
     }
+
+    if (env.boundary.y) {
+      if (y <= 0) {
+        this.setState({
+          y: 0,
+          dy: -dy,
+        });
+      } else if (y + height >= env.height) {
+        this.setState({
+          y: env.height - height,
+          dy: -dy,
+        });
+      }
+    } else {
+      if (y <= 0) {
+        this.setState({
+          y: env.height - height,
+        });
+      } else if (y + height >= env.height) {
+        this.setState({
+          y: 0,
+        });
+      }
+    }
   }
 
   move() {
-    const { x, dx } = this.state;
+    const { x, y, dx, dy } = this.state;
 
     this.setState({
       x: x + dx,
+      y: y + dy,
     });
 
     this.validatePosition();
@@ -67,7 +93,7 @@ class Breaker extends Component {
     const { maxSpeed } = this.props;
 
     this.setState({
-      dx: -maxSpeed,
+      dx: -maxSpeed.x,
     });
   }
 
@@ -75,7 +101,16 @@ class Breaker extends Component {
     const { maxSpeed } = this.props;
 
     this.setState({
-      dx: maxSpeed,
+      dx: maxSpeed.x,
+    });
+  }
+
+  jump() {
+    const { maxSpeed } = this.props;
+
+    this.setState({
+      dy: maxSpeed.x,
+      dy: maxSpeed.y,
     });
   }
 
@@ -83,15 +118,14 @@ class Breaker extends Component {
     const { env, width, height } = this.props;
     const { x, y } = this.state;
 
-    this.assets["rover"] &&
-      CreateImage({
-        ctx: env.ctx,
-        image: this.assets["rover"],
-        x,
-        y,
-        width,
-        height,
-      });
+    CreateRect({
+      ctx: env.ctx,
+      x,
+      y,
+      width,
+      height: height - 4,
+      fillColor: "#000",
+    });
   }
 
   update() {
@@ -103,7 +137,8 @@ class Breaker extends Component {
     const { initialSpeed } = this.props;
 
     this.setState({
-      dx: initialSpeed,
+      dx: initialSpeed.x,
+      dy: initialSpeed.y,
     });
   }
 

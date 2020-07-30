@@ -5,4 +5,13 @@ const GAME_STATES = {
   END: 3,
 };
 
-export { GAME_STATES };
+const KEY_CODES = {
+  ESC: 'escape',
+  SPACE: ' ',
+  LEFT: 'arrowleft',
+  RIGHT: 'arrowright',
+  ENTER: 'enter',
+  M: 'm'
+};
+
+export { GAME_STATES, KEY_CODES };

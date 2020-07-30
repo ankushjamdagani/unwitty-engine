@@ -1,6 +1,6 @@
 import "./index.css";
 
-import { GAME_STATES } from "./constants";
+import { GAME_STATES, KEY_CODES } from "./constants";
 
 import Component from "./HOC/Component";
 
@@ -12,8 +12,19 @@ import ResultsScene from "./scenes/Results";
 
 import AudioHandler from "./objects/AudioHandler";
 
-const WIDTH = window.innerWidth;
-const HEIGHT = window.innerHeight;
+const AspectRatios = {
+  SINGLE_PLAYER: 16/9,
+  DOUBLE_PLAYER: 4/3,
+  MULTI_PLAYER: 1
+}
+
+const smallValue =
+  window.innerWidth > window.innerHeight
+    ? window.innerHeight
+    : window.innerWidth;
+
+const WIDTH = smallValue * AspectRatios.DOUBLE_PLAYER;
+const HEIGHT = smallValue;
 
 class GameEngine extends Component {
   constructor(props) {
@@ -74,15 +85,17 @@ class GameEngine extends Component {
   listenKeysUp = (e) => {
     e.preventDefault();
     const { env, activeState } = this.state;
-    if (e.which === 27 || e.keyCode === 27) {
-      if (activeState === GAME_STATES.PLAY) {
-        this.changeState(GAME_STATES.PAUSE);
-      }
-    } else if (e.which === 32 || e.keyCode === 32) {
+    const key = e.key.toLowerCase();
+
+    if (key === KEY_CODES.ENTER) {
       if (activeState !== GAME_STATES.PLAY) {
         this.changeState(GAME_STATES.PLAY);
       }
-    } else if (e.which === 32 || e.keyCode === 32) {
+    } else if (key === KEY_CODES.ESC) {
+      if (activeState === GAME_STATES.PLAY) {
+        this.changeState(GAME_STATES.PAUSE);
+      }
+    } else if (key === KEY_CODES.M) {
       env.audioHandler.mute();
     }
   };

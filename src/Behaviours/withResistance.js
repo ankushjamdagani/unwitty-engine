@@ -4,37 +4,56 @@ const withResistance = (ObjectModel) => {
   };
 
   const applyGravity = function () {
-    if (this.y !== 0) {
-      this.dy += this.env.gravity;
+    const { env } = this.props;
+    const { y, dy } = this.state;
+    if (y !== 0) {
+      this.setState({
+        dy: dy + env.gravity,
+      });
     } else {
-      this.dy = 0;
+      this.setState({
+        dy: 0,
+      });
     }
   };
 
   const applyFluidResistance = function () {
-    if (this.dy !== 0) {
-      this.dy *= this.env.fluidFriction;
+    const { env } = this.props;
+    const { dx, dy } = this.state;
+    if (dx !== 0) {
+      this.setState({
+        dx: dx * env.fluidFriction,
+      });
     }
-    if (this.dx !== 0) {
-      this.dx *= this.env.fluidFriction;
+    if (dy !== 0) {
+      this.setState({
+        dy: dy * env.fluidFriction,
+      });
     }
   };
 
   const applySurfaceFriction = function () {
+    const { env } = this.props;
+    const { dx, dy } = this.state;
     if (this.isTouchingBorder()) {
-      if (this.dx !== 0) {
-        this.dx *= this.env.surfaceFriction;
+      if (dx !== 0) {
+        this.setState({
+          dx: dx * env.surfaceFriction,
+        });
       }
-      if (this.dy !== 0) {
-        this.dy *= this.env.surfaceFriction;
+      if (dy !== 0) {
+        this.setState({
+          dy: dy * env.surfaceFriction,
+        });
       }
     }
   };
 
   const move = function () {
-    this.env.gravity && this.applyGravity();
-    this.env.fluidFriction && this.applyFluidResistance();
-    this.env.surfaceFriction && this.applySurfaceFriction();
+    const { env } = this.props;
+    env.gravity && this.applyGravity();
+    env.fluidFriction && this.applyFluidResistance();
+    env.surfaceFriction && this.applySurfaceFriction();
     this.withResistance_move.apply(this, arguments);
   };
 

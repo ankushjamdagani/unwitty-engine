@@ -62,7 +62,7 @@ class GameDialogScene extends Component {
       ctx,
       x: width / 2 - 140,
       y: height / 2 + 84,
-      text: "Press SPACE to continue.",
+      text: "Press ENTER to continue.",
       font: "14px primaryFont",
       fontColor: `rgba(255,255,255,${subTitleOpacity})`,
     });
