@@ -1,3 +1,5 @@
+import { maximum, minimum } from "../helpers/common";
+
 const withResistance = (ObjectModel) => {
   const isNumberSmall = function (num) {
     return num < 0.001 || num > -0.001;
@@ -21,13 +23,21 @@ const withResistance = (ObjectModel) => {
     const { env } = this.props;
     const { dx, dy } = this.state;
     if (dx !== 0) {
+      const speed = dx * env.fluidFriction;
+      const isPositive = speed > 0;
       this.setState({
-        dx: dx * env.fluidFriction,
+        dx: isPositive
+          ? maximum(dx * env.fluidFriction, 5)
+          : minimum(dx * env.fluidFriction, -5),
       });
     }
     if (dy !== 0) {
+      const speed = dy * env.fluidFriction;
+      const isPositive = speed > 0;
       this.setState({
-        dy: dy * env.fluidFriction,
+        dy: isPositive
+          ? maximum(dy * env.fluidFriction, 5)
+          : minimum(dy * env.fluidFriction, -5),
       });
     }
   };
@@ -38,12 +48,12 @@ const withResistance = (ObjectModel) => {
     if (this.isTouchingBorder()) {
       if (dx !== 0) {
         this.setState({
-          dx: dx * env.surfaceFriction,
+          dx: maximum(dx * env.surfaceFriction, 5),
         });
       }
       if (dy !== 0) {
         this.setState({
-          dy: dy * env.surfaceFriction,
+          dy: maximum(dy * env.surfaceFriction, 5),
         });
       }
     }

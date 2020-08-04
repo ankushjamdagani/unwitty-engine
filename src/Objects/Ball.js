@@ -1,5 +1,7 @@
 import Component from "../HOC/Component";
 
+import { roundOff } from "../helpers/common";
+
 import { CreateImage } from "../helpers/Creator";
 import Animator from "../helpers/Animator";
 
@@ -33,7 +35,7 @@ class Ball extends Component {
       minVal: 1,
       maxVal: 5,
       step: 1,
-      ticksInterval: 10,
+      ticksInterval: 6,
       direction: "normal",
     });
   }
@@ -111,8 +113,8 @@ class Ball extends Component {
     const { x, y, dx, dy } = this.state;
 
     this.setState({
-      x: x + dx,
-      y: y + dy,
+      x: roundOff(x + dx),
+      y: roundOff(y + dy),
     });
 
     this.validatePosition();

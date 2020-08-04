@@ -52,6 +52,9 @@ class AudioHandler extends Component {
   };
 
   play(assetKey, { loop = false, volume = 1 } = {}) {
+    if(!this.assets[assetKey]) {
+      return
+    }
     const { audioContext } = this.state;
     if (audioContext.state === "suspended") {
       audioContext.resume();

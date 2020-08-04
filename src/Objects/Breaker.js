@@ -1,5 +1,7 @@
 import Component from "../HOC/Component";
 
+import { roundOff } from "../helpers/common";
+
 import { CreateRect } from "../helpers/Creator";
 
 import rover from "../assets/images/Board3.svg";
@@ -82,8 +84,8 @@ class Breaker extends Component {
     const { x, y, dx, dy } = this.state;
 
     this.setState({
-      x: x + dx,
-      y: y + dy,
+      x: roundOff(x + dx),
+      y: roundOff(y + dy),
     });
 
     this.validatePosition();
@@ -109,7 +111,6 @@ class Breaker extends Component {
     const { maxSpeed } = this.props;
 
     this.setState({
-      dy: maxSpeed.x,
       dy: maxSpeed.y,
     });
   }

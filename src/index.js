@@ -119,7 +119,7 @@ class GameEngine extends Component {
   };
 
   changeState = (state) => {
-    const { activeState, env } = this.state;
+    const { activeState } = this.state;
     const newState = state !== undefined ? state : activeState;
     this.setState({
       activeState: newState,
@@ -144,6 +144,7 @@ class GameEngine extends Component {
   startGame = () => {
     const { env, activeState } = this.state;
     requestAnimationFrame(this.startGame);
+    // setTimeout(this.startGame, 1000);
 
     env.ctx.clearRect(0, 0, WIDTH, HEIGHT);
 

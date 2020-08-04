@@ -71,8 +71,8 @@ class PlaygroundScene extends Component {
     const { ctx, width, height, boundary, audioHandler } = this.props;
     const ball = new (withResistance(Ball))({
       type: "circle",
-      x: 120,
-      y: 100,
+      x: width / 2 - 120 - 12,
+      y: height - 20 - 32,
       radius: 12,
       fillColor: "#3f8aff",
       initialSpeed: {
@@ -105,14 +105,14 @@ class PlaygroundScene extends Component {
       },
       maxSpeed: {
         x: 15,
-        y: 15,
+        y: -15,
       },
       env: {
         ctx,
         width,
         height,
         boundary,
-        gravity: 4,
+        gravity: 2,
       },
     });
 
@@ -218,29 +218,26 @@ class PlaygroundScene extends Component {
         }
       );
       if (rectCollisionVector) {
-        if (rectCollisionVector[0]) {
+        if (rectCollisionVector[0] || rectCollisionVector[2]) {
+          const isPositive = breaker.state.dy > 0;
+          const newBallSpeed = isPositive ? breaker.state.dy + ball.state.dy : breaker.state.dy - ball.state.dy;
           ball.setState({
-            dy: ball.state.dy > 0 ? -ball.state.dy : ball.state.dy,
-          });
-        } else if (rectCollisionVector[2]) {
-          ball.setState({
-            dy: ball.state.dy > 0 ? ball.state.dy : -ball.state.dy,
+            y: rectCollisionVector[2] ? breaker.state.y + breaker.props.height + ball.props.radius : breaker.state.y - ball.props.radius,
+            dy: newBallSpeed
           });
         }
-        if (rectCollisionVector[1]) {
+        if (rectCollisionVector[1] || rectCollisionVector[3]) {
+          const isPositive = breaker.state.dx > 0;
+          const newBallSpeed = isPositive ? breaker.state.dx + ball.state.dx : breaker.state.dx - ball.state.dx;
           ball.setState({
-            dx: ball.state.dx > 0 ? ball.state.dx : -ball.state.dx,
-          });
-        } else if (rectCollisionVector[3]) {
-          ball.setState({
-            dx: ball.state.dx > 0 ? -ball.state.dx : ball.state.dx,
+            dx: newBallSpeed
           });
         }
         audioHandler.play("OnBreakerBounce");
       } else if (
         ball.state.y + ball.props.radius >= height
       ) {
-        gameInstance.changeState(GAME_STATES.END);
+        // gameInstance.changeState(GAME_STATES.END);
       } else {
         for (let brIdx = 0; brIdx < bricks.length; brIdx++) {
           const brick = bricks[brIdx];
