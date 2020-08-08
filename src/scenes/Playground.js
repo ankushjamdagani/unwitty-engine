@@ -2,7 +2,7 @@ import { GAME_STATES, KEY_CODES } from "../constants";
 
 import Component from "../HOC/Component";
 
-import withResistance from '../behaviours/withResistance';
+import withResistance from "../behaviours/withResistance";
 
 import Ball from "../objects/Ball";
 import Breaker from "../objects/Breaker";
@@ -10,55 +10,7 @@ import Brick from "../objects/Brick";
 
 import CollisionHandler from "../helpers/CollisionHandler";
 
-const BRICK_MATRIX = {
-  0: [
-    [0],
-    [0],
-    [0],
-    [0],
-    [0, 0, 0, 0, 0, 0, 0, [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], 0],
-    [0, 0, 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], 0, 0, 0, 0, 0, 0, 0, [1,1], [1,1], [1,1], [1,2]],
-    [0, 0, 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], 0, 0, 0, [1,3], 0, 0, 0, [1,1], [1,1], [1,1], [1,2]],
-    [0, 0, 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], 0, 0, [1,3], [1,3], 0, 0, 0, [1,1], [1,1], [1,1], [1,2]],
-    [0, 0, 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], 0, 0, 0, [1,3], 0, 0, 0, [1,1], [1,1], [1,1], [1,2]],
-    [0, 0, 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], 0, 0, [1,3], [1,3], [1,3], 0, 0, [1,1], [1,1], [1,1], [1,2]],
-    [0, 0, 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], 0, 0, 0, 0, 0, 0, 0, [1,1], [1,1], [1,1], [1,2]],
-    [0, 0, 0, 0, 0, 0, 0, [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], 0],
-  ],
-  1: [
-    [0, [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], 0],
-    [[1,2], [1,1], [1,1], [1,1], 0, 0, 0, 0, 0, 0, 0, [1,1], [1,1], [1,1], [1,2]],
-    [[1,2], [1,1], [1,1], [1,1], 0, 0, 0, [1,3], 0, 0, 0, [1,1], [1,1], [1,1], [1,2]],
-    [[1,2], [1,1], [1,1], [1,1], 0, 0, [1,3], [1,3], 0, 0, 0, [1,1], [1,1], [1,1], [1,2]],
-    [[1,2], [1,1], [1,1], [1,1], 0, 0, 0, [1,3], 0, 0, 0, [1,1], [1,1], [1,1], [1,2]],
-    [[1,2], [1,1], [1,1], [1,1], 0, 0, [1,3], [1,3], [1,3], 0, 0, [1,1], [1,1], [1,1], [1,2]],
-    [[1,2], [1,1], [1,1], [1,1], 0, 0, 0, 0, 0, 0, 0, [1,1], [1,1], [1,1], [1,2]],
-    [0, [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], 0],
-  ],
-  2: [
-    [0],
-    [0],
-    [0, 0, 0, [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], 0, 0, 0, 0, [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2], [1,2]],
-    [0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2], 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2]],
-    [0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2], 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2]],
-    [0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2], 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2]],
-    [0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2], 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2]],
-    [0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2], 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2]],
-    [0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2], 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2]],
-    [0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2], 0, 0, 0, 0, [1,2], [1,1], [1,1], [1,1], [1,1], [1,1], [1,1], [1,2]],
-  ],
-  3: [
-    [0],
-    [0, 0, 0, 0, 0, 0, [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], 0, 0, 0, 0, [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3]],
-    [0, 0, 0, 0, 0, 0, [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], 0, 0, 0, 0, [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3]],
-    [0, 0, 0, 0, 0, 0, [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], 0, 0, 0, 0, [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3]],
-    [0, 0, 0, 0, 0, 0, [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], 0, 0, 0, 0, [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3]],
-    [0, 0, 0, 0, 0, 0, [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], 0, 0, 0, 0, [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3]],
-    [0, 0, 0, 0, 0, 0, [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], 0, 0, 0, 0, [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3]],
-    [0, 0, 0, 0, 0, 0, [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], 0, 0, 0, 0, [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3]],
-    [0, 0, 0, 0, 0, 0, [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], 0, 0, 0, 0, [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3], [1,3]],
-  ],
-};
+import BRICK_MATRIX from "../config/bricks.json";
 
 class PlaygroundScene extends Component {
   constructor(props) {
@@ -134,7 +86,7 @@ class PlaygroundScene extends Component {
   }
 
   listenKeysDown = (e) => {
-    const key = e.key.toLowerCase()
+    const key = e.key.toLowerCase();
     if (key === KEY_CODES.LEFT) {
       this.elements.breaker.goLeft();
     } else if (key === KEY_CODES.RIGHT) {
@@ -145,7 +97,7 @@ class PlaygroundScene extends Component {
   };
 
   listenKeysUp = (e) => {
-    const key = e.key.toLowerCase()
+    const key = e.key.toLowerCase();
     if (key === KEY_CODES.LEFT || key === KEY_CODES.RIGHT) {
       this.elements.breaker.stop();
     }
@@ -155,7 +107,7 @@ class PlaygroundScene extends Component {
     const { gameInstance, width, height, ctx, audioHandler } = this.props;
 
     // [20, 30]; // must be dynamic. based on screen size, 15 : 13 brick size
-    const gridDims = [17, 34]; 
+    const gridDims = [17, 34];
     const level = gameInstance.getLevel();
     const bricksMatrix = BRICK_MATRIX[level];
     const leftOffset = Math.floor((gridDims[1] - bricksMatrix[0].length) / 2);
@@ -164,7 +116,7 @@ class PlaygroundScene extends Component {
     const unitWidth = width / gridDims[1];
     // const unitHeight = (unitWidth * 15) / 13;
     const unitHeight = height / gridDims[0];
-    
+
     const bricks = [];
     let y = topOffset * unitHeight;
     bricksMatrix.forEach((row) => {
@@ -220,23 +172,27 @@ class PlaygroundScene extends Component {
       if (rectCollisionVector) {
         if (rectCollisionVector[0] || rectCollisionVector[2]) {
           const isPositive = breaker.state.dy > 0;
-          const newBallSpeed = isPositive ? breaker.state.dy + ball.state.dy : breaker.state.dy - ball.state.dy;
+          const newBallSpeed = isPositive
+            ? breaker.state.dy + ball.state.dy
+            : breaker.state.dy - ball.state.dy;
           ball.setState({
-            y: rectCollisionVector[2] ? breaker.state.y + breaker.props.height + ball.props.radius : breaker.state.y - ball.props.radius,
-            dy: newBallSpeed
+            y: rectCollisionVector[2]
+              ? breaker.state.y + breaker.props.height + ball.props.radius
+              : breaker.state.y - ball.props.radius,
+            dy: newBallSpeed,
           });
         }
         if (rectCollisionVector[1] || rectCollisionVector[3]) {
           const isPositive = breaker.state.dx > 0;
-          const newBallSpeed = isPositive ? breaker.state.dx + ball.state.dx : breaker.state.dx - ball.state.dx;
+          const newBallSpeed = isPositive
+            ? breaker.state.dx + ball.state.dx
+            : breaker.state.dx - ball.state.dx;
           ball.setState({
-            dx: newBallSpeed
+            dx: newBallSpeed,
           });
         }
         audioHandler.play("OnBreakerBounce");
-      } else if (
-        ball.state.y + ball.props.radius >= height
-      ) {
+      } else if (ball.state.y + ball.props.radius >= height) {
         // gameInstance.changeState(GAME_STATES.END);
       } else {
         for (let brIdx = 0; brIdx < bricks.length; brIdx++) {

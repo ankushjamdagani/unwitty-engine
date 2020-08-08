@@ -13,10 +13,10 @@ import ResultsScene from "./scenes/Results";
 import AudioHandler from "./objects/AudioHandler";
 
 const AspectRatios = {
-  SINGLE_PLAYER: 16/9,
-  DOUBLE_PLAYER: 4/3,
-  MULTI_PLAYER: 1
-}
+  SINGLE_PLAYER: 16 / 9,
+  DOUBLE_PLAYER: 4 / 3,
+  MULTI_PLAYER: 1,
+};
 
 const smallValue =
   window.innerWidth > window.innerHeight

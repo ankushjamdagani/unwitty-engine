@@ -19,4 +19,12 @@ const isOpposite = (x, y) => {
   return (x ^ y) < 0;
 };
 
-export { roundOff, minimum, maximum, isOpposite };
+const isPositive = (x) => {
+  return x >= 0;
+};
+
+const isNegative = (x) => {
+  return x < 0;
+};
+
+export { roundOff, minimum, maximum, isOpposite, isPositive, isNegative };
