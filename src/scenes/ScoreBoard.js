@@ -1,8 +1,7 @@
-import Component from "../HOC/Component";
+import Component from "../Engine/Component";
+import { CreateRect, CreateText, CreateImage } from "../Engine/Creator";
 
 import HeartFilled from "../assets/images/HeartFilled.svg";
-
-import { CreateRect, CreateText, CreateImage } from "../helpers/Creator";
 
 class ScoreBoardScene extends Component {
   constructor(props) {

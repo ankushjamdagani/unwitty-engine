@@ -1,9 +1,9 @@
 import Component from "../HOC/Component";
 
-import { roundOff } from "../helpers/common";
+import { roundOff } from "../helpers/Math";
 
-import { CreateImage } from "../helpers/Creator";
-import Animator from "../helpers/Animator";
+import { CreateImage } from "../Engine/Creator";
+import Animator from "../Engine/Animator";
 
 import ball1 from "../assets/images/BallRotate1.svg";
 import ball2 from "../assets/images/BallRotate2.svg";

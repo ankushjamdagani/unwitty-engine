@@ -1,6 +1,6 @@
 import Component from "../HOC/Component";
 
-import { CreateImage } from "../helpers/Creator";
+import { CreateImage } from "../Engine/Creator";
 
 import BrickSmall3 from "../assets/images/Brick - Small - Strong.svg";
 import BrickSmall2 from "../assets/images/Brick - Small - Weak.svg";

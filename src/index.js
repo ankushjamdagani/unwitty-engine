@@ -2,7 +2,7 @@ import "./index.css";
 
 import { GAME_STATES, KEY_CODES } from "./constants";
 
-import Component from "./HOC/Component";
+import Component from "./Engine/Component";
 
 import HomeScene from "./scenes/Home";
 import PlaygroundScene from "./scenes/Playground";

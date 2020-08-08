@@ -1,8 +1,8 @@
 import Component from "../HOC/Component";
 
-import { roundOff } from "../helpers/common";
+import { roundOff } from "../helpers/Math";
 
-import { CreateRect } from "../helpers/Creator";
+import { CreateRect } from "../Engine/Creator";
 
 import rover from "../assets/images/Board3.svg";
 

@@ -1,4 +1,4 @@
-import { maximum, minimum } from "../helpers/common";
+import { maximum, minimum } from "../helpers/Math";
 
 const withResistance = (ObjectModel) => {
   const isNumberSmall = function (num) {

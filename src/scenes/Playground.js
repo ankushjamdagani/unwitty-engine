@@ -1,14 +1,13 @@
 import { GAME_STATES, KEY_CODES } from "../constants";
 
-import Component from "../HOC/Component";
+import Component from "../Engine/Component";
+import CollisionHandler from "../Engine/CollisionHandler";
 
 import withResistance from "../behaviours/withResistance";
 
 import Ball from "../objects/Ball";
 import Breaker from "../objects/Breaker";
 import Brick from "../objects/Brick";
-
-import CollisionHandler from "../helpers/CollisionHandler";
 
 import BRICK_MATRIX from "../config/bricks.json";
 

@@ -1,7 +1,6 @@
-import Component from "../HOC/Component";
-
-import Animator from "../helpers/Animator";
-import { CreateRect, CreateText } from "../helpers/Creator";
+import Component from "../Engine/Component";
+import Animator from "../Engine/Animator";
+import { CreateRect, CreateText } from "../Engine/Creator";
 
 class ResultsScene extends Component {
   constructor(props) {
