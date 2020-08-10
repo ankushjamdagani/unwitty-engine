@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   mode: "development",
-  entry: { main: "./src/index.js" },
+  entry: { game: "./src/game/index.js", engine: "./src/engine/index.js" },
   output: {
     filename: "[name].bundle.js",
     path: path.resolve(__dirname, "dist"),
@@ -48,7 +48,7 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin({ cleanStaleWebpackAssets: false }),
     new HtmlWebpackPlugin({
-      template: "src/index.html",
+      template: "src/game/index.html",
     }),
   ],
 };

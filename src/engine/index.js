@@ -3,6 +3,7 @@
 // --------------- GAME LOOP STARTS
 // Get Elements to render
 // RENDER                   <- can run in pause state
+// Game Audio
 // PHYSICS STEPS
 //    COLLISION DETECTION
 //    COLLISION RESOLUTION

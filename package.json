@@ -2,7 +2,7 @@
   "name": "canvas-bricks-breaker",
   "version": "1.0.0",
   "description": "Bricks breaker game using canvas and javascript",
-  "main": "src/index.js",
+  "main": "src/game/index.js",
   "author": "AnkushJ <anqush.jamdagani@gmail.com>",
   "license": "MIT",
   "scripts": {
