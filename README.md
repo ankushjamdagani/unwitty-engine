@@ -1,4 +1,6 @@
-# Notes
+# Game
+
+## Notes
 
 - Offline and optimised
 - Modes
@@ -14,3 +16,7 @@
   - Quiz
     - theme based
     - preselected questions by other players
+
+## For Read
+
+- https://www.kirupa.com/canvas/sprite_animations_canvas.htm
