@@ -27,4 +27,16 @@ const isNegative = (x) => {
   return x < 0;
 };
 
-export { roundOff, minimum, maximum, isOpposite, isPositive, isNegative };
+const hasValue = (x) => {
+  return !(x === null || x === undefined || x === NaN);
+};
+
+export {
+  roundOff,
+  minimum,
+  maximum,
+  isOpposite,
+  isPositive,
+  isNegative,
+  hasValue,
+};
