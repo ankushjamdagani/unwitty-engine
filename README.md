@@ -40,3 +40,8 @@ Start Game
         setVelocity()
         setRotation()
 ```
+
+@todo
+
+- Apply Forces to elements
+- Remove/modify forces in realtime

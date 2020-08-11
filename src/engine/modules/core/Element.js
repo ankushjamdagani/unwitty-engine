@@ -16,6 +16,7 @@ class Element {
     name,
     shape = SHAPES.RECTANGLE, // will also be used for drawing bounding boxes and collision detection
     vertices,
+    edges,
     parent,
     children = [],
 

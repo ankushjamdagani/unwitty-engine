@@ -42,6 +42,11 @@ const KEY_CODES = {
   M: "m",
 };
 
+const RESOURCE_TYPE = {
+  IMAGE: 1,
+  AUDIO: 2,
+};
+
 export {
   BODY_TYPE,
   GRADIENT_TYPES,
@@ -49,4 +54,5 @@ export {
   SHAPES,
   GAME_STATES,
   KEY_CODES,
+  RESOURCE_TYPE,
 };

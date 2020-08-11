@@ -1,10 +1,15 @@
+import ResourceManager from "./modules/ResourceManager";
 // Initialise
 // Load Resources
 // --------------- GAME LOOP STARTS
 // Get Elements to render
 // RENDER                   <- can run in pause state
-// Game Audio
+// *Input
+// *  Games Changs Camera, speed, accelration and other aspects
+// *OnEvents
+// *  Game Audio
 // PHYSICS STEPS
+//    Apply forces
 //    COLLISION DETECTION
 //    COLLISION RESOLUTION
 // UPDATE
@@ -13,10 +18,28 @@
 // Exit
 
 function Engine(props) {
+  // init phase
   this.props = props;
-
   this.timeSpeed = 1;
+  // might get computed based on frameRate
   this.ellapsedTime = 0;
+
+  /**
+   * ------------ RESOURCE MANGER -------------
+   */
+  this.resourceManager = new ResourceManager();
+
+  this.loadResources = (resources = []) => {
+    resourceManager.addResources(resources);
+  };
+
+  this.unLoadResources = (resources = []) => {
+    if (resources.length) {
+      resourceManager.removeResources(resources);
+    } else {
+      resourceManager.removeAll();
+    }
+  };
 
   this.elements = []; // should itbe a <Map />
 
