@@ -1,4 +1,5 @@
 import ResourceManager from "./modules/ResourceManager";
+import EntityManager from "./modules/EntityManager";
 // Initialise
 // Load Resources
 // Set camera
@@ -21,71 +22,76 @@ import ResourceManager from "./modules/ResourceManager";
 // Unload Resources
 // Exit
 
-function Engine(props) {
-  // init phase
-  this.props = props;
+class Engine {
+  // { canvasId, canvasWidth, canvasHeight, timeSpeed }
+  constructor(props = {}) {
+    this.props = props;
 
-  /**
-   * ------------ TIME CONTROLS ------------
-   */
-  this.timeSpeed = 1;
-  this.ellapsedTime = 0; // might get computed based on frameRate
+    this.initCanvas();
+    this.initTimer();
+    this.initResourceManager();
+    this.initEntityManager();
+  }
+
+  initCanvas() {
+    const { canvasId, canvasWidth, canvasHeight } = this.props;
+
+    const canvas = document.createElement("canvas");
+    canvas.setAttribute("id", canvasId);
+    canvas.width = canvasWidth || window.innerWidth;
+    canvas.height = canvasHeight || window.innerHeight;
+
+    document.body.appendChild(canvas);
+
+    const ctx = canvas.getContext("2d");
+
+    this.canvas = {
+      element: canvas,
+      context: ctx,
+    };
+
+    this.screen = { width: canvas.width, height: canvas.height };
+  }
+
+  // Take frame per second in consideration
+  initTimer() {
+    const { timeSpeed = 1 } = this.props;
+
+    this.timeSpeed = timeSpeed;
+    this.ellapsedTime = 0;
+  }
 
   /**
    * ------------ RESOURCE MANGER -------------
    */
-  this.resourceManager = new ResourceManager();
+  initResourceManager() {
+    const resourceManager = new ResourceManager();
 
-  this.loadResources = (resources = []) => {
-    resourceManager.addResources(resources);
-  };
-
-  this.unLoadResources = (resources = []) => {
-    if (resources.length) {
-      resourceManager.removeResources(resources);
-    } else {
-      resourceManager.removeAll();
-    }
-  };
-
-  this.elements = []; // should itbe a <Map />
-
-  function addElement(element) {
-    this.elements.push(element);
+    this.resourceManager = resourceManager;
+    this.loadResources = resourceManager.addResources;
+    this.unLoadResources = resourceManager.removeResources;
   }
 
-  function removeElement(id) {
-    this.elements = this.elements.filter((el) => el.id === id);
+  initEntityManager() {
+    this.entityManager = new EntityManager();
   }
 
-  function update() {
-    for (let i = 0; i < this.elements.length; i++) {
-      const element = this.elements[i];
-
-      element.update();
-      element.render();
-    }
-  }
-
-  function autoPilot() {
-    requestAnimationFrame(autoPilot);
+  autoPilot() {
+    requestAnimationFrame(this.autoPilot);
 
     // https://stackoverflow.com/questions/19764018/controlling-fps-with-requestanimationframe
     if (this.ellapsedTime % 1 == 0) {
       for (let i = 0; i < this.timeSpeed; i += 1) {
-        update();
+        this.update();
       }
     }
 
     this.ellapsedTime += this.timeSpeed;
   }
 
-  return {
-    update,
-    autoPilot,
-    addElement,
-    removeElement,
-  };
+  update() {
+    console.log("PLAYING......");
+  }
 }
 
 export default Engine;

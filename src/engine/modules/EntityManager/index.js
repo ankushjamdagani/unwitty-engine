@@ -1,14 +1,17 @@
 class EntityManager {
-  parentIndex = new Map();
-  root = null;
+  constructor() {
+    this.parentIndex = new Map();
+    this.root = null;
+  }
 
   setRoot(elem) {
     this.root = elem;
   }
 
-  getNextToRender = function* () {
-    yield this.entityGraph[0];
-  };
+  * getNextToRender() {
+    yield 1;
+    yield* 2;
+  }
 
   getEntityById() {}
 }

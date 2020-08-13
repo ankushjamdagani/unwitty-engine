@@ -1,9 +1,11 @@
 import { RESOURCE_TYPE } from "../../constants";
 
-const ResourceManager = () => {
-  this.resources = new Map();
+class ResourceManager {
+  constructor() {
+    this.resources = new Map();
+  }
 
-  this.addResources = (resources = [], cb) => {
+  addResources(resources = [], cb) {
     for (let i = 0; i < resources.length; i++) {
       const { type = RESOURCE_TYPE.IMAGE, key = Date.now(), src } = resources[
         i
@@ -34,18 +36,22 @@ const ResourceManager = () => {
         };
       }
     }
-  };
+  }
 
-  this.hasResource = (key) => this.resources.has(key);
+  hasResource(key) {
+    this.resources.has(key);
+  }
 
-  this.removeResources = (keys) => {
+  removeResources(keys) {
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i];
       this.resources.delete(key);
     }
-  };
+  }
 
-  this.removeAll = () => this.resources.clear();
-};
+  removeAll() {
+    this.resources.clear();
+  }
+}
 
 export default ResourceManager;
