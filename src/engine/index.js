@@ -1,6 +1,10 @@
 import ResourceManager from "./modules/ResourceManager";
 // Initialise
 // Load Resources
+// Set camera
+// Set Light**
+// Load world
+// Add elements / constraints / elements-groups / styles / transformations / forces
 // --------------- GAME LOOP STARTS
 // Get Elements to render
 // RENDER                   <- can run in pause state
@@ -20,9 +24,12 @@ import ResourceManager from "./modules/ResourceManager";
 function Engine(props) {
   // init phase
   this.props = props;
+
+  /**
+   * ------------ TIME CONTROLS ------------
+   */
   this.timeSpeed = 1;
-  // might get computed based on frameRate
-  this.ellapsedTime = 0;
+  this.ellapsedTime = 0; // might get computed based on frameRate
 
   /**
    * ------------ RESOURCE MANGER -------------

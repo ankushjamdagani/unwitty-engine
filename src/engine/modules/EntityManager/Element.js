@@ -3,6 +3,8 @@ import { SHAPES, BODY_TYPE } from "../../constants";
 import Vector2D from "../Maths/Vector2D";
 import Renderers from "../../Renderer/Renderers";
 
+import Node from "./Node";
+
 // Shape
 // Bounding Box
 // Category Mask
@@ -11,32 +13,35 @@ import Renderers from "../../Renderer/Renderers";
 
 // Styles and textures will be applied to all childrens as well
 // childrens can have overriden styles as well, inherit unspecified values
-class Element {
-  constructor({
-    name,
-    shape = SHAPES.RECTANGLE, // will also be used for drawing bounding boxes and collision detection
-    vertices,
-    edges,
-    parent,
-    children = [],
+class Element extends Node {
+  constructor(props) {
+    super(props);
+    const {
+      name,
+      shape = SHAPES.RECTANGLE, // will also be used for drawing bounding boxes and collision detection
+      vertices,
+      edges,
+      parent,
+      children = [],
 
-    // check if collision can occer using these
-    categoryMask = 0b001,
-    collisionMask = 0b111,
+      // check if collision can occer using these
+      categoryMask = 0b001,
+      collisionMask = 0b111,
 
-    // on collision resolve using this
-    bodyType = BODY_TYPE.KINEMATIC,
-    mass = 1,
-    restitution = 0.2,
-    friction = 0,
-    position = { x: 0, y: 0 },
-    direction = { x: 0, y: 0 },
-    velocity = { x: 0, y: 0 },
-    acceleration = { x: 0, y: 0 },
+      // on collision resolve using this
+      bodyType = BODY_TYPE.KINEMATIC,
+      mass = 1, // and density. Drive size from that? maybe??
+      restitution = 0.2,
+      friction = 0,
+      position = { x: 0, y: 0 },
+      direction = { x: 0, y: 0 },
+      velocity = { x: 0, y: 0 },
+      acceleration = { x: 0, y: 0 },
 
-    renderProps = {},
-    ...restProps
-  }) {
+      renderProps = {},
+      ...restProps
+    } = props;
+
     // META
     this.id = Date.now();
     this.name = name;
@@ -64,6 +69,7 @@ class Element {
     // Vector Box
     // Label Box
     // Collision Points
+    // Surface Area
   }
 
   isMoving() {
@@ -92,5 +98,10 @@ class Element {
     return `Element(${this.id} :: ${this.name} | Shape :: ${this.shape})`;
   }
 }
+
+Element.createFromShape = () => {};
+Element.createRectangle = () => {};
+Element.createCircle = () => {};
+Element.createPolygon = () => {};
 
 export default Element;

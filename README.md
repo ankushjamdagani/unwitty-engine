@@ -21,7 +21,7 @@
 
 - [Sprite Animation](https://www.kirupa.com/canvas/sprite_animations_canvas.htm)
 - [Layering](https://developer.ibm.com/technologies/web-development/tutorials/wa-canvashtml5layering/)
-- [Light Effects](https://blogs.adobe.com/webplatform/2014/02/24/using-blend-modes-in-html-canvas/)
+- [Light Effects](https://blogs.adobe.com/webplatform/2014/02/24/using-blend-modes-in-html-canvas/) and [here](https://www.youtube.com/watch?v=fc3nnG2CG8U)
 - [Eyes using Raytracing](https://stackoverflow.com/questions/32716685/algorithm-for-2d-raytracer)
 - [Physics](https://courses.lumenlearning.com/boundless-physics/)
 

@@ -1,3 +1,4 @@
+// https://gamedevelopertips.com/vector-in-game-development/
 import { hasValue } from "./Commons";
 
 const Vector2D = (x, y) => {
@@ -120,6 +121,9 @@ Vector2D.prototype = {
     ) {
       this.normalise().mul({ x: limitAmt, y: limitAmt });
     }
+  },
+  clone() {
+    return new Vector2D(this.x, this.y);
   },
   toString() {
     return `Vector2D(${this.x}, ${this.y})`;
