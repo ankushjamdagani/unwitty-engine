@@ -1,4 +1,4 @@
-import Node from "./Node";
+import _node from "./_node";
 
 /**
  * Candidate environment variables
@@ -11,11 +11,11 @@ import Node from "./Node";
  * - Camera
  * - Transformations
  */
-class World extends Node {
-  constructor(props) {
+class World extends _node {
+  constructor(props = {}) {
     super(props);
     const {
-      gravity,
+      gravity = 0,
       bounds = [
         { x: -Infinity, y: -Infinity },
         { x: Infinity, y: Infinity },

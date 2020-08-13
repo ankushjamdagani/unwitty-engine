@@ -1,5 +1,7 @@
 import ResourceManager from "./modules/ResourceManager";
 import EntityManager from "./modules/EntityManager";
+import { Vector2D } from "./modules/core";
+
 // Initialise
 // Load Resources
 // Set camera
@@ -23,15 +25,23 @@ import EntityManager from "./modules/EntityManager";
 // Exit
 
 class Engine {
-  // { canvasId, canvasWidth, canvasHeight, timeSpeed }
+  /**
+   * @prop { canvasId, canvasWidth, canvasHeight, timeSpeed }
+   */
   constructor(props = {}) {
     this.props = props;
 
+    this.init();
+  }
+
+  init() {
     this.initCanvas();
     this.initTimer();
     this.initResourceManager();
     this.initEntityManager();
   }
+
+  destroy() {}
 
   initCanvas() {
     const { canvasId, canvasWidth, canvasHeight } = this.props;
@@ -74,6 +84,23 @@ class Engine {
 
   initEntityManager() {
     this.entityManager = new EntityManager();
+
+    const world = EntityManager.createWorld({
+      gravity: 0,
+      bounds: [
+        new Vector2D(-Infinity, -Infinity),
+        new Vector2D(Infinity, Infinity),
+      ],
+    });
+    const camera = EntityManager.createCamera({
+      position: new Vector2D(0, 0),
+      rotation: 0,
+    });
+    const light = EntityManager.createLight({ position: new Vector2D(0, 0) });
+
+    this.entityManager.setRoot(world);
+    world.add(camera);
+    world.add(light);
   }
 
   autoPilot() {

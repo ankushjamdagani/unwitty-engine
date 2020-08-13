@@ -1,10 +1,10 @@
-import Node from "./Node";
+import _node from "./_node";
 
-class Camera extends Node {
-  constructor(props) {
+class Camera extends _node {
+  constructor(props = {}) {
     super(props);
 
-    const { position, rotation } = props;
+    const { position, rotation = 0 } = props;
 
     this.position = position;
     this.rotation = rotation;

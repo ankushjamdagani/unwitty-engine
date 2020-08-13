@@ -1,6 +1,8 @@
-class Node {
-  constructor(props) {
-    this.id = Date.now();
+import { Commons } from "../core";
+
+class _node {
+  constructor({ entity, childrens } = {}) {
+    this.id = Commons.uid();
     this.entity = entity || null;
     this.parent = parent || null;
     this.childrens = new Map(childrens || []);
@@ -16,4 +18,4 @@ class Node {
   }
 }
 
-export default Node;
+export default _node;

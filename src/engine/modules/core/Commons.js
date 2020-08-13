@@ -31,7 +31,16 @@ const hasValue = (x) => {
   return !(x === null || x === undefined || x === NaN);
 };
 
-export {
+// https://gist.github.com/gordonbrander/2230317#gistcomment-3404537
+const uid = () => {
+  return (
+    String.fromCharCode(Math.floor(Math.random() * 26) + 97) +
+    Math.random().toString(16).slice(2) +
+    Date.now().toString(16).slice(4)
+  );
+};
+
+export default {
   roundOff,
   minimum,
   maximum,
@@ -39,4 +48,5 @@ export {
   isPositive,
   isNegative,
   hasValue,
+  uid,
 };

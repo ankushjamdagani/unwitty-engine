@@ -1,9 +1,9 @@
+import _node from "./_node";
+
 import { SHAPES, BODY_TYPE } from "../../constants";
 
-import Vector2D from "../Maths/Vector2D";
-import Renderers from "../../Renderer/Renderers";
-
-import Node from "./Node";
+import Vector2D from "../core/Vector2D";
+// import Renderers from "../../Renderer/Renderers";
 
 // Shape
 // Bounding Box
@@ -13,7 +13,7 @@ import Node from "./Node";
 
 // Styles and textures will be applied to all childrens as well
 // childrens can have overriden styles as well, inherit unspecified values
-class Element extends Node {
+class Element extends _node {
   constructor(props) {
     super(props);
     const {
