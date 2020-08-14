@@ -8,6 +8,8 @@ class Light extends _node {
 
     this.type = ENTITY_NODE_TYPES.LIGHT;
   }
+
+  render() {}
 }
 
 export default Light;

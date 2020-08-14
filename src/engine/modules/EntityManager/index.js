@@ -15,9 +15,22 @@ class EntityManager {
     this.root = elem;
   }
 
-  *getNextToRender() {
-    yield 1;
-    yield* 2;
+  getRoot() {
+    return this.root;
+  }
+
+  getItemsToRender(node) {
+    const elem = node || this.root;
+    let items = [];
+
+    items.push(elem);
+
+    if (elem.children && elem.children.size) {
+      for (const [key, val] of elem.children) {
+        items = items.concat(this.getItemsToRender(val));
+      }
+    }
+    return items;
   }
 
   getEntityById() {}
@@ -46,5 +59,12 @@ EntityManager.createLayer = (props) => {
 EntityManager.createElement = (props) => {
   return new Element(props);
 };
+
+EntityManager.World = World;
+EntityManager.Camera = Camera;
+EntityManager.Light = Light;
+EntityManager.Transform = Transform;
+EntityManager.Layer = Layer;
+EntityManager.Element = Element;
 
 export default EntityManager;

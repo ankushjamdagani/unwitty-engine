@@ -6,12 +6,13 @@ class Camera extends _node {
   constructor(props = {}) {
     super(props);
 
-    const { position, rotation = 0 } = props;
+    const { position, rotation = 0, screen } = props;
 
     this.type = ENTITY_NODE_TYPES.CAMERA;
 
     this.position = position;
     this.rotation = rotation;
+    this.screen = screen;
     this.target = null;
   }
 
@@ -28,9 +29,15 @@ class Camera extends _node {
     this.target = target;
   }
 
-  update() {
+  render() {
     if (this.target) {
-      this.setPosition(this.target.position);
+      const {
+        position: { x, y },
+      } = this.target;
+      const { width, height } = this.screen;
+
+      this.position.x = x - width / 2;
+      this.position.y = y - height / 2;
     }
   }
 }

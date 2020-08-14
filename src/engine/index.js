@@ -1,6 +1,7 @@
 import ResourceManager from "./modules/ResourceManager";
 import EntityManager from "./modules/EntityManager";
-import { Vector2D, Commons } from "./modules/core";
+import Renderer from "./modules/Renderer";
+import { Vector2D } from "./modules/core";
 
 // --------------- GAME LOOP STARTS
 // Get Elements to render
@@ -33,6 +34,7 @@ class Engine {
     this.initTimer();
     this.initResourceManager();
     this.initEntityManager();
+    this.initRenderer();
   }
 
   destroy() {}
@@ -90,12 +92,21 @@ class Engine {
     const camera = EntityManager.createCamera({
       position: new Vector2D(0, 0),
       rotation: 0,
+      screen: { ...this.screen },
     });
     const light = EntityManager.createLight({ position: new Vector2D(0, 0) });
+
+    this.world = world;
+    this.camera = camera;
+    this.light = light;
 
     this.entityManager.setRoot(world);
     world.add(camera);
     world.add(light);
+  }
+
+  initRenderer() {
+    this.renderer = new Renderer();
   }
 
   // https://stackoverflow.com/questions/19764018/controlling-fps-with-requestanimationframe
@@ -105,6 +116,12 @@ class Engine {
     const ticksPassed = this.currTick - this.lastTick;
 
     if (!ticksPassed || ticksPassed >= 1) {
+      this.canvas.context.clearRect(
+        0,
+        0,
+        this.screen.width,
+        this.screen.height
+      );
       for (let i = 0; i < this.timeSpeed; i += 1) {
         this.lastTick = this.currTick;
         this.update();
@@ -115,8 +132,28 @@ class Engine {
   };
 
   update() {
-    console.log("PLAYING......", this.currTick);
+    const parser = this.entityManager.getItemsToRender();
+
+    this.camera.render();
+    this.light.render();
+
+    for (const element of parser) {
+      this.renderer.render({
+        element,
+        envProps: {
+          ctx: this.canvas.context,
+          world: this.world,
+          screen: this.screen,
+          camera: this.camera,
+          light: this.light,
+        },
+      });
+    }
   }
 }
+
+Engine.API = {
+  ...EntityManager,
+};
 
 export default Engine;

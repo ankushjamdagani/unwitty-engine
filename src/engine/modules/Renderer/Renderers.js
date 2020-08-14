@@ -1,21 +1,26 @@
 import { SHAPES, SHAPE_STYLES, GRADIENT_TYPES } from "../../constants";
 
+const getPosition = (pos, camera) => ({
+  x: pos.x - camera.position.x,
+  y: pos.y - camera.position.y,
+});
+
 const Renderers = {
   [SHAPES.RECTANGLE]: {
     [SHAPE_STYLES.NONE]: (element, envProps) => {
       const { ctx } = envProps;
       const { x, y } = element.position;
-      const { width, height } = element.specs;
+      const { width, height } = element.props;
 
       ctx.rect(x, y, width, height);
     },
     [SHAPE_STYLES.NORMAL]: (element, envProps, renderProps) => {
-      const { ctx } = envProps;
-      const { x, y } = element.position;
-      const { width, height } = element.specs;
+      const { ctx, camera } = envProps;
+      const { x, y } = getPosition(element.position, camera);
+      const { width, height } = element.props;
       const { fillColor, strokeColor, strokeSize } = renderProps;
 
-      ctx.fillColor = fillColor || null;
+      ctx.fillStyle = fillColor || null;
       ctx.strokeStyle = strokeColor || null;
       ctx.lineWidth = strokeSize || 0;
 
@@ -26,7 +31,7 @@ const Renderers = {
     [SHAPE_STYLES.GRADIENT]: (element, envProps, renderProps) => {
       const { ctx } = envProps;
       const { x, y } = element.position;
-      const { width, height } = element.specs;
+      const { width, height } = element.props;
       const {
         gradientType,
         x1,
@@ -54,7 +59,7 @@ const Renderers = {
     [SHAPE_STYLES.PATTERN]: (element, envProps, renderProps) => {
       const { ctx } = envProps;
       const { x, y } = element.position;
-      const { width, height } = element.specs;
+      const { width, height } = element.props;
       const { image, repeat = "no-repeat" } = renderProps;
 
       const pattern = ctx.createPattern(image, repeat);
@@ -67,14 +72,14 @@ const Renderers = {
     [SHAPE_STYLES.NONE]: (envProps) => {
       const { ctx } = envProps;
       const { x, y } = element.position;
-      const { radius, sAngle, eAngle } = element.specs;
+      const { radius, sAngle, eAngle } = element.props;
 
       ctx.arc(x, y, radius, sAngle, eAngle);
     },
     [SHAPE_STYLES.NORMAL]: (element, envProps, renderProps) => {
       const { ctx } = envProps;
       const { x, y } = element.position;
-      const { radius, sAngle, eAngle } = element.specs;
+      const { radius, sAngle, eAngle } = element.props;
       const { fillColor, strokeColor, strokeSize } = renderProps;
 
       ctx.fillColor = fillColor || null;
@@ -89,7 +94,7 @@ const Renderers = {
     [SHAPE_STYLES.GRADIENT]: (element, envProps, renderProps) => {
       const { ctx } = envProps;
       const { x, y } = element.position;
-      const { radius, sAngle, eAngle } = element.specs;
+      const { radius, sAngle, eAngle } = element.props;
       const {
         gradientType,
         x1,
@@ -120,7 +125,7 @@ const Renderers = {
     [SHAPE_STYLES.PATTERN]: (element, envProps, renderProps) => {
       const { ctx } = envProps;
       const { x, y } = element.position;
-      const { radius, sAngle, eAngle } = element.specs;
+      const { radius, sAngle, eAngle } = element.props;
       const { image, repeat = "no-repeat" } = renderProps;
 
       const pattern = ctx.createPattern(image, repeat);

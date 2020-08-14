@@ -1,8 +1,9 @@
-import _node from "./_node";
-
 import { SHAPES, BODY_TYPE, ENTITY_NODE_TYPES } from "../../constants";
 
 import Vector2D from "../core/Vector2D";
+
+import _node from "./_node";
+
 // import Renderers from "../../Renderer/Renderers";
 
 // Shape
@@ -11,8 +12,8 @@ import Vector2D from "../core/Vector2D";
 // vertices
 // bodyType
 
-// Styles and textures will be applied to all childrens as well
-// childrens can have overriden styles as well, inherit unspecified values
+// Styles and textures will be applied to all children as well
+// children can have overriden styles as well, inherit unspecified values
 class Element extends _node {
   constructor(props) {
     super(props);
@@ -34,8 +35,6 @@ class Element extends _node {
       direction = { x: 0, y: 0 },
       velocity = { x: 0, y: 0 },
       acceleration = { x: 0, y: 0 },
-
-      renderProps = {},
       ...restProps
     } = props;
 
@@ -70,22 +69,19 @@ class Element extends _node {
     return this.velocity.x && this.velocity.y;
   }
 
-  addEventListeners() {}
-
-  addChild() {}
-  removeChild() {}
-
   getTransform() {}
   setTransform() {}
+
+  addEventListeners() {}
 
   onCollision() {}
 
   onInput() {}
 
-  // update self and all childrens
+  // update self and all children
   update() {}
 
-  // render self and all childrens
+  // render self and all children
   render(envProps) {}
 
   toString() {
@@ -94,7 +90,29 @@ class Element extends _node {
 }
 
 Element.createFromShape = () => {};
-Element.createRectangle = () => {};
+
+Element.createRectangle = ({ position, width, height, ...rest }) => {
+  return new Element({
+    shape: SHAPES.RECTANGLE,
+    vertices: [
+      [position.x, position.y],
+      [position.x + width, position.y],
+      [position.x, position.y + height],
+      [position.x + width, position.y + height],
+    ],
+    edges: [
+      [0, 1],
+      [1, 2],
+      [2, 3],
+      [3, 0],
+    ],
+    position,
+    width,
+    height,
+    ...rest,
+  });
+};
+
 Element.createCircle = () => {};
 Element.createPolygon = () => {};
 
