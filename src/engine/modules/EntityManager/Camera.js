@@ -1,3 +1,5 @@
+import { ENTITY_NODE_TYPES } from "../../constants";
+
 import _node from "./_node";
 
 class Camera extends _node {
@@ -5,6 +7,8 @@ class Camera extends _node {
     super(props);
 
     const { position, rotation = 0 } = props;
+
+    this.type = ENTITY_NODE_TYPES.CAMERA;
 
     this.position = position;
     this.rotation = rotation;

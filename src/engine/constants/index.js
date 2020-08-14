@@ -47,6 +47,14 @@ const RESOURCE_TYPE = {
   AUDIO: 2,
 };
 
+const ENTITY_NODE_TYPES = {
+  WORLD: 0,
+  CAMERA: 1,
+  LIGHT: 2,
+  ELEMENT: 3,
+  TRANSFORM: 4,
+};
+
 export {
   BODY_TYPE,
   GRADIENT_TYPES,
@@ -55,4 +63,5 @@ export {
   GAME_STATES,
   KEY_CODES,
   RESOURCE_TYPE,
+  ENTITY_NODE_TYPES,
 };

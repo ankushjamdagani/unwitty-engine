@@ -1,6 +1,6 @@
 import _node from "./_node";
 
-import { SHAPES, BODY_TYPE } from "../../constants";
+import { SHAPES, BODY_TYPE, ENTITY_NODE_TYPES } from "../../constants";
 
 import Vector2D from "../core/Vector2D";
 // import Renderers from "../../Renderer/Renderers";
@@ -17,12 +17,9 @@ class Element extends _node {
   constructor(props) {
     super(props);
     const {
-      name,
       shape = SHAPES.RECTANGLE, // will also be used for drawing bounding boxes and collision detection
       vertices,
       edges,
-      parent,
-      children = [],
 
       // check if collision can occer using these
       categoryMask = 0b001,
@@ -43,12 +40,9 @@ class Element extends _node {
     } = props;
 
     // META
-    this.id = Date.now();
-    this.name = name;
+    this.type = ENTITY_NODE_TYPES.ELEMENT;
     this.shape = shape;
     this.vertices = vertices; // maybe if not vertices - find it from shape and restProps
-    this.parent = parent;
-    this.children = children;
 
     // PHYSICS
     this.bodyType = bodyType;

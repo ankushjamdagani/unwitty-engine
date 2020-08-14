@@ -1,8 +1,10 @@
 import { Commons } from "../core";
 
 class _node {
-  constructor({ entity, childrens } = {}) {
+  constructor({ label, entity, childrens } = {}) {
     this.id = Commons.uid();
+    this.label = label;
+    this.type = null;
     this.entity = entity || null;
     this.parent = parent || null;
     this.childrens = new Map(childrens || []);
