@@ -1,13 +1,7 @@
 import ResourceManager from "./modules/ResourceManager";
 import EntityManager from "./modules/EntityManager";
-import { Vector2D } from "./modules/core";
+import { Vector2D, Commons } from "./modules/core";
 
-// Initialise
-// Load Resources
-// Set camera
-// Set Light**
-// Load world
-// Add elements / constraints / elements-groups / styles / transformations / forces
 // --------------- GAME LOOP STARTS
 // Get Elements to render
 // RENDER                   <- can run in pause state
@@ -68,7 +62,8 @@ class Engine {
     const { timeSpeed = 1 } = this.props;
 
     this.timeSpeed = timeSpeed;
-    this.ellapsedTime = 0;
+    this.lastTick = 0;
+    this.currTick = 0;
   }
 
   /**
@@ -103,21 +98,24 @@ class Engine {
     world.add(light);
   }
 
-  autoPilot() {
+  // https://stackoverflow.com/questions/19764018/controlling-fps-with-requestanimationframe
+  autoPilot = () => {
     requestAnimationFrame(this.autoPilot);
 
-    // https://stackoverflow.com/questions/19764018/controlling-fps-with-requestanimationframe
-    if (this.ellapsedTime % 1 == 0) {
+    const ticksPassed = this.currTick - this.lastTick;
+
+    if (!ticksPassed || ticksPassed >= 1) {
       for (let i = 0; i < this.timeSpeed; i += 1) {
+        this.lastTick = this.currTick;
         this.update();
       }
     }
 
-    this.ellapsedTime += this.timeSpeed;
-  }
+    this.currTick += this.timeSpeed;
+  };
 
   update() {
-    console.log("PLAYING......");
+    console.log("PLAYING......", this.currTick);
   }
 }
 
