@@ -4,7 +4,7 @@ const { Element } = GameEngine.API;
 
 const engine = new GameEngine({ canvasId: "test-1", timeSpeed: 1 });
 const world = engine.world;
-const camera = engine.camera;
+const camera = engine.renderer.camera;
 
 const player1 = Element.createRectangle({
   name: "Player1",
@@ -79,7 +79,7 @@ const player5 = Element.createRectangle({
   width: 200,
   height: 200,
   renderProps: {
-    fillColor: "blue",
+    fillColor: "yellow",
     strokeColor: "black",
     strokeSize: 2,
     shapeStyle: 1,
@@ -89,8 +89,8 @@ const player5 = Element.createRectangle({
 window.addEventListener("mousemove", (evt) => {
   const { clientX, clientY } = evt;
   player1.position = {
-    x: clientX - player1.props.width / 2,
-    y: clientY - player1.props.height / 2,
+    x: clientX,
+    y: clientY,
   };
 });
 

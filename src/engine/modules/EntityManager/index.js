@@ -1,5 +1,4 @@
 import World from "./World";
-import Camera from "./Camera";
 import Light from "./Light";
 import Transform from "./Transform";
 import Layer from "./Layer";
@@ -40,10 +39,6 @@ EntityManager.createWorld = (props) => {
   return new World(props);
 };
 
-EntityManager.createCamera = (props) => {
-  return new Camera(props);
-};
-
 EntityManager.createLight = (props) => {
   return new Light(props);
 };
@@ -61,7 +56,6 @@ EntityManager.createElement = (props) => {
 };
 
 EntityManager.World = World;
-EntityManager.Camera = Camera;
 EntityManager.Light = Light;
 EntityManager.Transform = Transform;
 EntityManager.Layer = Layer;

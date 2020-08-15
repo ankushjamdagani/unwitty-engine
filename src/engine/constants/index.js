@@ -49,10 +49,9 @@ const RESOURCE_TYPE = {
 
 const ENTITY_NODE_TYPES = {
   WORLD: 0,
-  CAMERA: 1,
-  LIGHT: 2,
-  ELEMENT: 3,
-  TRANSFORM: 4,
+  LIGHT: 1,
+  ELEMENT: 2,
+  TRANSFORM: 3,
 };
 
 export {

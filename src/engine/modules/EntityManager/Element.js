@@ -79,10 +79,10 @@ class Element extends _node {
   onInput() {}
 
   // update self and all children
-  update() {}
+  // update() {}
 
   // render self and all children
-  render(envProps) {}
+  // render(envProps) {}
 
   toString() {
     return `Element(${this.id} :: ${this.name} | Shape :: ${this.shape})`;

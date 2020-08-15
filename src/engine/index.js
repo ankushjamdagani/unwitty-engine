@@ -56,7 +56,11 @@ class Engine {
       context: ctx,
     };
 
-    this.screen = { width: canvas.width, height: canvas.height };
+    this.screen = {
+      width: canvas.width,
+      height: canvas.height,
+      aspectRatio: canvas.width / canvas.height,
+    };
   }
 
   // Take frame per second in consideration
@@ -82,31 +86,21 @@ class Engine {
   initEntityManager() {
     this.entityManager = new EntityManager();
 
-    const world = EntityManager.createWorld({
+    this.world = EntityManager.createWorld({
       gravity: 0,
       bounds: [
         new Vector2D(-Infinity, -Infinity),
         new Vector2D(Infinity, Infinity),
       ],
     });
-    const camera = EntityManager.createCamera({
-      position: new Vector2D(0, 0),
-      rotation: 0,
-      screen: { ...this.screen },
-    });
-    const light = EntityManager.createLight({ position: new Vector2D(0, 0) });
+    this.light = EntityManager.createLight({ position: Vector2D.zero() });
 
-    this.world = world;
-    this.camera = camera;
-    this.light = light;
-
-    this.entityManager.setRoot(world);
-    world.add(camera);
-    world.add(light);
+    this.entityManager.setRoot(this.world);
+    this.world.add(this.light);
   }
 
   initRenderer() {
-    this.renderer = new Renderer();
+    this.renderer = new Renderer({ canvas: this.canvas, screen: this.screen });
   }
 
   // https://stackoverflow.com/questions/19764018/controlling-fps-with-requestanimationframe
@@ -132,23 +126,11 @@ class Engine {
   };
 
   update() {
-    const parser = this.entityManager.getItemsToRender();
-
-    this.camera.render();
-    this.light.render();
-
-    for (const element of parser) {
-      this.renderer.render({
-        element,
-        envProps: {
-          ctx: this.canvas.context,
-          world: this.world,
-          screen: this.screen,
-          camera: this.camera,
-          light: this.light,
-        },
-      });
-    }
+    /**
+     * ============ RENDER STEP
+     */
+    const elements = this.entityManager.getItemsToRender();
+    this.renderer.render(elements, this);
   }
 }
 

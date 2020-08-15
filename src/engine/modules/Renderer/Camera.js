@@ -1,14 +1,6 @@
-import { ENTITY_NODE_TYPES } from "../../constants";
-
-import _node from "./_node";
-
-class Camera extends _node {
+class Camera {
   constructor(props = {}) {
-    super(props);
-
     const { position, rotation = 0, screen } = props;
-
-    this.type = ENTITY_NODE_TYPES.CAMERA;
 
     this.position = position;
     this.rotation = rotation;
@@ -29,7 +21,7 @@ class Camera extends _node {
     this.target = target;
   }
 
-  render() {
+  update() {
     if (this.target) {
       const {
         position: { x, y },
