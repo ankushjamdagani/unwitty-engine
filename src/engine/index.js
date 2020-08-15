@@ -25,6 +25,8 @@ class Engine {
    */
   constructor(props = {}) {
     this.props = props;
+    this.state = {};
+    this.managers = {};
 
     this.init();
   }
@@ -44,6 +46,7 @@ class Engine {
 
     const canvas = document.createElement("canvas");
     canvas.setAttribute("id", canvasId);
+    canvas.style.cursor = "crosshair"; // or none
     canvas.width = canvasWidth || window.innerWidth;
     canvas.height = canvasHeight || window.innerHeight;
 
@@ -51,12 +54,12 @@ class Engine {
 
     const ctx = canvas.getContext("2d");
 
-    this.canvas = {
+    this.state.canvas = {
       element: canvas,
       context: ctx,
     };
 
-    this.screen = {
+    this.state.screen = {
       width: canvas.width,
       height: canvas.height,
       aspectRatio: canvas.width / canvas.height,
@@ -67,9 +70,11 @@ class Engine {
   initTimer() {
     const { timeSpeed = 1 } = this.props;
 
-    this.timeSpeed = timeSpeed;
-    this.lastTick = 0;
-    this.currTick = 0;
+    this.state.timer = {
+      timeSpeed: timeSpeed,
+      lastTick: 0,
+      currTick: 0,
+    };
   }
 
   /**
@@ -78,59 +83,56 @@ class Engine {
   initResourceManager() {
     const resourceManager = new ResourceManager();
 
-    this.resourceManager = resourceManager;
-    this.loadResources = resourceManager.addResources;
-    this.unLoadResources = resourceManager.removeResources;
+    this.managers.resourceManager = resourceManager;
   }
 
   initEntityManager() {
-    this.entityManager = new EntityManager();
-
-    this.world = EntityManager.createWorld({
+    const entityManager = new EntityManager();
+    const world = EntityManager.createWorld({
       gravity: 0,
       bounds: [
         new Vector2D(-Infinity, -Infinity),
         new Vector2D(Infinity, Infinity),
       ],
     });
-    this.light = EntityManager.createLight({ position: Vector2D.zero() });
+    const light = EntityManager.createLight({ position: Vector2D.zero() });
 
-    this.entityManager.setRoot(this.world);
-    this.world.add(this.light);
+    entityManager.setRoot(world);
+    world.add(light);
+
+    this.managers.entityManager = entityManager;
+    this.state.world = world;
+    this.state.light = light;
   }
 
   initRenderer() {
-    this.renderer = new Renderer({ canvas: this.canvas, screen: this.screen });
+    this.managers.renderer = new Renderer(this.state);
   }
 
   // https://stackoverflow.com/questions/19764018/controlling-fps-with-requestanimationframe
   autoPilot = () => {
     requestAnimationFrame(this.autoPilot);
 
-    const ticksPassed = this.currTick - this.lastTick;
+    const { currTick, lastTick, timeSpeed } = this.state.timer;
+
+    const ticksPassed = currTick - lastTick;
 
     if (!ticksPassed || ticksPassed >= 1) {
-      this.canvas.context.clearRect(
-        0,
-        0,
-        this.screen.width,
-        this.screen.height
-      );
-      for (let i = 0; i < this.timeSpeed; i += 1) {
-        this.lastTick = this.currTick;
+      for (let i = 0; i < timeSpeed; i += 1) {
+        this.state.timer.lastTick = currTick;
         this.update();
       }
     }
 
-    this.currTick += this.timeSpeed;
+    this.state.timer.currTick += timeSpeed;
   };
 
   update() {
     /**
      * ============ RENDER STEP
      */
-    const elements = this.entityManager.getItemsToRender();
-    this.renderer.render(elements, this);
+    const elements = this.managers.entityManager.getItemsToRender();
+    this.managers.renderer.render(elements, this);
   }
 }
 

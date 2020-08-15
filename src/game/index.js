@@ -2,15 +2,18 @@ import GameEngine from "../engine";
 
 const { Element } = GameEngine.API;
 
-const engine = new GameEngine({ canvasId: "test-1", timeSpeed: 1 });
-const world = engine.world;
-const camera = engine.renderer.camera;
+const WIDHT = window.innerWidth;
+const HEIGHT = window.innerHeight;
 
-const player1 = Element.createRectangle({
+const engine = new GameEngine({ canvasId: "test-1", timeSpeed: 1 });
+const { world, canvas } = engine.state;
+const { renderer } = engine.managers;
+
+const crosshair = Element.createRectangle({
   name: "Player1",
   position: {
-    x: 0,
-    y: 0,
+    x: WIDHT / 2,
+    y: HEIGHT / 2,
   },
   width: 10,
   height: 10,
@@ -22,64 +25,16 @@ const player1 = Element.createRectangle({
   },
 });
 
-const player2 = Element.createRectangle({
-  name: "Player2",
+const bg = Element.createRectangle({
+  name: "bg",
   position: {
     x: 0,
     y: 0,
   },
-  width: 200,
-  height: 100,
+  width: WIDHT,
+  height: HEIGHT,
   renderProps: {
-    fillColor: "green",
-    strokeColor: "black",
-    strokeSize: 2,
-    shapeStyle: 1,
-  },
-});
-
-const player3 = Element.createRectangle({
-  name: "Player3",
-  position: {
-    x: window.innerWidth - 200,
-    y: window.innerHeight - 200,
-  },
-  width: 200,
-  height: 200,
-  renderProps: {
-    fillColor: "blue",
-    strokeColor: "black",
-    strokeSize: 2,
-    shapeStyle: 1,
-  },
-});
-
-const player4 = Element.createRectangle({
-  name: "Player4",
-  position: {
-    x: 0,
-    y: window.innerHeight - 200,
-  },
-  width: 200,
-  height: 200,
-  renderProps: {
-    fillColor: "blue",
-    strokeColor: "black",
-    strokeSize: 2,
-    shapeStyle: 1,
-  },
-});
-
-const player5 = Element.createRectangle({
-  name: "Player5",
-  position: {
-    x: window.innerWidth - 200,
-    y: 0,
-  },
-  width: 200,
-  height: 200,
-  renderProps: {
-    fillColor: "yellow",
+    fillColor: "#eee",
     strokeColor: "black",
     strokeSize: 2,
     shapeStyle: 1,
@@ -88,19 +43,15 @@ const player5 = Element.createRectangle({
 
 window.addEventListener("mousemove", (evt) => {
   const { clientX, clientY } = evt;
-  player1.position = {
+  crosshair.position = {
     x: clientX,
     y: clientY,
   };
 });
 
-camera.bindTarget(player1);
+renderer.camera.bindTarget(crosshair);
 
-player3.add(player1);
-player1.add(player2);
-player1.add(player4);
-player1.add(player5);
-
-world.add(player3);
+world.add(bg);
+world.add(crosshair);
 
 engine.autoPilot();
