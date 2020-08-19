@@ -1,3 +1,5 @@
+import * as Constants from "./constants";
+
 import ResourceManager from "./modules/ResourceManager";
 import EntityManager from "./modules/EntityManager";
 import Renderer from "./modules/Renderer";
@@ -29,6 +31,7 @@ class Engine {
     this.managers = {};
 
     this.init();
+    this.postInit();
   }
 
   init() {
@@ -37,6 +40,13 @@ class Engine {
     this.initResourceManager();
     this.initEntityManager();
     this.initRenderer();
+  }
+
+  postInit() {
+    this.managers.resourceManager.init &&
+      this.managers.resourceManager.init(this);
+    this.managers.entityManager.init && this.managers.entityManager.init(this);
+    this.managers.renderer.init && this.managers.renderer.init(this);
   }
 
   destroy() {}
@@ -106,7 +116,7 @@ class Engine {
   }
 
   initRenderer() {
-    this.managers.renderer = new Renderer(this.state);
+    this.managers.renderer = new Renderer();
   }
 
   // https://stackoverflow.com/questions/19764018/controlling-fps-with-requestanimationframe
@@ -132,11 +142,12 @@ class Engine {
      * ============ RENDER STEP
      */
     const elements = this.managers.entityManager.getItemsToRender();
-    this.managers.renderer.render(elements, this);
+    this.managers.renderer.render(elements);
   }
 }
 
-Engine.API = {
+Engine.Constants = Constants;
+Engine.helpers = {
   ...EntityManager,
 };
 

@@ -5,7 +5,7 @@ class ResourceManager {
     this.resources = new Map();
   }
 
-  addResources(resources = [], cb) {
+  loadResources(resources = [], cb) {
     for (let i = 0; i < resources.length; i++) {
       const { type = RESOURCE_TYPE.IMAGE, key = Date.now(), src } = resources[
         i
@@ -39,7 +39,7 @@ class ResourceManager {
   }
 
   hasResource(key) {
-    this.resources.has(key);
+    return this.resources.has(key);
   }
 
   removeResources(keys) {
@@ -51,6 +51,10 @@ class ResourceManager {
 
   removeAll() {
     this.resources.clear();
+  }
+
+  get(key) {
+    return this.resources.get(key);
   }
 }
 

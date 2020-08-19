@@ -1,3 +1,9 @@
+/**
+ * @todo
+ * - Zoom in / Zoom out
+ * - Rotation
+ * - Camera types [follow all, follow-x, follow-y, etc.]
+ */
 class Camera {
   constructor(props = {}) {
     const { position, rotation = 0, screen } = props;

@@ -43,15 +43,17 @@ const KEY_CODES = {
 };
 
 const RESOURCE_TYPE = {
-  IMAGE: 1,
-  AUDIO: 2,
+  IMAGE: "image",
+  AUDIO: "audio",
 };
 
 const ENTITY_NODE_TYPES = {
   WORLD: 0,
   LIGHT: 1,
-  ELEMENT: 2,
-  TRANSFORM: 3,
+  BODY: 2,
+  PHYSICS_BODY: 3,
+  FLUID_BODY: 4,
+  TRANSFORM: 5,
 };
 
 export {
