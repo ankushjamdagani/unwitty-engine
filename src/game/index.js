@@ -45,6 +45,25 @@ const Player2 = Body.createArc({
   },
 });
 
+const Player3 = Body.createPolygon({
+  label: "Player3",
+  position: [75, 75],
+  vertices: [
+    [0, 0],
+    [0, 50],
+    [50, 0],
+    [40, 30]
+  ],
+  styles: {
+    backgroundColor: "green",
+  },
+  debug: true,
+  boundingBox: {
+    margins: [-10,0,-20,0],
+    color: "red",
+  },
+});
+
 const bg = Body.createRectangle({
   label: "bg",
   position: [0, 0],
@@ -69,6 +88,7 @@ renderer.camera.bindTarget(mouse);
 world.add(bg);
 world.add(Player1);
 world.add(Player2);
+world.add(Player3);
 
 console.log(engine);
 

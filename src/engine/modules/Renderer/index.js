@@ -54,6 +54,12 @@ class Renderer {
             camera,
           });
           context.closePath();
+
+          if (element.debug) {
+            context.beginPath();
+            this.drawBoundingBox(context, element, camera);
+            context.closePath();
+          }
           break;
         }
         default: {
@@ -112,10 +118,6 @@ class Renderer {
     } else if (element.shape === SHAPES.POLYGON) {
       this.renderPolygon(context, element, camera);
     }
-
-    if (element.debug) {
-      this.drawBoundingBox(context, element, camera);
-    }
   }
 
   renderImage(context, element, camera, image) {
@@ -147,7 +149,20 @@ class Renderer {
     context.stroke();
   }
 
-  renderPolygon(context, element, camera) {}
+  renderPolygon(context, element, camera) {
+    const { x, y } = this.getScreenPosition(element.position, camera);
+    const { vertices } = element;
+
+    context.moveTo(x + vertices[0][0], y + vertices[0][1]);
+
+    for (let i = 0; i < vertices.length; i++) {
+      const vertex = vertices[i];
+      context.lineTo(x + vertex[0], y + vertex[1]);
+    }
+
+    context.fill();
+    context.stroke();
+  }
 
   drawBoundingBox(context, element, camera) {
     const { x, y } = this.getScreenPosition(element.position, camera);
