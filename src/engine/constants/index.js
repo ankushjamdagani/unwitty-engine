@@ -43,8 +43,8 @@ const KEY_CODES = {
 };
 
 const RESOURCE_TYPE = {
-  IMAGE: "image",
-  AUDIO: "audio",
+  IMAGE: 1,
+  AUDIO: 2,
 };
 
 const ENTITY_NODE_TYPES = {

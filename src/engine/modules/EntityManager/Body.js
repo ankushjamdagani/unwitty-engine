@@ -4,6 +4,17 @@ import Commons from "../core/Commons";
 
 import _node from "./_node";
 
+const defaultState = {
+  shape: SHAPES.RECTANGLE,
+  position: [0, 0],
+  debug: false,
+  boundingBox: {
+    margins: [0, 0, 0, 0],
+    shape: SHAPES.RECTANGLE,
+    color: "red",
+  },
+};
+
 // Styles and textures will be applied to all children as well
 // children can have overriden styles as well, inherit unspecified values
 class Body extends _node {
@@ -11,7 +22,7 @@ class Body extends _node {
     super(props);
 
     const {
-      shape = SHAPES.RECTANGLE,
+      shape = defaultState.shape,
       width,
       height,
       radius,
@@ -20,18 +31,14 @@ class Body extends _node {
       vertices,
       eddges,
 
-      position = [0, 0], // center
+      position = defaultState.position, // center
       transform, // matrix? rotation, scale, translate,
 
       styles, // backgroundColor, backgroundImage, backgroundGradient, borderColor, borderSize
 
-      debug = false,
+      debug = defaultState.debug,
       // collision box?
-      boundingBox = {
-        margins: [0, 0, 0, 0],
-        shape: SHAPES.RECTANGLE,
-        color: "red",
-      },
+      boundingBox = defaultState.boundingBox,
 
       ...restProps
     } = props;
@@ -55,7 +62,7 @@ class Body extends _node {
     this.styles = styles;
 
     this.debug = debug;
-    this.boundingBox = boundingBox;
+    this.boundingBox = { ...defaultState.boundingBox, ...boundingBox };
 
     this.restProps = restProps;
   }

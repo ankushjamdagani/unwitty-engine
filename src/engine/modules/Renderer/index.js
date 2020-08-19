@@ -156,8 +156,8 @@ class Renderer {
     context.strokeStyle = color;
     context.lineWidth = 1;
     if (shape === SHAPES.ARC) {
-      const radius = width + margins[1] - margins[3];
-      context.arc(x - radius, y - radius, radius, 0, Math.PI * 2);
+      const radius = width / 2 + margins[1] - margins[3];
+      context.arc(x + radius, y + radius, radius, 0, Math.PI * 2);
       context.stroke();
     } else {
       context.strokeRect(

@@ -2,6 +2,7 @@ import GameEngine from "../engine";
 
 import Image from "../game1/assets/images/Ball1.svg";
 
+const { SHAPES } = GameEngine.Constants;
 const { Body } = GameEngine.helpers;
 
 const WIDHT = window.innerWidth;
@@ -11,7 +12,7 @@ const engine = new GameEngine({ canvasId: "test-1", timeSpeed: 1 });
 const { world } = engine.state;
 const { renderer, resourceManager } = engine.managers;
 
-resourceManager.loadResources([{ type: "image", key: "bg1", src: Image }]);
+resourceManager.loadResources([{ key: "bg1", src: Image }]);
 
 const mouse = {
   position: { x: 0, y: 0 },
@@ -38,6 +39,10 @@ const Player2 = Body.createArc({
     backgroundImage: "bg1",
   },
   debug: true,
+  boundingBox: {
+    shape: SHAPES.ARC,
+    color: "yellow",
+  },
 });
 
 const bg = Body.createRectangle({
