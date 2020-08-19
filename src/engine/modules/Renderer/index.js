@@ -84,32 +84,33 @@ class Renderer {
       borderSize,
     } = element.styles;
 
+    const _image = image && this.props.resourceManager.get(image);
+    _image && this.renderImage(context, element, camera, _image);
+
+    if (!backgroundColor & !borderColor & !borderSize & !_bgImage) {
+      return;
+    }
+
     context.fillStyle = backgroundColor || "transparent";
     context.strokeStyle = borderColor || "transparent";
     context.lineWidth = borderSize || 0;
 
-    const _image = image && this.props.resourceManager.get(image);
+    const _bgImage =
+      backgroundImage && this.props.resourceManager.get(backgroundImage);
 
-    if (_image) {
-      this.renderImage(context, element, camera, _image);
-    } else {
-      const _bgImage =
-        backgroundImage && this.props.resourceManager.get(backgroundImage);
+    if (_bgImage) {
+      const pattern = context.createPattern(_bgImage, repeat || "repeat");
+      context.fillStyle = pattern;
+    } else if (backgroundGradient) {
+      console.warn("Gradients are not supported for now");
+    }
 
-      if (_bgImage) {
-        const pattern = context.createPattern(_bgImage, repeat || "repeat");
-        context.fillStyle = pattern;
-      } else if (backgroundGradient) {
-        console.warn("Gradients are not supported for now");
-      }
-
-      if (element.shape === SHAPES.RECTANGLE) {
-        this.renderRect(context, element, camera);
-      } else if (element.shape === SHAPES.ARC) {
-        this.renderCircle(context, element, camera);
-      } else if (element.shape === SHAPES.POLYGON) {
-        this.renderPolygon(context, element, camera);
-      }
+    if (element.shape === SHAPES.RECTANGLE) {
+      this.renderRect(context, element, camera);
+    } else if (element.shape === SHAPES.ARC) {
+      this.renderCircle(context, element, camera);
+    } else if (element.shape === SHAPES.POLYGON) {
+      this.renderPolygon(context, element, camera);
     }
 
     if (element.debug) {
