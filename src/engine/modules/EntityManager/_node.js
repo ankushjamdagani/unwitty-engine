@@ -17,7 +17,10 @@ class _node {
 
   addTo(parent) {
     this.parent = parent;
+    this.parent.onAddChilren(this);
   }
+
+  onAddChilren(child) {}
 }
 
 export default _node;

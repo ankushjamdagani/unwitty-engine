@@ -141,8 +141,7 @@ class Engine {
     /**
      * ============ RENDER STEP
      */
-    const elements = this.managers.entityManager.getItemsToRender();
-    this.managers.renderer.render(elements);
+    this.managers.renderer.renderTree(this.state.world);
   }
 }
 

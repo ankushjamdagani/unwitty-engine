@@ -31,8 +31,7 @@ class Body extends _node {
       vertices,
       eddges,
 
-      position = defaultState.position, // center
-      transform, // matrix? rotation, scale, translate,
+      position = defaultState.position,
 
       styles, // backgroundColor, backgroundImage, backgroundGradient, borderColor, borderSize
 
@@ -57,7 +56,6 @@ class Body extends _node {
     // should I save corners? and edges?
     // users will be giving center pos by default
     this.position = new Vector2D(position[0], position[1]);
-    this.transform = transform;
 
     this.styles = styles;
 
@@ -67,9 +65,51 @@ class Body extends _node {
     this.restProps = restProps;
   }
 
-  rotate() {}
-  scale() {}
-  translate() {}
+  onAddChilren(child) {
+    if (!this.position || !child.position) {
+      return;
+    }
+
+    const {
+      position: cPosition,
+      boundingBox: { margins: cBoundingBoxMargin },
+      width: cWidth,
+      height: cHeight,
+    } = child;
+    const {
+      position: pPosition,
+      boundingBox: { margins: pBoundingBoxMargin },
+      width: pWidth,
+      height: pHeight,
+    } = this;
+
+    const xMin = Commons.minimum(
+      pPosition.x - pBoundingBoxMargin[3],
+      cPosition.x - cBoundingBoxMargin[3]
+    );
+    const yMin = Commons.minimum(
+      pPosition.y - pBoundingBoxMargin[0],
+      cPosition.y - cBoundingBoxMargin[0]
+    );
+
+    const xMax = Commons.maximum(
+      pPosition.x + pWidth + pBoundingBoxMargin[1],
+      cPosition.x + cWidth + cBoundingBoxMargin[1]
+    );
+    const yMax = Commons.maximum(
+      pPosition.y + pHeight + pBoundingBoxMargin[2],
+      cPosition.y + cHeight + cBoundingBoxMargin[2]
+    );
+
+    this.boundingBox.margins = [
+      pPosition.y - yMin,
+      xMax - (pPosition.x + pWidth),
+      yMax - (pPosition.y + pHeight),
+      pPosition.x - xMin,
+    ];
+
+    this.parent.onAddChilren(this);
+  }
 }
 
 Body.getDebugMessage = (body) => {
