@@ -109,38 +109,48 @@ class Renderer {
       height,
       origin,
     } = element;
-    const { x, y } = this.getScreenPosition(position, camera);
-    const xMax = x + width + margins[1];
-    const xMin = x - margins[3];
 
-    const yMax = y + height + margins[2];
-    const yMin = y - margins[0];
+    let coords;
 
-    const xMid = xMin + (xMax - xMin) / 2;
-    const yMid = yMin + (yMax - yMin) / 2;
+    if (Array.isArray(origin)) {
+      const { x, y } = this.getScreenPosition(
+        { x: origin[0], y: origin[1] },
+        camera
+      );
+      coords = [x, y];
+    } else {
+      const { x, y } = this.getScreenPosition(position, camera);
+      const xMax = x + width + margins[1];
+      const xMin = x - margins[3];
 
-    const coords = [xMid, yMid];
+      const yMax = y + height + margins[2];
+      const yMin = y - margins[0];
 
-    switch (origin) {
-      case TRANSFORM_ORIGIN.LEFT_TOP:
-        coords[0] = xMin;
-        coords[1] = yMin;
-        break;
-      case TRANSFORM_ORIGIN.RIGHT_TOP:
-        coords[0] = xMax;
-        coords[1] = yMin;
-        break;
-      case TRANSFORM_ORIGIN.RIGHT_BOTTOM:
-        coords[0] = xMax;
-        coords[1] = yMax;
-        break;
-      case TRANSFORM_ORIGIN.LEFT_BOTTOM:
-        coords[0] = xMin;
-        coords[1] = yMax;
-        break;
-      case TRANSFORM_ORIGIN.CENTER:
-      default:
-        break;
+      const xMid = xMin + (xMax - xMin) / 2;
+      const yMid = yMin + (yMax - yMin) / 2;
+
+      switch (origin) {
+        case TRANSFORM_ORIGIN.LEFT_TOP:
+          coords = [xMin, yMin];
+          break;
+        case TRANSFORM_ORIGIN.RIGHT_TOP:
+          coords = [xMax, yMin];
+          break;
+        case TRANSFORM_ORIGIN.RIGHT_BOTTOM:
+          coords = [xMax, yMax];
+          break;
+        case TRANSFORM_ORIGIN.LEFT_BOTTOM:
+          coords = [xMin, yMax];
+          coords[0] = xMin;
+          coords[1] = yMax;
+          break;
+        case TRANSFORM_ORIGIN.CENTER:
+          coords = [xMid, yMid];
+          break;
+        default:
+          coords = [0, 0];
+          break;
+      }
     }
 
     context.save();
