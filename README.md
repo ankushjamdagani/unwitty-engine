@@ -41,6 +41,46 @@ Start Game
         setRotation()
 ```
 
+```MD
+- WORLD
+  - background, atmosphere, gravity, etc....
+- Layer
+- Poly Mesh
+- Light
+- FLUID
+    - density
+    - Friction
+    - position
+    ..etc.
+- CONSTRAINT
+- STYLES
+- FORCES
+    - Surface Friction
+    - Fluid Friction
+    - Gravity
+    - Gravitational pull between bodies
+    - CONSTRAINT
+    - Magnetic behaviour
+
+                    O[]
+                    - CONSTRAINT
+                        - Distance between childrens = 0
+                    - STYLES
+                        - Both of color red
+                    - TRANSFORM
+                    - Some Common props will get inherited
+                        - Restitution
+                        - Friction
+                        - positional attributes
+                    - Some won't
+                        - mass would be sum of childrens or given exclusively to parent
+                        _
+                        _
+                        _
+                        _
+        __Circle__                 __Rectangle__
+```
+
 @todo
 
 - Apply Forces to elements

@@ -1,11 +1,8 @@
-import { Vector2D } from "../core";
+import { Vector2D, Commons } from "../core";
 import { ENTITY_NODE_TYPES, SHAPES, TRANSFORM_ORIGIN } from "../../constants";
 
 import Camera from "./Camera";
 
-// Maybe
-// Checks which ones are ideal and don't need updating
-// i.e. checks if elements are sleeping
 // DOC ::  https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial
 class Renderer {
   init({ state, managers }) {
@@ -25,6 +22,8 @@ class Renderer {
   // - depth first render
   // - check if in camera viewport (cunning)
   // - raytracing using light
+  // - Checks which ones are ideal and don't need updating
+  //   i.e. checks if elements are sleeping
   renderTree(root) {
     const {
       canvas: { context },
@@ -94,8 +93,8 @@ class Renderer {
 
   getScreenPosition(pos, camera) {
     return {
-      x: pos.x - camera.position.x,
-      y: pos.y - camera.position.y,
+      x: Commons.roundOff(pos.x - camera.position.x),
+      y: Commons.roundOff(pos.y - camera.position.y),
     };
   }
 
@@ -206,10 +205,6 @@ class Renderer {
     const { x, y } = this.getScreenPosition(element.position, camera);
     const { width, height } = element;
 
-    context.mozImageSmoothingEnabled = false;
-    context.webkitImageSmoothingEnabled = false;
-    context.msImageSmoothingEnabled = false;
-    context.imageSmoothingEnabled = false;
     context.drawImage(image, x, y, width, height);
   }
 
@@ -253,6 +248,7 @@ class Renderer {
 
     context.strokeStyle = color;
     context.lineWidth = 1;
+    context.setLineDash([25, 5, 5, 5, 5, 5, 5, 5]);
     if (shape === SHAPES.ARC) {
       const radius = width / 2 + margins[1] - margins[3];
       context.arc(x + radius, y + radius, radius, 0, Math.PI * 2);

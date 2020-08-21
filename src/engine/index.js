@@ -52,7 +52,7 @@ class Engine {
   destroy() {}
 
   initCanvas() {
-    const { canvasId, canvasWidth, canvasHeight } = this.props;
+    const { canvasId, canvasWidth, canvasHeight, smoothImage } = this.props;
 
     const canvas = document.createElement("canvas");
     canvas.setAttribute("id", canvasId);
@@ -63,6 +63,10 @@ class Engine {
     document.body.appendChild(canvas);
 
     const ctx = canvas.getContext("2d");
+    ctx.mozImageSmoothingEnabled = !!smoothImage;
+    ctx.webkitImageSmoothingEnabled = !!smoothImage;
+    ctx.msImageSmoothingEnabled = !!smoothImage;
+    ctx.imageSmoothingEnabled = !!smoothImage;
 
     this.state.canvas = {
       element: canvas,

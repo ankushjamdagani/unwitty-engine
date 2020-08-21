@@ -20,13 +20,18 @@ const mouse = {
 
 const transform1 = new Transform({
   label: "transform1",
-  rotate: 45,
+  rotate: 0,
   origin: [WIDTH / 2 + 25, HEIGHT / 2 + 25],
+  transform: [
+    [1,0,0],
+    [0,1,0],
+    [0,0,1],
+  ]
 });
 
 const transform2 = new Transform({
   label: "transform2",
-  rotate: 90,
+  rotate: 0,
   origin: [WIDTH / 2 + 115, HEIGHT / 2 + 115],
 });
 
@@ -37,7 +42,7 @@ const sun = new Body.createArc({
   styles: {
     backgroundColor: "orange",
   },
-  // debug: true,
+  debug: true,
 });
 
 const earth = new Body.createArc({
@@ -47,7 +52,7 @@ const earth = new Body.createArc({
   styles: {
     backgroundColor: "green",
   },
-  // debug: true,
+  debug: true,
 });
 
 const moon = new Body.createArc({
@@ -57,7 +62,7 @@ const moon = new Body.createArc({
   styles: {
     backgroundColor: "#fff",
   },
-  // debug: true,
+  debug: true,
 });
 
 const bg = Body.createRectangle({
@@ -68,7 +73,7 @@ const bg = Body.createRectangle({
   styles: {
     backgroundColor: "#000",
   },
-  // debug: true,
+  debug: true,
 });
 
 window.addEventListener("mousemove", (evt) => {
@@ -87,6 +92,11 @@ transform1.add(sun);
 sun.add(transform2);
 transform2.add(earth);
 earth.add(moon);
+
+// world.add(bg);
+// world.add(sun);
+// sun.add(earth);
+// earth.add(moon);
 
 console.log(engine);
 
