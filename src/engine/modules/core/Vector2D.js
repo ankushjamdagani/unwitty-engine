@@ -7,75 +7,32 @@ class Vector2D {
     this.y = y || 0;
   }
 
-  add(v1) {
-    this.x += v1.x;
-    this.y += v1.y;
+  // scalar arithmetics
+  add(a) {
+    this.x += a;
+    this.y += a;
     return this;
   }
 
-  sub(v1) {
-    this.x -= v1.x;
-    this.y -= v1.y;
+  sub(a) {
+    this.x -= a;
+    this.y -= a;
     return this;
   }
 
-  mul(v1) {
-    this.x *= v1.x;
-    this.y *= v1.y;
+  mul(a) {
+    this.x *= a;
+    this.y *= a;
     return this;
   }
 
-  div(v1) {
-    this.x /= v1.x;
-    this.y /= v1.y;
+  div(a) {
+    this.x /= a;
+    this.y /= a;
     return this;
   }
 
-  rev() {
-    this.x *= -1;
-    this.y *= -1;
-    return this;
-  }
-
-  mag() {
-    return Math.sqrt(this.x * this.x + this.y * this.y);
-  }
-
-  magSq() {
-    return this.x * this.x + this.y * this.y;
-  }
-
-  normalise() {
-    const mag = this.mag();
-    return this.div(this, { x: mag, y: mag });
-  }
-
-  setMag(mag) {
-    return this.normalise().mul({ x: mag, y: mag });
-  }
-
-  limitMag(limitAmt = { min: null, max: null }) {
-    const mag = this.mag();
-    if (
-      (Commons.hasValue(limitAmt.max) && mag > limitAmt.max) ||
-      (Commons.hasValue(limitAmt.min) && mag < limitAmt.min)
-    ) {
-      this.normalise().mul({ x: limitAmt, y: limitAmt });
-    }
-  }
-
-  clone() {
-    return new Vector2D(this.x, this.y);
-  }
-
-  toString() {
-    return `Vector2D(${this.x}, ${this.y})`;
-  }
-
-  toArray() {
-    return [this.x, this.y];
-  }
-
+  // vector arithmetics
   static add = (v1, v2) => {
     return new Vector2D(v1.x + v2.x, v1.y + v2.y);
   };
@@ -91,6 +48,78 @@ class Vector2D {
   static div = (v1, v2) => {
     return new Vector2D(v1.x / v2.x, v1.y / v2.y);
   };
+
+  mag() {
+    return Math.sqrt(this.x * this.x + this.y * this.y);
+  }
+
+  magSq() {
+    return this.x * this.x + this.y * this.y;
+  }
+
+  normalise() {
+    const mag = this.mag();
+    return this.div(mag);
+  }
+
+  setMag(mag) {
+    const currMag = this.mag();
+    return this.div(currMag).mul(mag);
+  }
+
+  // setMag2(mag) {
+  //   const theta = this.getAngle();
+  //   this.x = Math.cos(theta) * mag;
+  //   this.y = Math.sin(theta) * mag;
+  //   return this;
+  // }
+
+  limitMag(limitAmt = { min: null, max: null }) {
+    const mag = this.mag();
+    if (
+      (Commons.hasValue(limitAmt.max) && mag > limitAmt.max) ||
+      (Commons.hasValue(limitAmt.min) && mag < limitAmt.min)
+    ) {
+      this.normalise().mul(limitAmt);
+    }
+  }
+
+  rotate(theta) {
+    const { x, y } = this;
+
+    this.x = Math.cos(theta) * x - Math.sin(theta) * y;
+    this.y = Math.sin(theta) * x + Math.cos(theta) * y;
+
+    return this;
+  }
+
+  setAngle(theta) {
+    const mag = this.mag();
+    this.x = Math.cos(theta) * mag;
+    this.y = Math.sin(theta) * mag;
+  }
+
+  getAngle() {
+    return Math.atan2(this.y, this.x);
+  }
+
+  rev() {
+    this.x *= -1;
+    this.y *= -1;
+    return this;
+  }
+
+  clone() {
+    return new Vector2D(this.x, this.y);
+  }
+
+  toString() {
+    return `Vector2D(${this.x}, ${this.y})`;
+  }
+
+  toArray() {
+    return [this.x, this.y];
+  }
 
   /**
    * https://www.mathsisfun.com/algebra/vectors-dot-product.html

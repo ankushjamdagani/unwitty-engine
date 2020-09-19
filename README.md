@@ -85,3 +85,16 @@ Start Game
 
 - Apply Forces to elements
 - Remove/modify forces in realtime
+
+## Physics Notes
+
+```js
+    AABB Collision (when up direction is positive)
+
+        Circle with circle - 
+        (r1 + r2)^2 > (x2-x1)^2 + (y2-y1)^2
+
+        Rectangle with Rectangle -
+        on x-axis
+        L2 < R1 && L1 < R2 && B2 < T1 && B1 < T2
+```
