@@ -82,14 +82,22 @@ class Engine {
 
   // Take frame per second in consideration
   initTimer() {
-    const { timeSpeed = 1 } = this.props;
+    const { timeSpeed = 1, fps = 100 } = this.props;
+    const currTime = (performance || Date).now();
 
     this.state.timer = {
       timeSpeed: timeSpeed,
-      lastTick: 0,
-      currTick: 0,
+      lastTime: currTime,
+      currTime: currTime,
+      deltaTime: 1000 / fps,
+      fps: 0,
+      fpsLastTick: 0,
+      fpsHistory: [],
     };
   }
+
+  //          |--------------------|
+  //          last                  now
 
   /**
    * ------------ RESOURCE MANGER -------------
@@ -127,25 +135,40 @@ class Engine {
   autoPilot = () => {
     requestAnimationFrame(this.autoPilot);
 
-    const { currTick, lastTick, timeSpeed } = this.state.timer;
+    const { timer } = this.state;
+    const now = (performance || Date).now();
+    const elapsed = now - timer.lastTime;
 
-    const ticksPassed = currTick - lastTick;
-
-    if (!ticksPassed || ticksPassed >= 1) {
-      for (let i = 0; i < timeSpeed; i += 1) {
-        this.state.timer.lastTick = currTick;
-        this.update();
+    timer.currTime = now;
+    if (elapsed >= timer.deltaTime) {
+      // compute FPS
+      while (timer.fpsHistory.length > 0 && timer.fpsHistory[0] <= now - 1000) {
+        timer.fpsHistory.shift();
       }
-    }
+      timer.fpsHistory.push(now);
 
-    this.state.timer.currTick += timeSpeed;
+      timer.lastTime = now - (elapsed % 10);
+
+      if (timer.currTime - timer.fpsLastTick >= 500) {
+        timer.fps = timer.fpsHistory.length;
+        timer.fpsLastTick = timer.currTime;
+      }
+
+      console.log("FPS :: ", timer.fps);
+
+      // Game Loop
+      this.update(timer.currTime);
+    }
   };
 
   update() {
     /**
      * ============ RENDER STEP
      */
-    this.managers.renderer.renderTree(this.state.world);
+    this.managers.renderer.renderTree(
+      this.state.world,
+      this.state.timer.currTime
+    );
   }
 }
 

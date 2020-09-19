@@ -8,7 +8,7 @@ const { Body, Transform } = GameEngine.helpers;
 const WIDTH = window.innerWidth;
 const HEIGHT = window.innerHeight;
 
-const engine = new GameEngine({ canvasId: "test-1", timeSpeed: 1 });
+const engine = new GameEngine({ canvasId: "test-1", timeSpeed: 1, fps: 5 });
 const { world } = engine.state;
 const { renderer, resourceManager } = engine.managers;
 
@@ -20,13 +20,13 @@ const mouse = {
 
 const transform1 = new Transform({
   label: "transform1",
-  rotate: 0,
+  rotate: 1,
   origin: [WIDTH / 2 + 25, HEIGHT / 2 + 25],
   transform: [
-    [1,0,0],
-    [0,1,0],
-    [0,0,1],
-  ]
+    [1, 0, 0],
+    [0, 1, 0],
+    [0, 0, 1],
+  ],
 });
 
 const transform2 = new Transform({
