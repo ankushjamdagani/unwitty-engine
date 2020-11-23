@@ -11,6 +11,8 @@ import Body from "./Body";
 // Collision Points
 // Surface Area
 // onCollision() {}
+// getSpeed()
+// getDirection()
 class PhysicsBody extends Body {
   constructor(props) {
     super(props);
@@ -23,6 +25,7 @@ class PhysicsBody extends Body {
 
       mass,
       restitution,
+      // bounxe
       friction,
       gravityScale,
 
@@ -30,7 +33,8 @@ class PhysicsBody extends Body {
       angularDrag,
 
       velocity,
-      direction,
+      // speed
+      direction, // <------ ? vx = cos(a)*speed  && vy = sin(a)*speed 
       acceleration,
     } = props;
 

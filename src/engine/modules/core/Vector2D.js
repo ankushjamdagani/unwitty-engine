@@ -109,6 +109,16 @@ class Vector2D {
     return this;
   }
 
+  revX() {
+    this.x *= -1;
+    return this;
+  }
+
+  revY() {
+    this.y *= -1;
+    return this;
+  }
+
   clone() {
     return new Vector2D(this.x, this.y);
   }
