@@ -1,5 +1,5 @@
-import _node from "./_node";
-import { ENTITY_NODE_TYPES } from "../../constants";
+import _node from './_node';
+import { ENTITY_NODE_TYPES } from '../../constants';
 
 /**
  * Candidate environment variables
@@ -19,8 +19,8 @@ class World extends _node {
       gravity = 0,
       bounds = [
         { x: -Infinity, y: -Infinity },
-        { x: Infinity, y: Infinity },
-      ],
+        { x: Infinity, y: Infinity }
+      ]
     } = props;
 
     this.type = ENTITY_NODE_TYPES.WORLD;
@@ -28,7 +28,7 @@ class World extends _node {
     this.bounds = bounds;
   }
 
-  setGravity() {
+  setGravity(gravity) {
     this.gravity = gravity;
   }
 

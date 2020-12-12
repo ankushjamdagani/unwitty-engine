@@ -1,5 +1,5 @@
 // https://gamedevelopertips.com/vector-in-game-development/
-import Commons from "./Commons";
+import Commons from './Commons';
 
 class Vector2D {
   constructor(x, y) {
@@ -33,21 +33,21 @@ class Vector2D {
   }
 
   // vector arithmetics
-  static add = (v1, v2) => {
+  static add(v1, v2) {
     return new Vector2D(v1.x + v2.x, v1.y + v2.y);
-  };
+  }
 
-  static sub = (v1, v2) => {
+  static sub(v1, v2) {
     return new Vector2D(v1.x - v2.x, v1.y - v2.y);
-  };
+  }
 
-  static mul = (v1, v2) => {
+  static mul(v1, v2) {
     return new Vector2D(v1.x * v2.x, v1.y * v2.y);
-  };
+  }
 
-  static div = (v1, v2) => {
+  static div(v1, v2) {
     return new Vector2D(v1.x / v2.x, v1.y / v2.y);
-  };
+  }
 
   mag() {
     return Math.sqrt(this.x * this.x + this.y * this.y);
@@ -135,57 +135,57 @@ class Vector2D {
    * https://www.mathsisfun.com/algebra/vectors-dot-product.html
    * or |v1| * |v2| * cos(theta)
    */
-  static dotProduct = (v1, v2) => {
+  static dotProduct(v1, v2) {
     return v1.x * v2.x + v1.y * v2.y;
-  };
+  }
 
   /**
    * https://www.mathsisfun.com/algebra/vectors-cross-product.html
    * or |v1| * |v2| * sin(theta) * UnitVector
    */
-  static crossProduct = (v1, v2) => {
+  static crossProduct(v1, v2) {
     return v1.x * v2.y - v1.y * v2.x;
-  };
+  }
 
   // Projecting v2 onto v1
-  static project = (v1, v2) => {
+  static project(v1, v2) {
     const shadow = Vector2D.dotProduct(v1, v2) / v1.magSq();
     return new Vector2D(v1.x * shadow, v1.y * shadow);
-  };
+  }
 
-  static dist = (v1, v2) => {
+  static dist(v1, v2) {
     const dx = v1.x - v2.x;
     const dy = v1.y - v2.y;
     return Math.sqrt(dx * dx + dy * dy);
-  };
+  }
 
-  static distSq = (v1, v2) => {
+  static distSq(v1, v2) {
     const dx = v1.x - v2.x;
     const dy = v1.y - v2.y;
     return dx * dx + dy * dy;
-  };
+  }
 
-  static getAngle = (v1, v2) => {
+  static getAngle(v1, v2) {
     return Math.acos(Vector2D.dotProduct(v1, v2) / (v1.mag() * v2.mag()));
-  };
+  }
 
-  static polarToCartesian = (r, theta) => {
+  static polarToCartesian(r, theta) {
     return [r * Math.cos(theta), r * Math.sin(theta)];
-  };
+  }
 
-  static cartesianToPolar = (v1) => {
+  static cartesianToPolar(v1) {
     return [v1.mag(), Math.atan(v1.y / v1.x)];
-  };
+  }
 
   // returns unit vector pointing in random direction
-  static getRandom = (mag = 1) => {
+  static getRandom(mag = 1) {
     const [x, y] = Vector2D.polarToCartesian(mag, Math.random() * Math.PI * 2);
     return new Vector2D(x, y);
-  };
+  }
 
-  static zero = () => {
+  static zero() {
     return new Vector2D(0, 0);
-  };
+  }
 }
 
 export default Vector2D;

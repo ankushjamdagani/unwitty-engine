@@ -1,4 +1,4 @@
-import { Commons } from "../core";
+import { Commons } from '../core';
 
 class _node {
   constructor({ label, entity, children } = {}) {
@@ -20,7 +20,7 @@ class _node {
     this.parent.onAddChilren(this);
   }
 
-  onAddChilren(child) {}
+  onAddChilren() {}
 }
 
 export default _node;

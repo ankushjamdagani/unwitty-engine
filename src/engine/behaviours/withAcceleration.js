@@ -1,6 +1,7 @@
 const withAcceleration = (ObjectModel) => {
-  const accelerate = function (dirX, dirY) {
+  function accelerate(dirX, dirY) {
     const { x, y, maxX, maxY } = this.options.acceleration;
+
     if (x && dirX) {
       this.dx += x * dirX;
       if (this.dx > maxX || this.dx < -maxX) {
@@ -13,11 +14,11 @@ const withAcceleration = (ObjectModel) => {
         this.dy = maxY * dirY;
       }
     }
-  };
-  const move = function () {
+  }
+  function move() {
     this.options.acceleration && this.accelerate();
     this.withAcceleration_move.apply(this, arguments);
-  };
+  }
 
   ObjectModel.prototype.accelerate = accelerate;
   ObjectModel.prototype.withAcceleration_move = ObjectModel.prototype.move;

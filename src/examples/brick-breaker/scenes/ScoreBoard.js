@@ -1,13 +1,13 @@
-import Component from "../Engine/Component";
-import { CreateRect, CreateText, CreateImage } from "../Engine/Creator";
+import Component from '../Engine/Component';
+import { CreateRect, CreateText, CreateImage } from '../Engine/Creator';
 
-import HeartFilled from "../assets/images/HeartFilled.svg";
+import HeartFilled from '../assets/images/HeartFilled.svg';
 
 class ScoreBoardScene extends Component {
   constructor(props) {
     super(props);
 
-    this.preload([{ key: "HeartFilled", src: HeartFilled }]);
+    this.preload([{ key: 'HeartFilled', src: HeartFilled }]);
   }
 
   reset() {
@@ -25,16 +25,16 @@ class ScoreBoardScene extends Component {
       width: 200,
       height: 80,
       strokeSize: 4,
-      strokeColor: "rgba(0,0,0,1)",
+      strokeColor: 'rgba(0,0,0,1)'
     });
 
     CreateText({
       ctx,
       x: width - 190,
       y: 40,
-      text: "SCORE",
-      font: "14px primaryFont",
-      fontColor: "#000",
+      text: 'SCORE',
+      font: '14px primaryFont',
+      fontColor: '#000'
     });
 
     CreateText({
@@ -42,36 +42,36 @@ class ScoreBoardScene extends Component {
       x: width - 190,
       y: 80,
       text: gameInstance.getScore(),
-      font: "30px primaryFont",
-      fontColor: "#000",
+      font: '30px primaryFont',
+      fontColor: '#000'
     });
 
-    if (this.assets["HeartFilled"]) {
+    if (this.assets.HeartFilled) {
       CreateImage({
         ctx,
-        image: this.assets["HeartFilled"],
+        image: this.assets.HeartFilled,
         x: width - 190,
         y: 110,
         width: 32,
-        height: 32,
+        height: 32
       });
 
       CreateImage({
         ctx,
-        image: this.assets["HeartFilled"],
+        image: this.assets.HeartFilled,
         x: width - 130,
         y: 110,
         width: 32,
-        height: 32,
+        height: 32
       });
 
       CreateImage({
         ctx,
-        image: this.assets["HeartFilled"],
+        image: this.assets.HeartFilled,
         x: width - 70,
         y: 110,
         width: 32,
-        height: 32,
+        height: 32
       });
     }
   }

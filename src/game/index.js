@@ -1,86 +1,84 @@
-import GameEngine from "../engine";
+import GameEngine from '../engine';
 
 // import Image from "../examples/brick-breaker/assets/images/Ball1.svg";
 
-const { SHAPES } = GameEngine.Constants;
+// const { SHAPES } = GameEngine.Constants;
 const { Body, Transform } = GameEngine.helpers;
 
 const WIDTH = window.innerWidth;
 const HEIGHT = window.innerHeight;
 
-const engine = new GameEngine({ canvasId: "test-1", timeSpeed: 1, fps: 100 });
+const engine = new GameEngine({ canvasId: 'test-1', timeSpeed: 1, fps: 100 });
 const { world } = engine.state;
-const { renderer, resourceManager } = engine.managers;
-
-// resourceManager.loadResources([{ key: "bg1", src: Image }]);
+const { renderer } = engine.managers;
 
 const mouse = {
-  position: { x: 0, y: 0 },
+  position: { x: 0, y: 0 }
 };
 
 const transform1 = new Transform({
-  label: "transform1",
+  label: 'transform1',
   rotate: 1,
   origin: [WIDTH / 2 + 25, HEIGHT / 2 + 25],
   transform: [
     [1, 0, 0],
     [0, 1, 0],
-    [0, 0, 1],
-  ],
+    [0, 0, 1]
+  ]
 });
 
 const transform2 = new Transform({
-  label: "transform2",
+  label: 'transform2',
   rotate: 0,
-  origin: [WIDTH / 2 + 115, HEIGHT / 2 + 115],
+  origin: [WIDTH / 2 + 115, HEIGHT / 2 + 115]
 });
 
 const sun = new Body.createArc({
-  label: "sun",
+  label: 'sun',
   position: [WIDTH / 2, HEIGHT / 2],
   radius: 25,
   styles: {
-    backgroundColor: "orange",
+    backgroundColor: 'orange'
   },
-  debug: true,
+  debug: true
 });
 
 const earth = new Body.createArc({
-  label: "earth",
+  label: 'earth',
   position: [WIDTH / 2 + 100, HEIGHT / 2 + 100],
   radius: 15,
   styles: {
-    backgroundColor: "green",
+    backgroundColor: 'green'
   },
-  debug: true,
+  debug: true
 });
 
 const moon = new Body.createArc({
-  label: "moon",
+  label: 'moon',
   position: [WIDTH / 2 + 130, HEIGHT / 2 + 130],
   radius: 5,
   styles: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff'
   },
-  debug: true,
+  debug: true
 });
 
 const bg = Body.createRectangle({
-  label: "bg",
+  label: 'bg',
   position: [0, 0],
   width: WIDTH,
   height: HEIGHT,
   styles: {
-    backgroundColor: "#000",
+    backgroundColor: '#000'
   },
-  debug: true,
+  debug: true
 });
 
-window.addEventListener("mousemove", (evt) => {
+window.addEventListener('mousemove', (evt) => {
   const { clientX, clientY } = evt;
   mouse.position = {
     x: clientX,
-    y: clientY,
+    y: clientY
   };
 });
 

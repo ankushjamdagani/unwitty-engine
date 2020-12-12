@@ -1,15 +1,15 @@
-import { GAME_STATES, KEY_CODES } from "../constants";
+import { GAME_STATES, KEY_CODES } from '../constants';
 
-import Component from "../Engine/Component";
-import CollisionHandler from "../Engine/CollisionHandler";
+import Component from '../Engine/Component';
+import CollisionHandler from '../Engine/CollisionHandler';
 
-import withResistance from "../behaviours/withResistance";
+import withResistance from '../behaviours/withResistance';
 
-import Ball from "../objects/Ball";
-import Breaker from "../objects/Breaker";
-import Brick from "../objects/Brick";
+import Ball from '../objects/Ball';
+import Breaker from '../objects/Breaker';
+import Brick from '../objects/Brick';
 
-import BRICK_MATRIX from "../config/bricks.json";
+import BRICK_MATRIX from '../config/bricks.json';
 
 class PlaygroundScene extends Component {
   constructor(props) {
@@ -21,70 +21,70 @@ class PlaygroundScene extends Component {
   initElements() {
     const { ctx, width, height, boundary, audioHandler } = this.props;
     const ball = new (withResistance(Ball))({
-      type: "circle",
+      type: 'circle',
       x: width / 2 - 120 - 12,
       y: height - 20 - 32,
       radius: 12,
-      fillColor: "#3f8aff",
+      fillColor: '#3f8aff',
       initialSpeed: {
         x: 0,
-        y: 0,
+        y: 0
       },
       maxSpeed: {
         x: 5,
-        y: 5,
+        y: 5
       },
       env: {
         ctx,
         audioHandler,
         width,
         height,
-        boundary,
+        boundary
         // fluidFriction: .9
-      },
+      }
     });
 
     const breaker = new (withResistance(Breaker))({
-      type: "rect",
+      type: 'rect',
       x: width / 2 - 120,
       y: height - 20,
       width: 120,
       height: 20,
       initialSpeed: {
         x: 0,
-        y: 0,
+        y: 0
       },
       maxSpeed: {
         x: 15,
-        y: -15,
+        y: -15
       },
       env: {
         ctx,
         width,
         height,
         boundary,
-        gravity: 2,
-      },
+        gravity: 2
+      }
     });
 
     this.setElements({
       ball,
       breaker,
-      bricks: [],
+      bricks: []
     });
   }
 
   bindEvents() {
-    window.addEventListener("keydown", this.listenKeysDown);
-    window.addEventListener("keyup", this.listenKeysUp);
+    window.addEventListener('keydown', this.listenKeysDown);
+    window.addEventListener('keyup', this.listenKeysUp);
   }
 
   unBindEvents() {
-    window.removeEventListener("keydown", this.listenKeysDown);
-    window.removeEventListener("keyup", this.listenKeysUp);
+    window.removeEventListener('keydown', this.listenKeysDown);
+    window.removeEventListener('keyup', this.listenKeysUp);
   }
 
-  listenKeysDown = (e) => {
+  listenKeysDown(e) {
     const key = e.key.toLowerCase();
     if (key === KEY_CODES.LEFT) {
       this.elements.breaker.goLeft();
@@ -93,14 +93,14 @@ class PlaygroundScene extends Component {
     } else if (key === KEY_CODES.SPACE) {
       this.elements.breaker.jump();
     }
-  };
+  }
 
-  listenKeysUp = (e) => {
+  listenKeysUp(e) {
     const key = e.key.toLowerCase();
     if (key === KEY_CODES.LEFT || key === KEY_CODES.RIGHT) {
       this.elements.breaker.stop();
     }
-  };
+  }
 
   mountBricks() {
     const { gameInstance, width, height, ctx, audioHandler } = this.props;
@@ -133,8 +133,8 @@ class PlaygroundScene extends Component {
               ctx,
               audioHandler,
               width,
-              height,
-            },
+              height
+            }
           });
           bricks.push(brick);
         }
@@ -144,7 +144,7 @@ class PlaygroundScene extends Component {
     });
 
     this.setElements({
-      bricks,
+      bricks
     });
   }
 
@@ -159,13 +159,13 @@ class PlaygroundScene extends Component {
         {
           x: ball.state.x,
           y: ball.state.y,
-          radius: ball.props.radius,
+          radius: ball.props.radius
         },
         {
           x: breaker.state.x,
           y: breaker.state.y,
           width: breaker.props.width,
-          height: breaker.props.height,
+          height: breaker.props.height
         }
       );
       if (rectCollisionVector) {
@@ -178,7 +178,7 @@ class PlaygroundScene extends Component {
             y: rectCollisionVector[2]
               ? breaker.state.y + breaker.props.height + ball.props.radius
               : breaker.state.y - ball.props.radius,
-            dy: newBallSpeed,
+            dy: newBallSpeed
           });
         }
         if (rectCollisionVector[1] || rectCollisionVector[3]) {
@@ -187,10 +187,10 @@ class PlaygroundScene extends Component {
             ? breaker.state.dx + ball.state.dx
             : breaker.state.dx - ball.state.dx;
           ball.setState({
-            dx: newBallSpeed,
+            dx: newBallSpeed
           });
         }
-        audioHandler.play("OnBreakerBounce");
+        audioHandler.play('OnBreakerBounce');
       } else if (ball.state.y + ball.props.radius >= height) {
         // gameInstance.changeState(GAME_STATES.END);
       } else {
@@ -203,33 +203,33 @@ class PlaygroundScene extends Component {
             {
               x: ball.state.x,
               y: ball.state.y,
-              radius: ball.props.radius,
+              radius: ball.props.radius
             },
             {
               x: brick.props.x,
               y: brick.props.y,
               width: brick.props.width,
-              height: brick.props.height,
+              height: brick.props.height
             }
           );
 
           if (brickCollisionVector) {
             if (brickCollisionVector[0]) {
               ball.setState({
-                dy: ball.state.dy > 0 ? -ball.state.dy : ball.state.dy,
+                dy: ball.state.dy > 0 ? -ball.state.dy : ball.state.dy
               });
             } else if (brickCollisionVector[2]) {
               ball.setState({
-                dy: ball.state.dy > 0 ? ball.state.dy : -ball.state.dy,
+                dy: ball.state.dy > 0 ? ball.state.dy : -ball.state.dy
               });
             }
             if (brickCollisionVector[1]) {
               ball.setState({
-                dx: ball.state.dx > 0 ? ball.state.dx : -ball.state.dx,
+                dx: ball.state.dx > 0 ? ball.state.dx : -ball.state.dx
               });
             } else if (brickCollisionVector[3]) {
               ball.setState({
-                dx: ball.state.dx > 0 ? -ball.state.dx : ball.state.dx,
+                dx: ball.state.dx > 0 ? -ball.state.dx : ball.state.dx
               });
             }
 
@@ -257,8 +257,8 @@ class PlaygroundScene extends Component {
     this.mountBricks();
     this.bindEvents();
 
-    this.props.audioHandler.play("OnGameStart");
-    this.props.audioHandler.play("OnGameBg", { loop: true, volume: 0.6 });
+    this.props.audioHandler.play('OnGameStart');
+    this.props.audioHandler.play('OnGameBg', { loop: true, volume: 0.6 });
   }
 
   stop() {
@@ -269,9 +269,9 @@ class PlaygroundScene extends Component {
 
     this.unBindEvents();
 
-    this.props.audioHandler.stop("OnGameStart");
-    this.props.audioHandler.stop("OnGameBg");
-    this.props.audioHandler.play("OnGameEnd");
+    this.props.audioHandler.stop('OnGameStart');
+    this.props.audioHandler.stop('OnGameBg');
+    this.props.audioHandler.play('OnGameEnd');
   }
 
   pause() {
@@ -282,8 +282,8 @@ class PlaygroundScene extends Component {
 
     this.unBindEvents();
 
-    this.props.audioHandler.stop("OnGameStart");
-    this.props.audioHandler.stop("OnGameBg");
+    this.props.audioHandler.stop('OnGameStart');
+    this.props.audioHandler.stop('OnGameBg');
   }
 
   resume() {
@@ -294,7 +294,7 @@ class PlaygroundScene extends Component {
 
     this.bindEvents();
 
-    this.props.audioHandler.play("OnGameBg", { loop: true, volume: 0.6 });
+    this.props.audioHandler.play('OnGameBg', { loop: true, volume: 0.6 });
   }
 
   reset() {

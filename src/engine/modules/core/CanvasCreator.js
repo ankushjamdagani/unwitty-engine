@@ -6,7 +6,7 @@ function CreateRectangle({
   height,
   fillColor,
   strokeColor,
-  strokeSize = 0,
+  strokeSize = 0
 }) {
   ctx.beginPath();
   if (fillColor) {
@@ -30,7 +30,7 @@ function CreateCircle({
   eAngle = 2 * Math.PI,
   fillColor,
   strokeColor,
-  strokeSize = 0,
+  strokeSize = 0
 }) {
   ctx.beginPath();
   if (fillColor) {

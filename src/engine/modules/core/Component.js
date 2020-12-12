@@ -8,9 +8,9 @@ class Component {
 
   preload(assets, cb) {
     assets.forEach((asset) => {
-      if (asset.type && asset.type === "audio") {
+      if (asset.type && asset.type === 'audio') {
         const assetAudio = new Audio(asset.src);
-        assetAudio.addEventListener("canplaythrough", () => {
+        assetAudio.addEventListener('canplaythrough', () => {
           if (this.assets[asset.key]) {
             return;
           }
@@ -31,7 +31,7 @@ class Component {
   setState(state = {}, cb) {
     this.state = {
       ...this.state,
-      ...state,
+      ...state
     };
 
     cb && cb(this.state);
@@ -40,7 +40,7 @@ class Component {
   setAssets(assets = {}, cb) {
     this.assets = {
       ...this.assets,
-      ...assets,
+      ...assets
     };
 
     cb && cb(this.assets);
@@ -49,7 +49,7 @@ class Component {
   setElements(elements = {}, cb) {
     this.elements = {
       ...this.elements,
-      ...elements,
+      ...elements
     };
 
     cb && cb(this.elements);

@@ -1,21 +1,21 @@
-import "./index.css";
+import './index.css';
 
-import { GAME_STATES, KEY_CODES } from "./constants";
+import { GAME_STATES, KEY_CODES } from './constants';
 
-import Component from "./Engine/Component";
+import Component from './Engine/Component';
 
-import HomeScene from "./scenes/Home";
-import PlaygroundScene from "./scenes/Playground";
-import ScoreBoardScene from "./scenes/ScoreBoard";
-import GameDialogScene from "./scenes/GameDialog";
-import ResultsScene from "./scenes/Results";
+import HomeScene from './scenes/Home';
+import PlaygroundScene from './scenes/Playground';
+import ScoreBoardScene from './scenes/ScoreBoard';
+import GameDialogScene from './scenes/GameDialog';
+import ResultsScene from './scenes/Results';
 
-import AudioHandler from "./objects/AudioHandler";
+import AudioHandler from './objects/AudioHandler';
 
 const AspectRatios = {
   SINGLE_PLAYER: 16 / 9,
   DOUBLE_PLAYER: 4 / 3,
-  MULTI_PLAYER: 1,
+  MULTI_PLAYER: 1
 };
 
 const smallValue =
@@ -29,11 +29,11 @@ const HEIGHT = smallValue;
 class GameEngine extends Component {
   constructor(props) {
     super(props);
-    const canvas = document.querySelector("canvas");
+    const canvas = document.querySelector('canvas');
     canvas.width = WIDTH;
     canvas.height = HEIGHT;
 
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext('2d');
     const audioHandler = new AudioHandler();
 
     const env = {
@@ -42,7 +42,7 @@ class GameEngine extends Component {
       width: canvas.width,
       height: canvas.height,
       boundary: { x: true, y: true },
-      gameInstance: this,
+      gameInstance: this
     };
 
     const playgroundSceneInstance = new PlaygroundScene(env);
@@ -56,7 +56,7 @@ class GameEngine extends Component {
       score: 0,
       level: 1,
       lives: 3,
-      env,
+      env
     };
 
     this.elements = {
@@ -64,25 +64,25 @@ class GameEngine extends Component {
       playgroundSceneInstance,
       scoreBoardSceneInstance,
       gameDialogSceneInstance,
-      resultsSceneInstance,
+      resultsSceneInstance
     };
   }
 
-  init = () => {
+  init() {
     this.changeState();
     this.startGame();
     this.bindEvents();
-  };
+  }
 
   bindEvents() {
-    window.addEventListener("keyup", this.listenKeysUp);
+    window.addEventListener('keyup', this.listenKeysUp);
   }
 
   unBindEvents() {
-    window.removeEventListener("keyup", this.listenKeysUp);
+    window.removeEventListener('keyup', this.listenKeysUp);
   }
 
-  listenKeysUp = (e) => {
+  listenKeysUp(e) {
     e.preventDefault();
     const { env, activeState } = this.state;
     const key = e.key.toLowerCase();
@@ -98,31 +98,31 @@ class GameEngine extends Component {
     } else if (key === KEY_CODES.M) {
       env.audioHandler.mute();
     }
-  };
+  }
 
-  getScore = () => {
+  getScore() {
     return this.state.score;
-  };
+  }
 
-  getState = () => {
+  getState() {
     return this.state.activeState;
-  };
+  }
 
-  getLevel = () => {
+  getLevel() {
     return this.state.level;
-  };
+  }
 
-  changeScore = (score) => {
+  changeScore(score) {
     this.setState({
-      score,
+      score
     });
-  };
+  }
 
-  changeState = (state) => {
+  changeState(state) {
     const { activeState } = this.state;
     const newState = state !== undefined ? state : activeState;
     this.setState({
-      activeState: newState,
+      activeState: newState
     });
 
     if (newState === GAME_STATES.HOME) {
@@ -139,9 +139,9 @@ class GameEngine extends Component {
     } else if (newState === GAME_STATES.PAUSE) {
       this.elements.playgroundSceneInstance.pause();
     }
-  };
+  }
 
-  startGame = () => {
+  startGame() {
     const { env, activeState } = this.state;
     requestAnimationFrame(this.startGame);
     // setTimeout(this.startGame, 1000);
@@ -159,7 +159,7 @@ class GameEngine extends Component {
       this.elements.scoreBoardSceneInstance.update();
       this.elements.gameDialogSceneInstance.update();
     }
-  };
+  }
 }
 
 const gameEngine = new GameEngine();

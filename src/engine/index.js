@@ -1,9 +1,9 @@
-import * as Constants from "./constants";
+import * as Constants from './constants';
 
-import ResourceManager from "./modules/ResourceManager";
-import EntityManager from "./modules/EntityManager";
-import Renderer from "./modules/Renderer";
-import { Vector2D } from "./modules/core";
+import ResourceManager from './modules/ResourceManager';
+import EntityManager from './modules/EntityManager';
+import Renderer from './modules/Renderer';
+import { Vector2D } from './modules/core';
 
 // --------------- GAME LOOP STARTS
 // Get Elements to render
@@ -54,15 +54,15 @@ class Engine {
   initCanvas() {
     const { canvasId, canvasWidth, canvasHeight, smoothImage } = this.props;
 
-    const canvas = document.createElement("canvas");
-    canvas.setAttribute("id", canvasId);
-    canvas.style.cursor = "crosshair"; // or none
+    const canvas = document.createElement('canvas');
+    canvas.setAttribute('id', canvasId);
+    canvas.style.cursor = 'crosshair'; // or none
     canvas.width = canvasWidth || window.innerWidth;
     canvas.height = canvasHeight || window.innerHeight;
 
     document.body.appendChild(canvas);
 
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext('2d');
     ctx.mozImageSmoothingEnabled = !!smoothImage;
     ctx.webkitImageSmoothingEnabled = !!smoothImage;
     ctx.msImageSmoothingEnabled = !!smoothImage;
@@ -70,13 +70,13 @@ class Engine {
 
     this.state.canvas = {
       element: canvas,
-      context: ctx,
+      context: ctx
     };
 
     this.state.screen = {
       width: canvas.width,
       height: canvas.height,
-      aspectRatio: canvas.width / canvas.height,
+      aspectRatio: canvas.width / canvas.height
     };
   }
 
@@ -92,7 +92,7 @@ class Engine {
       deltaTime: 1000 / fps,
       fps: 0,
       fpsLastTick: 0,
-      fpsHistory: [],
+      fpsHistory: []
     };
   }
 
@@ -114,8 +114,8 @@ class Engine {
       gravity: 0,
       bounds: [
         new Vector2D(-Infinity, -Infinity),
-        new Vector2D(Infinity, Infinity),
-      ],
+        new Vector2D(Infinity, Infinity)
+      ]
     });
     const light = EntityManager.createLight({ position: Vector2D.zero() });
 
@@ -132,7 +132,7 @@ class Engine {
   }
 
   // https://stackoverflow.com/questions/19764018/controlling-fps-with-requestanimationframe
-  autoPilot = () => {
+  autoPilot() {
     requestAnimationFrame(this.autoPilot);
 
     const { timer } = this.state;
@@ -154,12 +154,12 @@ class Engine {
         timer.fpsLastTick = timer.currTime;
       }
 
-      console.log("FPS :: ", timer.fps);
+      console.log('FPS :: ', timer.fps);
 
       // Game Loop
       this.update(timer.currTime);
     }
-  };
+  }
 
   update() {
     /**
@@ -174,7 +174,7 @@ class Engine {
 
 Engine.Constants = Constants;
 Engine.helpers = {
-  ...EntityManager,
+  ...EntityManager
 };
 
 export default Engine;

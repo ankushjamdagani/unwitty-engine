@@ -1,10 +1,10 @@
-import World from "./World";
-import Light from "./Light";
-import Transform from "./Transform";
-import Layer from "./Layer";
-import Body from "./Body";
-import PhysicsBody from "./PhysicsBody";
-import FluidBody from "./FluidBody";
+import World from './World';
+import Light from './Light';
+import Transform from './Transform';
+import Layer from './Layer';
+import Body from './Body';
+import PhysicsBody from './PhysicsBody';
+import FluidBody from './FluidBody';
 
 class EntityManager {
   constructor() {
@@ -27,7 +27,7 @@ class EntityManager {
     items.push(elem);
 
     if (elem.children && elem.children.size) {
-      for (const [key, val] of elem.children) {
+      for (const [, val] of elem.children) {
         items = items.concat(this.getItemsToRender(val));
       }
     }

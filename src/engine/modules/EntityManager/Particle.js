@@ -1,8 +1,8 @@
-import { SHAPES, ENTITY_NODE_TYPES } from "../../constants";
-import Vector2D from "../core/Vector2D";
-import Commons from "../core/Commons";
+import { SHAPES, ENTITY_NODE_TYPES } from '../../constants';
+import Vector2D from '../core/Vector2D';
+// import Commons from "../core/Commons";
 
-import _node from "./_node";
+import _node from './_node';
 
 const defaultState = {
   shape: SHAPES.ARC,
@@ -11,8 +11,8 @@ const defaultState = {
   boundingBox: {
     margins: [0, 0, 0, 0],
     shape: SHAPES.RECTANGLE,
-    color: "red",
-  },
+    color: 'red'
+  }
 };
 
 // Styles and textures will be applied to all children as well
@@ -55,7 +55,7 @@ class Particle extends _node {
   }
 
   onAddChilren() {
-    console.error("Cannot add children to particle");
+    console.error('Cannot add children to particle');
   }
 }
 
