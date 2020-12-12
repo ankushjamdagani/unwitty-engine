@@ -1,7 +1,7 @@
 {
-  "name": "canvas-bricks-breaker",
-  "version": "1.0.0",
-  "description": "Bricks breaker game using canvas and javascript",
+  "name": "dumb-engine",
+  "version": "0.1.0",
+  "description": "game engine graphics, audio and logic",
   "main": "src/game/index.js",
   "author": "AnkushJ <anqush.jamdagani@gmail.com>",
   "license": "MIT",

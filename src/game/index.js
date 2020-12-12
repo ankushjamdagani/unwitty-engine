@@ -1,6 +1,6 @@
 import GameEngine from "../engine";
 
-import Image from "../game1/assets/images/Ball1.svg";
+// import Image from "../examples/brick-breaker/assets/images/Ball1.svg";
 
 const { SHAPES } = GameEngine.Constants;
 const { Body, Transform } = GameEngine.helpers;
@@ -8,11 +8,11 @@ const { Body, Transform } = GameEngine.helpers;
 const WIDTH = window.innerWidth;
 const HEIGHT = window.innerHeight;
 
-const engine = new GameEngine({ canvasId: "test-1", timeSpeed: 1, fps: 5 });
+const engine = new GameEngine({ canvasId: "test-1", timeSpeed: 1, fps: 100 });
 const { world } = engine.state;
 const { renderer, resourceManager } = engine.managers;
 
-resourceManager.loadResources([{ key: "bg1", src: Image }]);
+// resourceManager.loadResources([{ key: "bg1", src: Image }]);
 
 const mouse = {
   position: { x: 0, y: 0 },
@@ -93,6 +93,11 @@ sun.add(transform2);
 transform2.add(earth);
 earth.add(moon);
 
+setInterval(() => {
+  transform1.rotate += 1;
+  transform2.rotate += 1;
+});
+
 // world.add(bg);
 // world.add(sun);
 // sun.add(earth);
@@ -101,6 +106,3 @@ earth.add(moon);
 console.log(engine);
 
 engine.autoPilot();
-
-150, 0, 0, 150;
-300;
