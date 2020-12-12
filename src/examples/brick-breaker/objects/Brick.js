@@ -1,4 +1,4 @@
-import Component from '../HOC/Component';
+import Component from '../Engine/Component';
 
 import { CreateImage } from '../Engine/Creator';
 

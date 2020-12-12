@@ -1,8 +1,11 @@
-import Component from '../HOC/Component';
+import Component from './Component';
 
 import OnGameStart from '../assets/sounds/retro_43.mp3';
 import OnGameEnd from '../assets/sounds/retro_11.mp3';
 import OnGameBg from '../assets/sounds/retro_47.mp3';
+import OnPoints from '../assets/sounds/sfx_wpn_cannon4.wav';
+import OnWallBounce from '../assets/sounds/sfx_wpn_laser7.wav';
+import OnBreakerBounce from '../assets/sounds/sfx_wpn_laser5.wav';
 
 // Bounce
 // retro_jump_24, retro_jump_26
@@ -12,10 +15,6 @@ import OnGameBg from '../assets/sounds/retro_47.mp3';
 
 // Canon
 // sfx_wpn_cannon1, sfx_wpn_cannon4, sfx_weapon_singleshot13
-
-import OnPoints from '../assets/sounds/sfx_wpn_cannon4.wav';
-import OnWallBounce from '../assets/sounds/sfx_wpn_laser7.wav';
-import OnBreakerBounce from '../assets/sounds/sfx_wpn_laser5.wav';
 
 class AudioHandler extends Component {
   constructor(props) {

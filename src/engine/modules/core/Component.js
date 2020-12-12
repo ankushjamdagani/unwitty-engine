@@ -54,14 +54,6 @@ class Component {
 
     cb && cb(this.elements);
   }
-
-  start() {}
-
-  stop() {}
-
-  reset() {}
-
-  update() {}
 }
 
 export default Component;
