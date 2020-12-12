@@ -6,7 +6,7 @@ function CreateRect({
   height,
   fillColor,
   strokeColor,
-  strokeSize = 0,
+  strokeSize = 0
 }) {
   ctx.beginPath();
   if (fillColor) {

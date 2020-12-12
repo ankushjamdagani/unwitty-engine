@@ -1,10 +1,10 @@
-import Component from "../HOC/Component";
+import Component from '../HOC/Component';
 
-import { roundOff } from "../helpers/Math";
+import { roundOff } from '../helpers/Math';
 
-import { CreateRect } from "../Engine/Creator";
+import { CreateRect } from '../Engine/Creator';
 
-import rover from "../assets/images/Board3.svg";
+import rover from '../assets/images/Board3.svg';
 
 class Breaker extends Component {
   constructor(props) {
@@ -14,10 +14,10 @@ class Breaker extends Component {
       x: props.x,
       y: props.y,
       dx: props.initialSpeed.x,
-      dy: props.initialSpeed.y,
+      dy: props.initialSpeed.y
     };
 
-    this.preload([{ key: "rover", src: rover }]);
+    this.preload([{ key: 'rover', src: rover }]);
   }
 
   isTouchingBorder() {
@@ -36,47 +36,43 @@ class Breaker extends Component {
     if (env.boundary.x) {
       if (x <= 0) {
         this.setState({
-          x: 0,
+          x: 0
         });
       } else if (x + width >= env.width) {
         this.setState({
-          x: env.width - width,
+          x: env.width - width
         });
       }
-    } else {
-      if (x <= 0) {
-        this.setState({
-          x: env.width - width,
-        });
-      } else if (x + width >= env.width) {
-        this.setState({
-          x: 0,
-        });
-      }
+    } else if (x <= 0) {
+      this.setState({
+        x: env.width - width
+      });
+    } else if (x + width >= env.width) {
+      this.setState({
+        x: 0
+      });
     }
 
     if (env.boundary.y) {
       if (y <= 0) {
         this.setState({
           y: 0,
-          dy: -dy,
+          dy: -dy
         });
       } else if (y + height >= env.height) {
         this.setState({
           y: env.height - height,
-          dy: -dy,
+          dy: -dy
         });
       }
-    } else {
-      if (y <= 0) {
-        this.setState({
-          y: env.height - height,
-        });
-      } else if (y + height >= env.height) {
-        this.setState({
-          y: 0,
-        });
-      }
+    } else if (y <= 0) {
+      this.setState({
+        y: env.height - height
+      });
+    } else if (y + height >= env.height) {
+      this.setState({
+        y: 0
+      });
     }
   }
 
@@ -85,7 +81,7 @@ class Breaker extends Component {
 
     this.setState({
       x: roundOff(x + dx),
-      y: roundOff(y + dy),
+      y: roundOff(y + dy)
     });
 
     this.validatePosition();
@@ -95,7 +91,7 @@ class Breaker extends Component {
     const { maxSpeed } = this.props;
 
     this.setState({
-      dx: -maxSpeed.x,
+      dx: -maxSpeed.x
     });
   }
 
@@ -103,7 +99,7 @@ class Breaker extends Component {
     const { maxSpeed } = this.props;
 
     this.setState({
-      dx: maxSpeed.x,
+      dx: maxSpeed.x
     });
   }
 
@@ -111,7 +107,7 @@ class Breaker extends Component {
     const { maxSpeed } = this.props;
 
     this.setState({
-      dy: maxSpeed.y,
+      dy: maxSpeed.y
     });
   }
 
@@ -125,7 +121,7 @@ class Breaker extends Component {
       y,
       width,
       height: height - 4,
-      fillColor: "#000",
+      fillColor: '#000'
     });
   }
 
@@ -139,7 +135,7 @@ class Breaker extends Component {
 
     this.setState({
       dx: initialSpeed.x,
-      dy: initialSpeed.y,
+      dy: initialSpeed.y
     });
   }
 
@@ -148,7 +144,7 @@ class Breaker extends Component {
 
     this.setState({
       x,
-      y,
+      y
     });
   }
 

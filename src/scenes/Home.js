@@ -1,6 +1,6 @@
-import Component from "../Engine/Component";
-import Animator from "../Engine/Animator";
-import { CreateRect, CreateText } from "../Engine/Creator";
+import Component from '../Engine/Component';
+import Animator from '../Engine/Animator';
+import { CreateRect, CreateText } from '../Engine/Creator';
 
 class HomeScene extends Component {
   constructor(props) {
@@ -11,7 +11,7 @@ class HomeScene extends Component {
       minVal: 0,
       maxVal: 1,
       step: 0.1,
-      ticksInterval: 2,
+      ticksInterval: 2
     });
   }
 
@@ -25,7 +25,7 @@ class HomeScene extends Component {
       y: height / 2 - 85,
       width: 20,
       height: 200,
-      fillColor: "#000",
+      fillColor: '#000'
     });
 
     CreateRect({
@@ -34,7 +34,7 @@ class HomeScene extends Component {
       y: height / 2 + 104,
       width: 500,
       height: 20,
-      fillColor: "#000",
+      fillColor: '#000'
     });
 
     CreateRect({
@@ -43,34 +43,34 @@ class HomeScene extends Component {
       y: height / 2 - 105,
       width: 500,
       height: 200,
-      fillColor: "#000",
+      fillColor: '#000'
     });
 
     CreateText({
       ctx,
       x: width / 2 - 190,
       y: height / 2,
-      text: "Bricks Breaker",
-      font: "30px primaryFont",
-      fontColor: "#fff",
+      text: 'Bricks Breaker',
+      font: '30px primaryFont',
+      fontColor: '#fff'
     });
 
     CreateText({
       ctx,
       x: width / 2 - 235,
       y: height / 2 + 70,
-      text: "-----------------",
-      font: "30px primaryFont",
-      fontColor: "#fff",
+      text: '-----------------',
+      font: '30px primaryFont',
+      fontColor: '#fff'
     });
 
     CreateText({
       ctx,
       x: width / 2 - 140,
       y: height / 2 + 84,
-      text: "Press ENTER to play.",
-      font: "14px primaryFont",
-      fontColor: `rgba(255,255,255,${subTitleOpacity})`,
+      text: 'Press ENTER to play.',
+      font: '14px primaryFont',
+      fontColor: `rgba(255,255,255,${subTitleOpacity})`
     });
   }
 }

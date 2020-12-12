@@ -3,29 +3,21 @@ const Vector2D = (x, y) => {
   this.y = y || 0;
 };
 
-Vector2D.add = (v1, v2) => {
-  return new Vector2D(v1.x + v2.x, v1.y + v2.y);
-};
+Vector2D.add = (v1, v2) => new Vector2D(v1.x + v2.x, v1.y + v2.y);
 
-Vector2D.sub = (v1, v2) => {
-  return new Vector2D(v1.x - v2.x, v1.y - v2.y);
-};
+Vector2D.sub = (v1, v2) => new Vector2D(v1.x - v2.x, v1.y - v2.y);
 
 /**
  * https://www.mathsisfun.com/algebra/vectors-dot-product.html
  * or |v1| * |v2| * cos(theta)
  */
-Vector2D.dotProduct = (v1, v2) => {
-  return v1.x * v2.x + v1.y * v2.y;
-};
+Vector2D.dotProduct = (v1, v2) => v1.x * v2.x + v1.y * v2.y;
 
 /**
  * https://www.mathsisfun.com/algebra/vectors-cross-product.html
  * or |v1| * |v2| * sin(theta) * UnitVector
  */
-Vector2D.crossProduct = (v1, v2) => {
-  return v1.x * v2.y - v1.y * v2.x;
-};
+Vector2D.crossProduct = (v1, v2) => v1.x * v2.y - v1.y * v2.x;
 
 // Projecting v2 onto v1
 Vector2D.project = (v1, v2) => {
@@ -50,17 +42,15 @@ Vector2D.getUnit = (v1) => {
   return new Vector2D(v1.x / mag, v1.y / mag);
 };
 
-Vector2D.getAngle = (v1, v2) => {
-  return Math.acos(Vector2D.dotProduct(v1, v2) / (v1.mag() * v2.mag()));
-};
+Vector2D.getAngle = (v1, v2) =>
+  Math.acos(Vector2D.dotProduct(v1, v2) / (v1.mag() * v2.mag()));
 
-Vector2D.polarToCartesian = (r, theta) => {
-  return [r * Math.cos(theta), r * Math.sin(theta)];
-};
+Vector2D.polarToCartesian = (r, theta) => [
+  r * Math.cos(theta),
+  r * Math.sin(theta)
+];
 
-Vector2D.cartesianToPolar = (v1) => {
-  return [v1.mag(), Math.atan(v1.y / v1.x)];
-};
+Vector2D.cartesianToPolar = (v1) => [v1.mag(), Math.atan(v1.y / v1.x)];
 
 Vector2D.prototype = {
   add(v1) {
@@ -99,7 +89,7 @@ Vector2D.prototype = {
   },
   toArray() {
     return [this.x, this.y];
-  },
+  }
 };
 
 export default Vector2D;

@@ -1,8 +1,8 @@
-import Component from "../HOC/Component";
+import Component from '../HOC/Component';
 
-import OnGameStart from "../assets/sounds/retro_43.mp3";
-import OnGameEnd from "../assets/sounds/retro_11.mp3";
-import OnGameBg from "../assets/sounds/retro_47.mp3";
+import OnGameStart from '../assets/sounds/retro_43.mp3';
+import OnGameEnd from '../assets/sounds/retro_11.mp3';
+import OnGameBg from '../assets/sounds/retro_47.mp3';
 
 // Bounce
 // retro_jump_24, retro_jump_26
@@ -13,9 +13,9 @@ import OnGameBg from "../assets/sounds/retro_47.mp3";
 // Canon
 // sfx_wpn_cannon1, sfx_wpn_cannon4, sfx_weapon_singleshot13
 
-import OnPoints from "../assets/sounds/sfx_wpn_cannon4.wav";
-import OnWallBounce from "../assets/sounds/sfx_wpn_laser7.wav";
-import OnBreakerBounce from "../assets/sounds/sfx_wpn_laser5.wav";
+import OnPoints from '../assets/sounds/sfx_wpn_cannon4.wav';
+import OnWallBounce from '../assets/sounds/sfx_wpn_laser7.wav';
+import OnBreakerBounce from '../assets/sounds/sfx_wpn_laser5.wav';
 
 class AudioHandler extends Component {
   constructor(props) {
@@ -24,23 +24,23 @@ class AudioHandler extends Component {
     const audioContext = new (window.AudioContext ||
       window.webkitAudioContext)();
     this.state = {
-      audioContext,
+      audioContext
     };
 
     this.preload(
       [
-        { key: "OnGameBg", src: OnGameBg, type: "audio" },
-        { key: "OnGameStart", src: OnGameStart, type: "audio" },
-        { key: "OnPoints", src: OnPoints, type: "audio" },
-        { key: "OnWallBounce", src: OnWallBounce, type: "audio" },
-        { key: "OnBreakerBounce", src: OnBreakerBounce, type: "audio" },
-        { key: "OnGameEnd", src: OnGameEnd, type: "audio" },
+        { key: 'OnGameBg', src: OnGameBg, type: 'audio' },
+        { key: 'OnGameStart', src: OnGameStart, type: 'audio' },
+        { key: 'OnPoints', src: OnPoints, type: 'audio' },
+        { key: 'OnWallBounce', src: OnWallBounce, type: 'audio' },
+        { key: 'OnBreakerBounce', src: OnBreakerBounce, type: 'audio' },
+        { key: 'OnGameEnd', src: OnGameEnd, type: 'audio' }
       ],
       this.bindToContext
     );
   }
 
-  bindToContext = (key, asset) => {
+  bindToContext(key, asset) {
     const { audioContext } = this.state;
     const track = audioContext.createMediaElementSource(asset);
     var gain = audioContext.createGain();
@@ -49,14 +49,14 @@ class AudioHandler extends Component {
 
     track.connect(gain);
     gain.connect(audioContext.destination);
-  };
+  }
 
   play(assetKey, { loop = false, volume = 1 } = {}) {
-    if(!this.assets[assetKey]) {
-      return
+    if (!this.assets[assetKey]) {
+      return;
     }
     const { audioContext } = this.state;
-    if (audioContext.state === "suspended") {
+    if (audioContext.state === 'suspended') {
       audioContext.resume();
     }
 
@@ -77,7 +77,7 @@ class AudioHandler extends Component {
   }
 
   mute() {
-    console.log("Muting");
+    console.log('Muting');
   }
 }
 

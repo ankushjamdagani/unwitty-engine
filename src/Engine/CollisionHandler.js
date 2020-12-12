@@ -58,5 +58,5 @@ function isCircleCollidingRect(circle, rect) {
 }
 
 export default {
-  isCircleCollidingRect,
+  isCircleCollidingRect
 };

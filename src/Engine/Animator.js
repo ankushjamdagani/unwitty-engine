@@ -4,9 +4,9 @@ function Animator({
   maxVal = 1,
   step = 0.1,
   ticksInterval = 1,
-  direction = "alternate", // normal | reverse | alternate | alternate-reverse,
-  iterationCount = Infinity,
-  fillMode = "forwards",
+  direction = 'alternate', // normal | reverse | alternate | alternate-reverse,
+  iterationCount = Infinity
+  // fillMode = 'forwards'
 }) {
   this.activeVal =
     startVal === null || startVal === undefined ? minVal : startVal;
@@ -28,16 +28,15 @@ function Animator({
     const ticksDiff = this.currentTick - this.referenceTick;
     if (ticksDiff < ticksInterval) {
       return this.activeVal;
-    } else {
-      this.referenceTick = this.currentTick;
     }
+    this.referenceTick = this.currentTick;
 
     this.activeVal += this.step;
 
     if (this.activeVal > maxVal || this.activeVal < minVal) {
-      if (direction === "alternate") {
+      if (direction === 'alternate') {
         this.step = -this.step;
-      } else if (direction === "normal") {
+      } else if (direction === 'normal') {
         this.activeVal = minVal;
       }
     }
@@ -47,7 +46,7 @@ function Animator({
   return {
     get,
     set,
-    update,
+    update
   };
 }
 
