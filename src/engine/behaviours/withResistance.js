@@ -1,11 +1,11 @@
 import { maximum, minimum } from '../helpers/Math';
 
-const withResistance = (ObjectModel) => {
-  const isNumberSmall = function (num) {
+function withResistance(ObjectModel) {
+  function isNumberSmall(num) {
     return num < 0.001 || num > -0.001;
-  };
+  }
 
-  const applyGravity = function () {
+  function applyGravity() {
     const { env } = this.props;
     const { y, dy } = this.state;
     if (y !== 0) {
@@ -17,9 +17,9 @@ const withResistance = (ObjectModel) => {
         dy: 0
       });
     }
-  };
+  }
 
-  const applyFluidResistance = function () {
+  function applyFluidResistance() {
     const { env } = this.props;
     const { dx, dy } = this.state;
     if (dx !== 0) {
@@ -40,9 +40,9 @@ const withResistance = (ObjectModel) => {
           : minimum(dy * env.fluidFriction, -5)
       });
     }
-  };
+  }
 
-  const applySurfaceFriction = function () {
+  function applySurfaceFriction() {
     const { env } = this.props;
     const { dx, dy } = this.state;
     if (this.isTouchingBorder()) {
@@ -57,15 +57,15 @@ const withResistance = (ObjectModel) => {
         });
       }
     }
-  };
+  }
 
-  const move = function () {
+  function move() {
     const { env } = this.props;
     env.gravity && this.applyGravity();
     env.fluidFriction && this.applyFluidResistance();
     env.surfaceFriction && this.applySurfaceFriction();
     this.withResistance_move.apply(this, arguments);
-  };
+  }
 
   ObjectModel.prototype.isNumberSmall = isNumberSmall;
   ObjectModel.prototype.applyGravity = applyGravity;
@@ -75,6 +75,6 @@ const withResistance = (ObjectModel) => {
   ObjectModel.prototype.move = move;
 
   return ObjectModel;
-};
+}
 
 export default withResistance;

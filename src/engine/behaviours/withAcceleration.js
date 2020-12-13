@@ -1,4 +1,4 @@
-const withAcceleration = (ObjectModel) => {
+function withAcceleration(ObjectModel) {
   function accelerate(dirX, dirY) {
     const { x, y, maxX, maxY } = this.options.acceleration;
 
@@ -25,6 +25,6 @@ const withAcceleration = (ObjectModel) => {
   ObjectModel.prototype.move = move;
 
   return ObjectModel;
-};
+}
 
 export default withAcceleration;

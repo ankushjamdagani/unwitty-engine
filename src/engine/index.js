@@ -133,7 +133,7 @@ class Engine {
 
   // https://stackoverflow.com/questions/19764018/controlling-fps-with-requestanimationframe
   autoPilot() {
-    requestAnimationFrame(this.autoPilot);
+    requestAnimationFrame(this.autoPilot.bind(this));
 
     const { timer } = this.state;
     const now = (performance || Date).now();
