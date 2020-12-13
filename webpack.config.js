@@ -7,12 +7,12 @@ module.exports = {
   entry: { game: './src/game/index.js', engine: './src/engine/index.js' },
   output: {
     filename: '[name].bundle.js',
-    path: path.resolve(__dirname, 'doc'),
+    path: path.resolve(__dirname, 'build'),
     publicPath: '/'
   },
   devtool: 'inline-source-map',
   devServer: {
-    contentBase: './doc'
+    contentBase: './build'
   },
   module: {
     rules: [
