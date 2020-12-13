@@ -5,7 +5,7 @@ import EntityManager from './modules/EntityManager';
 import Renderer from './modules/Renderer';
 import { Vector2D } from './modules/core';
 
-import Styles from './styles.css';
+import './styles.css';
 
 // --------------- GAME LOOP STARTS
 // Get Elements to render
@@ -48,7 +48,7 @@ class Engine {
   destroy() {}
 
   initDomManager() {
-    const { name, width, height, containerDOM } = this.props;
+    const { name, width, height, containerDOM, debug } = this.props;
     const uniqueKey = name || 'demo_game';
     const _width = width || window.innerWidth;
     const _height = height || window.innerHeight;
@@ -63,18 +63,17 @@ class Engine {
     canvasWrapper.setAttribute('class', `wrapper_canvas_demo_game`);
     canvasWrapper.setAttribute('id', `wrapper_canvas_${uniqueKey}`);
 
-    const overlaysWrapper = document.createElement('div');
-    overlaysWrapper.setAttribute('class', `wrapper_overlays_demo_game`);
-    overlaysWrapper.setAttribute('id', `wrapper_overlays_${uniqueKey}`);
-
     wrapper.appendChild(canvasWrapper);
-    wrapper.appendChild(overlaysWrapper);
+
+    if (debug) {
+      const overlaysWrapper = document.createElement('div');
+      overlaysWrapper.setAttribute('class', `wrapper_overlays_demo_game`);
+      overlaysWrapper.setAttribute('id', `wrapper_overlays_${uniqueKey}`);
+
+      wrapper.appendChild(overlaysWrapper);
+    }
 
     (containerDOM || document.body).appendChild(wrapper);
-
-    var style = document.createElement('style');
-    style.innerHTML = Styles;
-    document.head.appendChild(style);
   }
 
   getCanvasWrapper() {

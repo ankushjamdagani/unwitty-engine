@@ -12,7 +12,8 @@ const engine = new GameEngine({
   timeSpeed: 1,
   fps: 100,
   width: WIDTH,
-  height: HEIGHT
+  height: HEIGHT,
+  debug: true
 });
 const { world } = engine.state;
 const { renderer } = engine.managers;

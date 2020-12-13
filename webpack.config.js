@@ -1,6 +1,7 @@
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   mode: 'development',
@@ -10,6 +11,11 @@ module.exports = {
     path: path.resolve(__dirname, 'build'),
     publicPath: '/'
   },
+  optimization: {
+    splitChunks: {
+      chunks: 'all'
+    }
+  },
   devtool: 'inline-source-map',
   devServer: {
     contentBase: './build'
@@ -18,7 +24,7 @@ module.exports = {
     rules: [
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
+        use: [MiniCssExtractPlugin.loader, 'css-loader']
       },
       {
         test: /\.m?js$/,
@@ -52,6 +58,7 @@ module.exports = {
     new CleanWebpackPlugin({ cleanStaleWebpackAssets: false }),
     new HtmlWebpackPlugin({
       template: 'src/game/index.html'
-    })
+    }),
+    new MiniCssExtractPlugin()
   ]
 };
