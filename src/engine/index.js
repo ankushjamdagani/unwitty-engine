@@ -2,7 +2,7 @@
 import * as Constants from './constants';
 
 // eslint-disable-next-line import/no-named-as-default-member
-import mountDebugger from './modules/Debugger';
+import mountEditor from './modules/Editor';
 import ResourceManager from './modules/ResourceManager';
 import EntityManager from './modules/EntityManager';
 import Renderer from './modules/Renderer';
@@ -77,7 +77,7 @@ class Engine {
 
       wrapper.appendChild(overlaysWrapper);
 
-      mountDebugger(`wrapper_overlays_${uniqueKey}`);
+      mountEditor(`wrapper_overlays_${uniqueKey}`, this);
     }
 
     (containerDOM || document.body).appendChild(wrapper);
@@ -179,8 +179,6 @@ class Engine {
         timer.fps = timer.fpsHistory.length;
         timer.fpsLastTick = timer.currTime;
       }
-
-      console.log('FPS :: ', timer.fps);
 
       // Game Loop
       this.update(timer.currTime);
