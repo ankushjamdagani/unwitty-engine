@@ -4,44 +4,120 @@ import { ENTITY_NODE_TYPES, SHAPES, TRANSFORM_ORIGIN } from '../../constants';
 import Camera from './Camera';
 
 // DOC ::  https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial
+const MID_CANVAS_KEY = 'BASE';
+
+/**
+ * @todo::
+ * - what would be data structure for holding canvases
+ * - Track INACTIVE states
+ *   - set lastUpdatedAt for elements :: whether physics should be calculated or not
+ *   - set lastUpdatedAt for canvas :: whether canvas needs to be cleared or not
+ * - create instance of canvas based on zIndex and canvasId
+ *   - maintain order of canvas based on zIndex
+ * - Scene Graph method
+ *   - depth first render
+ *   - check if in camera viewport (cunning)
+ *   - raytracing using light
+ *   - Checks which ones are ideal and don't need updating
+ *      i.e. checks if elements are sleeping
+ */
 class Renderer {
-  init({ state, managers }) {
-    this.props = {
-      resourceManager: managers.resourceManager,
-      screen: state.screen,
-      canvas: state.canvas
+  constructor({ key, width, height, smoothImage, engine }) {
+    const screen = {
+      width: width,
+      height: height,
+      aspectRatio: width / height
     };
-    this.camera = new Camera({
+
+    const camera = new Camera({
       position: Vector2D.zero(),
       rotation: 0,
-      screen: state.screen
+      screen: screen
     });
+
+    this.name = key;
+    this.state = {
+      screen,
+      canvasMap: new Map(),
+      camera,
+      engine,
+      smoothImage,
+      width,
+      height
+    };
+
+    this.addCanvas(MID_CANVAS_KEY);
   }
 
-  // Scene Graph method
-  // - depth first render
-  // - check if in camera viewport (cunning)
-  // - raytracing using light
-  // - Checks which ones are ideal and don't need updating
-  //   i.e. checks if elements are sleeping
-  renderTree(root, time) {
-    const {
-      canvas: { context },
-      screen: { width, height }
-    } = this.props;
-    const camera = this.camera;
+  addCanvas(key) {
+    const { width, height, smoothImage, engine, canvasMap } = this.state;
 
-    context.clearRect(0, 0, width, height);
-    camera.update();
+    if (canvasMap.get(key)) return;
+
+    const wrapper = engine.getCanvasWrapper();
+
+    const canvas = document.createElement('canvas');
+    canvas.setAttribute('id', `${this.name}_${key}`);
+    canvas.width = width;
+    canvas.height = height;
+
+    const context = canvas.getContext('2d');
+    context.mozImageSmoothingEnabled = !!smoothImage;
+    context.webkitImageSmoothingEnabled = !!smoothImage;
+    context.msImageSmoothingEnabled = !!smoothImage;
+    context.imageSmoothingEnabled = !!smoothImage;
+
+    wrapper.appendChild(canvas);
+
+    canvasMap.set(
+      key,
+      new Map([
+        ['canvas', canvas],
+        ['context', context],
+        ['lastUpdatedAt', null],
+        ['isActive', true]
+      ])
+    );
+  }
+
+  bindCamera(target) {
+    this.state.camera.bindTarget(target);
+  }
+
+  getScreenPosition(pos, camera) {
+    return {
+      x: Commons.roundOff(pos.x - camera.position.x),
+      y: Commons.roundOff(pos.y - camera.position.y)
+    };
+  }
+
+  renderTree(root, time) {
+    const { width, height } = this.state.screen;
+
+    this.state.canvasMap.forEach((cv) => {
+      if (cv.get('lastUpdatedAt') - Date.now() < 1000) {
+        cv.get('context').clearRect(0, 0, width, height);
+      } else {
+        cv.set('isActive', false);
+        console.log('----------------');
+      }
+    });
+    this.state.camera.update();
 
     this.renderNode(root, time);
   }
 
   renderNode(element) {
-    const {
-      canvas: { context }
-    } = this.props;
-    const camera = this.camera;
+    const { canvasMap, camera, engine } = this.state;
+    const { resourceManager } = engine.managers;
+
+    const canvasObj = canvasMap.get(element.canvasId || MID_CANVAS_KEY);
+    if (!canvasObj) {
+      this.addCanvas(element.canvasId);
+      return;
+    }
+    const context = canvasObj.get('context');
+    canvasObj.set('lastUpdatedAt', Date.now());
 
     switch (element.type) {
       case ENTITY_NODE_TYPES.WORLD:
@@ -57,7 +133,8 @@ class Renderer {
         context.beginPath();
         this.renderBody(element, {
           context,
-          camera
+          camera,
+          resourceManager
         });
         context.closePath();
 
@@ -91,11 +168,45 @@ class Renderer {
     }
   }
 
-  getScreenPosition(pos, camera) {
-    return {
-      x: Commons.roundOff(pos.x - camera.position.x),
-      y: Commons.roundOff(pos.y - camera.position.y)
-    };
+  renderBody(element, envProps) {
+    const { context, camera, resourceManager } = envProps;
+    const {
+      image,
+      backgroundImage,
+      repeat,
+      backgroundColor,
+      backgroundGradient,
+      borderColor,
+      borderSize
+    } = element.styles;
+
+    const _image = image && resourceManager.get(image);
+    _image && this.renderImage(context, element, camera, _image);
+
+    if (!backgroundColor & !borderColor & !borderSize & !_bgImage) {
+      return;
+    }
+
+    context.fillStyle = backgroundColor || 'transparent';
+    context.strokeStyle = borderColor || 'transparent';
+    context.lineWidth = borderSize || 0;
+
+    const _bgImage = backgroundImage && resourceManager.get(backgroundImage);
+
+    if (_bgImage) {
+      const pattern = context.createPattern(_bgImage, repeat || 'repeat');
+      context.fillStyle = pattern;
+    } else if (backgroundGradient) {
+      console.warn('Gradients are not supported for now');
+    }
+
+    if (element.shape === SHAPES.RECTANGLE) {
+      this.renderRect(context, element, camera);
+    } else if (element.shape === SHAPES.ARC) {
+      this.renderCircle(context, element, camera);
+    } else if (element.shape === SHAPES.POLYGON) {
+      this.renderPolygon(context, element, camera);
+    }
   }
 
   applyTransform(context, element, camera) {
@@ -157,48 +268,6 @@ class Renderer {
     context.transform(a, b, c, d, e + coords[0], f + coords[1]);
     rotate && context.rotate((Math.PI * rotate) / 180);
     context.translate(-coords[0], -coords[1]);
-  }
-
-  renderBody(element, envProps) {
-    const { context, camera } = envProps;
-    const {
-      image,
-      backgroundImage,
-      repeat,
-      backgroundColor,
-      backgroundGradient,
-      borderColor,
-      borderSize
-    } = element.styles;
-
-    const _image = image && this.props.resourceManager.get(image);
-    _image && this.renderImage(context, element, camera, _image);
-
-    if (!backgroundColor & !borderColor & !borderSize & !_bgImage) {
-      return;
-    }
-
-    context.fillStyle = backgroundColor || 'transparent';
-    context.strokeStyle = borderColor || 'transparent';
-    context.lineWidth = borderSize || 0;
-
-    const _bgImage =
-      backgroundImage && this.props.resourceManager.get(backgroundImage);
-
-    if (_bgImage) {
-      const pattern = context.createPattern(_bgImage, repeat || 'repeat');
-      context.fillStyle = pattern;
-    } else if (backgroundGradient) {
-      console.warn('Gradients are not supported for now');
-    }
-
-    if (element.shape === SHAPES.RECTANGLE) {
-      this.renderRect(context, element, camera);
-    } else if (element.shape === SHAPES.ARC) {
-      this.renderCircle(context, element, camera);
-    } else if (element.shape === SHAPES.POLYGON) {
-      this.renderPolygon(context, element, camera);
-    }
   }
 
   renderImage(context, element, camera, image) {

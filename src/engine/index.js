@@ -5,6 +5,8 @@ import EntityManager from './modules/EntityManager';
 import Renderer from './modules/Renderer';
 import { Vector2D } from './modules/core';
 
+import Styles from './styles.css';
+
 // --------------- GAME LOOP STARTS
 // Get Elements to render
 // RENDER                   <- can run in pause state
@@ -23,7 +25,7 @@ import { Vector2D } from './modules/core';
 
 class Engine {
   /**
-   * @prop { canvasId, canvasWidth, canvasHeight, timeSpeed }
+   * @prop { id, width, height, smoothImage, containerDOM, timeSpeed, fps }
    */
   constructor(props = {}) {
     this.props = props;
@@ -31,53 +33,75 @@ class Engine {
     this.managers = {};
 
     this.init();
-    this.postInit();
   }
 
   init() {
-    this.initCanvas();
+    this.initDomManager();
     this.initTimer();
     this.initResourceManager();
     this.initEntityManager();
-    this.initRenderer();
-  }
+    this.initGameRenderer();
 
-  postInit() {
-    this.managers.resourceManager.init &&
-      this.managers.resourceManager.init(this);
-    this.managers.entityManager.init && this.managers.entityManager.init(this);
-    this.managers.renderer.init && this.managers.renderer.init(this);
+    // this.initControlsBar();
   }
 
   destroy() {}
 
-  initCanvas() {
-    const { canvasId, canvasWidth, canvasHeight, smoothImage } = this.props;
+  initDomManager() {
+    const { name, width, height, containerDOM } = this.props;
+    const uniqueKey = name || 'demo_game';
+    const _width = width || window.innerWidth;
+    const _height = height || window.innerHeight;
 
-    const canvas = document.createElement('canvas');
-    canvas.setAttribute('id', canvasId);
-    canvas.style.cursor = 'crosshair'; // or none
-    canvas.width = canvasWidth || window.innerWidth;
-    canvas.height = canvasHeight || window.innerHeight;
+    const wrapper = document.createElement('div');
+    wrapper.setAttribute('class', `wrapper_demo_game`);
+    wrapper.setAttribute('id', `wrapper_${uniqueKey}`);
+    wrapper.style.width = `${_width}px`;
+    wrapper.style.height = `${_height}px`;
 
-    document.body.appendChild(canvas);
+    const canvasWrapper = document.createElement('div');
+    canvasWrapper.setAttribute('class', `wrapper_canvas_demo_game`);
+    canvasWrapper.setAttribute('id', `wrapper_canvas_${uniqueKey}`);
 
-    const ctx = canvas.getContext('2d');
-    ctx.mozImageSmoothingEnabled = !!smoothImage;
-    ctx.webkitImageSmoothingEnabled = !!smoothImage;
-    ctx.msImageSmoothingEnabled = !!smoothImage;
-    ctx.imageSmoothingEnabled = !!smoothImage;
+    const overlaysWrapper = document.createElement('div');
+    overlaysWrapper.setAttribute('class', `wrapper_overlays_demo_game`);
+    overlaysWrapper.setAttribute('id', `wrapper_overlays_${uniqueKey}`);
 
-    this.state.canvas = {
-      element: canvas,
-      context: ctx
-    };
+    wrapper.appendChild(canvasWrapper);
+    wrapper.appendChild(overlaysWrapper);
 
-    this.state.screen = {
-      width: canvas.width,
-      height: canvas.height,
-      aspectRatio: canvas.width / canvas.height
-    };
+    (containerDOM || document.body).appendChild(wrapper);
+
+    var style = document.createElement('style');
+    style.innerHTML = Styles;
+    document.head.appendChild(style);
+  }
+
+  getCanvasWrapper() {
+    const { name } = this.props;
+    const uniqueKey = name || 'demo_game';
+    return document.getElementById(`wrapper_canvas_${uniqueKey}`);
+  }
+
+  getOverlaysWrapper() {
+    const { name } = this.props;
+    const uniqueKey = name || 'demo_game';
+    return document.getElementById(`wrapper_overlays_${uniqueKey}`);
+  }
+
+  initGameRenderer() {
+    const { name, width, height, smoothImage } = this.props;
+    const uniqueKey = name || 'demo_game';
+    const _width = width || window.innerWidth;
+    const _height = height || window.innerHeight;
+
+    this.managers.renderer = new Renderer({
+      key: uniqueKey,
+      width: _width,
+      height: _height,
+      smoothImage,
+      engine: this
+    });
   }
 
   // Take frame per second in consideration
@@ -125,10 +149,6 @@ class Engine {
     this.managers.entityManager = entityManager;
     this.state.world = world;
     this.state.light = light;
-  }
-
-  initRenderer() {
-    this.managers.renderer = new Renderer();
   }
 
   // https://stackoverflow.com/questions/19764018/controlling-fps-with-requestanimationframe

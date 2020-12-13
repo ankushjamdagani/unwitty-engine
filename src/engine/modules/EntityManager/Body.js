@@ -1,8 +1,8 @@
-import { SHAPES, ENTITY_NODE_TYPES } from "../../constants";
-import Vector2D from "../core/Vector2D";
-import Commons from "../core/Commons";
+import { SHAPES, ENTITY_NODE_TYPES } from '../../constants';
+import Vector2D from '../core/Vector2D';
+import Commons from '../core/Commons';
 
-import _node from "./_node";
+import _node from './_node';
 
 const defaultState = {
   shape: SHAPES.RECTANGLE,
@@ -11,8 +11,8 @@ const defaultState = {
   boundingBox: {
     margins: [0, 0, 0, 0],
     shape: SHAPES.RECTANGLE,
-    color: "red",
-  },
+    color: 'red'
+  }
 };
 
 // Styles and textures will be applied to all children as well
@@ -35,6 +35,7 @@ class Body extends _node {
 
       styles, // backgroundColor, backgroundImage, backgroundGradient, borderColor, borderSize
 
+      canvasId,
       debug = defaultState.debug,
       // collision box?
       boundingBox = defaultState.boundingBox,
@@ -59,6 +60,7 @@ class Body extends _node {
 
     this.styles = styles;
 
+    this.canvasId = canvasId;
     this.debug = debug;
     this.boundingBox = { ...defaultState.boundingBox, ...boundingBox };
 
@@ -74,13 +76,13 @@ class Body extends _node {
       position: cPosition,
       boundingBox: { margins: cBoundingBoxMargin },
       width: cWidth,
-      height: cHeight,
+      height: cHeight
     } = child;
     const {
       position: pPosition,
       boundingBox: { margins: pBoundingBoxMargin },
       width: pWidth,
-      height: pHeight,
+      height: pHeight
     } = this;
 
     const xMin = Commons.minimum(
@@ -105,7 +107,7 @@ class Body extends _node {
       pPosition.y - yMin,
       xMax - (pPosition.x + pWidth),
       yMax - (pPosition.y + pHeight),
-      pPosition.x - xMin,
+      pPosition.x - xMin
     ];
 
     this.parent.onAddChilren(this);
@@ -131,7 +133,7 @@ Body.createArc = ({
     endAngle,
     radius,
     position,
-    ...restProps,
+    ...restProps
   });
 };
 
@@ -141,7 +143,7 @@ Body.createRectangle = ({ width, height, position, ...restProps }) => {
     width,
     height,
     position,
-    ...restProps,
+    ...restProps
   });
 };
 
@@ -166,7 +168,7 @@ Body.createPolygon = ({ vertices, eddges, position, ...restProps }) => {
     position,
     vertices,
     eddges,
-    ...restProps,
+    ...restProps
   });
 };
 

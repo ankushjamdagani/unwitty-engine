@@ -1,0 +1,32 @@
+.wrapper_demo_game {
+  background: #000000;
+  position: relative;
+}
+
+.wrapper_canvas_demo_game {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+.wrapper_canvas_demo_game canvas {
+  background: transparent;
+  margin: 0 auto;
+  display: block;
+  cursor: crosshair;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.wrapper_overlays_demo_game {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}

@@ -8,7 +8,12 @@ const { Body, Transform } = GameEngine.helpers;
 const WIDTH = window.innerWidth;
 const HEIGHT = window.innerHeight;
 
-const engine = new GameEngine({ canvasId: 'test-1', timeSpeed: 1, fps: 100 });
+const engine = new GameEngine({
+  timeSpeed: 1,
+  fps: 100,
+  width: WIDTH,
+  height: HEIGHT
+});
 const { world } = engine.state;
 const { renderer } = engine.managers;
 
@@ -82,7 +87,7 @@ window.addEventListener('mousemove', (evt) => {
   };
 });
 
-renderer.camera.bindTarget(mouse);
+renderer.bindCamera(mouse);
 
 world.add(bg);
 world.add(transform1);

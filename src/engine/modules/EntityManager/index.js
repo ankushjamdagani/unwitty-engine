@@ -8,7 +8,6 @@ import FluidBody from './FluidBody';
 
 class EntityManager {
   constructor() {
-    this.parentIndex = new Map();
     this.root = null;
   }
 
