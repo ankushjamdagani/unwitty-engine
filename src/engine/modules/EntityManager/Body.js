@@ -35,7 +35,7 @@ class Body extends _node {
 
       styles, // backgroundColor, backgroundImage, backgroundGradient, borderColor, borderSize
 
-      canvasIndex,
+      canvasId,
       debug = defaultState.debug,
       // collision box?
       boundingBox = defaultState.boundingBox,
@@ -60,7 +60,7 @@ class Body extends _node {
 
     this.styles = styles;
 
-    this.canvasIndex = canvasIndex;
+    this.canvasId = canvasId;
     this.debug = debug;
     this.boundingBox = { ...defaultState.boundingBox, ...boundingBox };
 

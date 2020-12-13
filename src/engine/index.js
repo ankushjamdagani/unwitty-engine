@@ -5,6 +5,8 @@ import EntityManager from './modules/EntityManager';
 import Renderer from './modules/Renderer';
 import { Vector2D } from './modules/core';
 
+import Styles from './styles.css';
+
 // --------------- GAME LOOP STARTS
 // Get Elements to render
 // RENDER                   <- can run in pause state
@@ -46,70 +48,58 @@ class Engine {
   destroy() {}
 
   initDomManager() {
-    const { id, width, height, containerDOM } = this.props;
-    const uniqueKey = id || 'game_canvas';
+    const { name, width, height, containerDOM } = this.props;
+    const uniqueKey = name || 'demo_game';
     const _width = width || window.innerWidth;
     const _height = height || window.innerHeight;
 
     const wrapper = document.createElement('div');
+    wrapper.setAttribute('class', `wrapper_demo_game`);
     wrapper.setAttribute('id', `wrapper_${uniqueKey}`);
     wrapper.style.width = `${_width}px`;
     wrapper.style.height = `${_height}px`;
 
     const canvasWrapper = document.createElement('div');
+    canvasWrapper.setAttribute('class', `wrapper_canvas_demo_game`);
     canvasWrapper.setAttribute('id', `wrapper_canvas_${uniqueKey}`);
-    canvasWrapper.style.width = `${_width}px`;
-    canvasWrapper.style.height = `${_height}px`;
 
     const overlaysWrapper = document.createElement('div');
+    overlaysWrapper.setAttribute('class', `wrapper_overlays_demo_game`);
     overlaysWrapper.setAttribute('id', `wrapper_overlays_${uniqueKey}`);
-    overlaysWrapper.style.width = `${_width}px`;
-    overlaysWrapper.style.height = `${_height}px`;
 
     wrapper.appendChild(canvasWrapper);
     wrapper.appendChild(overlaysWrapper);
 
     (containerDOM || document.body).appendChild(wrapper);
+
+    var style = document.createElement('style');
+    style.innerHTML = Styles;
+    document.head.appendChild(style);
   }
 
   getCanvasWrapper() {
-    const { id } = this.props;
-    const uniqueKey = id || 'game_canvas';
+    const { name } = this.props;
+    const uniqueKey = name || 'demo_game';
     return document.getElementById(`wrapper_canvas_${uniqueKey}`);
   }
 
   getOverlaysWrapper() {
-    const { id } = this.props;
-    const uniqueKey = id || 'game_canvas';
+    const { name } = this.props;
+    const uniqueKey = name || 'demo_game';
     return document.getElementById(`wrapper_overlays_${uniqueKey}`);
   }
 
   initGameRenderer() {
-    const { id, width, height, smoothImage } = this.props;
-    const uniqueKey = id || 'game_canvas';
+    const { name, width, height, smoothImage } = this.props;
+    const uniqueKey = name || 'demo_game';
     const _width = width || window.innerWidth;
     const _height = height || window.innerHeight;
 
-    const canvasWrapper = this.getCanvasWrapper();
-
-    const canvas = document.createElement('canvas');
-    canvas.setAttribute('id', uniqueKey);
-    canvas.style.cursor = 'crosshair'; // or none
-    canvas.width = _width;
-    canvas.height = _height;
-
-    canvasWrapper.appendChild(canvas);
-
-    const context = canvas.getContext('2d');
-    context.mozImageSmoothingEnabled = !!smoothImage;
-    context.webkitImageSmoothingEnabled = !!smoothImage;
-    context.msImageSmoothingEnabled = !!smoothImage;
-    context.imageSmoothingEnabled = !!smoothImage;
-
     this.managers.renderer = new Renderer({
       key: uniqueKey,
-      canvas,
-      context,
+      width: _width,
+      height: _height,
+      smoothImage,
       engine: this
     });
   }
@@ -168,8 +158,6 @@ class Engine {
     const { timer } = this.state;
     const now = (performance || Date).now();
     const elapsed = now - timer.lastTime;
-
-    console.log(elapsed);
 
     timer.currTime = now;
     if (elapsed >= timer.deltaTime) {

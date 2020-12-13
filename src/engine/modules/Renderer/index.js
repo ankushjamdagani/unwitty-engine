@@ -4,12 +4,29 @@ import { ENTITY_NODE_TYPES, SHAPES, TRANSFORM_ORIGIN } from '../../constants';
 import Camera from './Camera';
 
 // DOC ::  https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial
+const MID_CANVAS_KEY = 'BASE';
+
+/**
+ * @todo::
+ * - what would be data structure for holding canvases
+ * - Track INACTIVE states
+ *   - set lastUpdatedAt for elements :: whether physics should be calculated or not
+ *   - set lastUpdatedAt for canvas :: whether canvas needs to be cleared or not
+ * - create instance of canvas based on zIndex and canvasId
+ *   - maintain order of canvas based on zIndex
+ * - Scene Graph method
+ *   - depth first render
+ *   - check if in camera viewport (cunning)
+ *   - raytracing using light
+ *   - Checks which ones are ideal and don't need updating
+ *      i.e. checks if elements are sleeping
+ */
 class Renderer {
-  constructor({ key, canvas, context, engine }) {
+  constructor({ key, width, height, smoothImage, engine }) {
     const screen = {
-      width: canvas.width,
-      height: canvas.height,
-      aspectRatio: canvas.width / canvas.height
+      width: width,
+      height: height,
+      aspectRatio: width / height
     };
 
     const camera = new Camera({
@@ -18,24 +35,49 @@ class Renderer {
       screen: screen
     });
 
-    this.key = key;
+    this.name = key;
+    this.state = {
+      screen,
+      canvasMap: new Map(),
+      camera,
+      engine,
+      smoothImage,
+      width,
+      height
+    };
 
-    const canvasMap = new Map();
+    this.addCanvas(MID_CANVAS_KEY);
+  }
+
+  addCanvas(key) {
+    const { width, height, smoothImage, engine, canvasMap } = this.state;
+
+    if (canvasMap.get(key)) return;
+
+    const wrapper = engine.getCanvasWrapper();
+
+    const canvas = document.createElement('canvas');
+    canvas.setAttribute('id', `${this.name}_${key}`);
+    canvas.width = width;
+    canvas.height = height;
+
+    const context = canvas.getContext('2d');
+    context.mozImageSmoothingEnabled = !!smoothImage;
+    context.webkitImageSmoothingEnabled = !!smoothImage;
+    context.msImageSmoothingEnabled = !!smoothImage;
+    context.imageSmoothingEnabled = !!smoothImage;
+
+    wrapper.appendChild(canvas);
+
     canvasMap.set(
-      1,
+      key,
       new Map([
         ['canvas', canvas],
         ['context', context],
-        ['lastUpdatedAt', null]
+        ['lastUpdatedAt', null],
+        ['isActive', true]
       ])
     );
-
-    this.state = {
-      screen,
-      canvasMap,
-      camera,
-      engine
-    };
   }
 
   bindCamera(target) {
@@ -49,20 +91,17 @@ class Renderer {
     };
   }
 
-  // Scene Graph method
-  // - depth first render
-  // - check if in camera viewport (cunning)
-  // - raytracing using light
-  // - Checks which ones are ideal and don't need updating
-  //   i.e. checks if elements are sleeping
   renderTree(root, time) {
     const { width, height } = this.state.screen;
 
-    this.state.canvasMap.forEach((cv) =>
-      cv.get('lastUpdatedAt') - Date.now() < 1000
-        ? cv.get('context').clearRect(0, 0, width, height)
-        : null
-    );
+    this.state.canvasMap.forEach((cv) => {
+      if (cv.get('lastUpdatedAt') - Date.now() < 1000) {
+        cv.get('context').clearRect(0, 0, width, height);
+      } else {
+        cv.set('isActive', false);
+        console.log('----------------');
+      }
+    });
     this.state.camera.update();
 
     this.renderNode(root, time);
@@ -72,9 +111,9 @@ class Renderer {
     const { canvasMap, camera, engine } = this.state;
     const { resourceManager } = engine.managers;
 
-    // Track INACTIVE elements and canvas :: set last updated at for elements and canvas
-    const canvasObj = canvasMap.get(element.canvasIndex || 1);
+    const canvasObj = canvasMap.get(element.canvasId || MID_CANVAS_KEY);
     if (!canvasObj) {
+      this.addCanvas(element.canvasId);
       return;
     }
     const context = canvasObj.get('context');

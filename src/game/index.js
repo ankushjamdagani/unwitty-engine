@@ -73,7 +73,6 @@ const bg = Body.createRectangle({
   position: [0, 0],
   width: WIDTH,
   height: HEIGHT,
-  canvasIndex: -1,
   styles: {
     backgroundColor: '#000'
   },
