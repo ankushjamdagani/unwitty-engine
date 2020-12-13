@@ -30,6 +30,20 @@ const uid = () => {
   );
 };
 
+const throttle = (fn, time) => {
+  let timer = null;
+  return function (...args) {
+    if (timer) {
+      return;
+    }
+
+    timer = setTimeout(() => {
+      fn.apply(this, args);
+      timer = null;
+    }, time);
+  };
+};
+
 export default {
   roundOff,
   minimum,
@@ -38,5 +52,6 @@ export default {
   isPositive,
   isNegative,
   hasValue,
-  uid
+  uid,
+  throttle
 };

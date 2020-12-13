@@ -1,4 +1,4 @@
-function CreateRectangle({
+const CreateRectangle = ({
   ctx,
   x,
   y,
@@ -7,7 +7,7 @@ function CreateRectangle({
   fillColor,
   strokeColor,
   strokeSize = 0
-}) {
+}) => {
   ctx.beginPath();
   if (fillColor) {
     ctx.fillStyle = fillColor;
@@ -20,8 +20,9 @@ function CreateRectangle({
   }
 
   ctx.closePath();
-}
-function CreateCircle({
+};
+
+const CreateCircle = ({
   ctx,
   x,
   y,
@@ -31,7 +32,7 @@ function CreateCircle({
   fillColor,
   strokeColor,
   strokeSize = 0
-}) {
+}) => {
   ctx.beginPath();
   if (fillColor) {
     ctx.fillStyle = fillColor;
@@ -48,16 +49,16 @@ function CreateCircle({
     ctx.stroke();
   }
   ctx.closePath();
-}
+};
 
-function CreateText({ ctx, text, x, y, fontColor, font }) {
+const CreateText = ({ ctx, text, x, y, fontColor, font }) => {
   ctx.fillStyle = fontColor;
   ctx.font = font;
   ctx.fillText(text, x, y);
-}
+};
 
-function CreateImage({ ctx, image, x, y, width, height }) {
+const CreateImage = ({ ctx, image, x, y, width, height }) => {
   ctx.drawImage(image, x, y, width, height);
-}
+};
 
 export { CreateRectangle, CreateCircle, CreateText, CreateImage };

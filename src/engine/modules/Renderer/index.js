@@ -1,7 +1,7 @@
-import { Vector2D, Commons } from "../core";
-import { ENTITY_NODE_TYPES, SHAPES, TRANSFORM_ORIGIN } from "../../constants";
+import { Vector2D, Commons } from '../core';
+import { ENTITY_NODE_TYPES, SHAPES, TRANSFORM_ORIGIN } from '../../constants';
 
-import Camera from "./Camera";
+import Camera from './Camera';
 
 // DOC ::  https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial
 class Renderer {
@@ -9,12 +9,12 @@ class Renderer {
     this.props = {
       resourceManager: managers.resourceManager,
       screen: state.screen,
-      canvas: state.canvas,
+      canvas: state.canvas
     };
     this.camera = new Camera({
       position: Vector2D.zero(),
       rotation: 0,
-      screen: state.screen,
+      screen: state.screen
     });
   }
 
@@ -24,22 +24,22 @@ class Renderer {
   // - raytracing using light
   // - Checks which ones are ideal and don't need updating
   //   i.e. checks if elements are sleeping
-  renderTree(root) {
+  renderTree(root, time) {
     const {
       canvas: { context },
-      screen: { width, height },
+      screen: { width, height }
     } = this.props;
     const camera = this.camera;
 
     context.clearRect(0, 0, width, height);
     camera.update();
 
-    this.renderNode(root);
+    this.renderNode(root, time);
   }
 
   renderNode(element) {
     const {
-      canvas: { context },
+      canvas: { context }
     } = this.props;
     const camera = this.camera;
 
@@ -57,7 +57,7 @@ class Renderer {
         context.beginPath();
         this.renderBody(element, {
           context,
-          camera,
+          camera
         });
         context.closePath();
 
@@ -94,7 +94,7 @@ class Renderer {
   getScreenPosition(pos, camera) {
     return {
       x: Commons.roundOff(pos.x - camera.position.x),
-      y: Commons.roundOff(pos.y - camera.position.y),
+      y: Commons.roundOff(pos.y - camera.position.y)
     };
   }
 
@@ -106,7 +106,7 @@ class Renderer {
       position,
       width,
       height,
-      origin,
+      origin
     } = element;
 
     let coords;
@@ -168,7 +168,7 @@ class Renderer {
       backgroundColor,
       backgroundGradient,
       borderColor,
-      borderSize,
+      borderSize
     } = element.styles;
 
     const _image = image && this.props.resourceManager.get(image);
@@ -178,18 +178,18 @@ class Renderer {
       return;
     }
 
-    context.fillStyle = backgroundColor || "transparent";
-    context.strokeStyle = borderColor || "transparent";
+    context.fillStyle = backgroundColor || 'transparent';
+    context.strokeStyle = borderColor || 'transparent';
     context.lineWidth = borderSize || 0;
 
     const _bgImage =
       backgroundImage && this.props.resourceManager.get(backgroundImage);
 
     if (_bgImage) {
-      const pattern = context.createPattern(_bgImage, repeat || "repeat");
+      const pattern = context.createPattern(_bgImage, repeat || 'repeat');
       context.fillStyle = pattern;
     } else if (backgroundGradient) {
-      console.warn("Gradients are not supported for now");
+      console.warn('Gradients are not supported for now');
     }
 
     if (element.shape === SHAPES.RECTANGLE) {
