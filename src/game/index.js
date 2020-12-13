@@ -10,7 +10,7 @@ const HEIGHT = window.innerHeight;
 
 const engine = new GameEngine({
   timeSpeed: 1,
-  fps: 100,
+  fps: 60,
   width: WIDTH,
   height: HEIGHT,
   debug: true

@@ -1,14 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+
+import FPSDebugger from './components/FPSDebugger';
 
 const App = ({ engine: { state } }) => {
-  console.log(state.timer.fps);
+  const [abc, setAbc] = useState(1);
+  useEffect(() => {
+    setInterval(() => {
+      setAbc(abc + 1);
+    }, 100);
+  }, []);
+
   return (
     <div
       style={{
         color: 'white'
       }}
     >
-      Happy debugging !
+      <FPSDebugger fps={state.timer.fps} />
     </div>
   );
 };

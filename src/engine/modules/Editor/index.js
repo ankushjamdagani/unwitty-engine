@@ -13,10 +13,7 @@ async function mountEditor(id, engine) {
   //   console.log(changes);
   // });
   setTimeout(() => {
-    ReactDOM.render(
-      <App engine={engine} state={engine.state} />,
-      document.getElementById(id)
-    );
+    ReactDOM.render(<App engine={engine} />, document.getElementById(id));
   }, 100);
 }
 
