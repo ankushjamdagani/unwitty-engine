@@ -19,7 +19,7 @@ const { world } = engine.state;
 const { renderer } = engine.managers;
 
 const mouse = {
-  position: { x: 0, y: 0 }
+  position: { x: WIDTH / 2, y: HEIGHT / 2 }
 };
 
 const transform1 = new Transform({
