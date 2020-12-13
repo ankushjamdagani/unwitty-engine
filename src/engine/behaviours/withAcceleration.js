@@ -1,3 +1,4 @@
+/* eslint-disable */
 function withAcceleration(ObjectModel) {
   function accelerate(dirX, dirY) {
     const { x, y, maxX, maxY } = this.options.acceleration;

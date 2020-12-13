@@ -1,5 +1,8 @@
+/* eslint-disable import/no-named-as-default */
 import * as Constants from './constants';
 
+// eslint-disable-next-line import/no-named-as-default-member
+import mountDebugger from './modules/Debugger';
 import ResourceManager from './modules/ResourceManager';
 import EntityManager from './modules/EntityManager';
 import Renderer from './modules/Renderer';
@@ -45,7 +48,9 @@ class Engine {
     // this.initControlsBar();
   }
 
-  destroy() {}
+  destroy() {
+    return this;
+  }
 
   initDomManager() {
     const { name, width, height, containerDOM, debug } = this.props;
@@ -71,6 +76,8 @@ class Engine {
       overlaysWrapper.setAttribute('id', `wrapper_overlays_${uniqueKey}`);
 
       wrapper.appendChild(overlaysWrapper);
+
+      mountDebugger(`wrapper_overlays_${uniqueKey}`);
     }
 
     (containerDOM || document.body).appendChild(wrapper);
@@ -109,9 +116,9 @@ class Engine {
     const currTime = (performance || Date).now();
 
     this.state.timer = {
-      timeSpeed: timeSpeed,
+      timeSpeed,
       lastTime: currTime,
-      currTime: currTime,
+      currTime,
       deltaTime: 1000 / fps,
       fps: 0,
       fpsLastTick: 0,

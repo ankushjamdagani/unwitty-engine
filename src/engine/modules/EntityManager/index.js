@@ -26,43 +26,31 @@ class EntityManager {
     items.push(elem);
 
     if (elem.children && elem.children.size) {
-      for (const [, val] of elem.children) {
-        items = items.concat(this.getItemsToRender(val));
-      }
+      elem.children.forEach((el) => {
+        items = items.concat(this.getItemsToRender(el));
+      });
     }
     return items;
   }
 
-  getEntityById() {}
+  getEntityById() {
+    return this;
+  }
 }
 
-EntityManager.createWorld = (props) => {
-  return new World(props);
-};
+EntityManager.createWorld = (props) => new World(props);
 
-EntityManager.createLight = (props) => {
-  return new Light(props);
-};
+EntityManager.createLight = (props) => new Light(props);
 
-EntityManager.createTransform = (props) => {
-  return new Transform(props);
-};
+EntityManager.createTransform = (props) => new Transform(props);
 
-EntityManager.createLayer = (props) => {
-  return new Layer(props);
-};
+EntityManager.createLayer = (props) => new Layer(props);
 
-EntityManager.createBody = (props) => {
-  return new Body(props);
-};
+EntityManager.createBody = (props) => new Body(props);
 
-EntityManager.createPhysicsBody = (props) => {
-  return new PhysicsBody(props);
-};
+EntityManager.createPhysicsBody = (props) => new PhysicsBody(props);
 
-EntityManager.createFluidBody = (props) => {
-  return new FluidBody(props);
-};
+EntityManager.createFluidBody = (props) => new FluidBody(props);
 
 EntityManager.World = World;
 EntityManager.Light = Light;

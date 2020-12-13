@@ -24,15 +24,15 @@ const MID_CANVAS_KEY = 'BASE';
 class Renderer {
   constructor({ key, width, height, smoothImage, engine }) {
     const screen = {
-      width: width,
-      height: height,
+      width,
+      height,
       aspectRatio: width / height
     };
 
     const camera = new Camera({
       position: Vector2D.zero(),
       rotation: 0,
-      screen: screen
+      screen
     });
 
     this.name = key;
@@ -84,7 +84,7 @@ class Renderer {
     this.state.camera.bindTarget(target);
   }
 
-  getScreenPosition(pos, camera) {
+  static getScreenPosition(pos, camera) {
     return {
       x: Commons.roundOff(pos.x - camera.position.x),
       y: Commons.roundOff(pos.y - camera.position.y)
@@ -152,9 +152,9 @@ class Renderer {
       }
     }
 
-    for (const [, val] of element.children) {
-      this.renderNode(val);
-    }
+    element.children.forEach((el) => {
+      this.renderNode(el);
+    });
 
     switch (element.type) {
       case ENTITY_NODE_TYPES.TRANSFORM:
@@ -183,6 +183,8 @@ class Renderer {
     const _image = image && resourceManager.get(image);
     _image && this.renderImage(context, element, camera, _image);
 
+    const _bgImage = backgroundImage && resourceManager.get(backgroundImage);
+
     if (!backgroundColor & !borderColor & !borderSize & !_bgImage) {
       return;
     }
@@ -190,8 +192,6 @@ class Renderer {
     context.fillStyle = backgroundColor || 'transparent';
     context.strokeStyle = borderColor || 'transparent';
     context.lineWidth = borderSize || 0;
-
-    const _bgImage = backgroundImage && resourceManager.get(backgroundImage);
 
     if (_bgImage) {
       const pattern = context.createPattern(_bgImage, repeat || 'repeat');
@@ -301,7 +301,7 @@ class Renderer {
 
     context.moveTo(x + vertices[0][0], y + vertices[0][1]);
 
-    for (let i = 0; i < vertices.length; i++) {
+    for (let i = 0; i < vertices.length; i += 1) {
       const vertex = vertices[i]; // x, y, type :: moveTo, arc, lineTo, quadraticCurveTo, bezierCurveTo etc.
       context.lineTo(x + vertex[0], y + vertex[1]);
     }

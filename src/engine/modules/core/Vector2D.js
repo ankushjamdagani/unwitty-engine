@@ -135,17 +135,13 @@ class Vector2D {
  * https://www.mathsisfun.com/algebra/vectors-dot-product.html
  * or |v1| * |v2| * cos(theta)
  */
-Vector2D.dotProduct = (v1, v2) => {
-  return v1.x * v2.x + v1.y * v2.y;
-};
+Vector2D.dotProduct = (v1, v2) => v1.x * v2.x + v1.y * v2.y;
 
 /**
  * https://www.mathsisfun.com/algebra/vectors-cross-product.html
  * or |v1| * |v2| * sin(theta) * UnitVector
  */
-Vector2D.crossProduct = (v1, v2) => {
-  return v1.x * v2.y - v1.y * v2.x;
-};
+Vector2D.crossProduct = (v1, v2) => v1.x * v2.y - v1.y * v2.x;
 
 // Projecting v2 onto v1
 Vector2D.project = (v1, v2) => {
@@ -165,17 +161,15 @@ Vector2D.distSq = (v1, v2) => {
   return dx * dx + dy * dy;
 };
 
-Vector2D.getAngle = (v1, v2) => {
-  return Math.acos(Vector2D.dotProduct(v1, v2) / (v1.mag() * v2.mag()));
-};
+Vector2D.getAngle = (v1, v2) =>
+  Math.acos(Vector2D.dotProduct(v1, v2) / (v1.mag() * v2.mag()));
 
-Vector2D.polarToCartesian = (r, theta) => {
-  return [r * Math.cos(theta), r * Math.sin(theta)];
-};
+Vector2D.polarToCartesian = (r, theta) => [
+  r * Math.cos(theta),
+  r * Math.sin(theta)
+];
 
-Vector2D.cartesianToPolar = (v1) => {
-  return [v1.mag(), Math.atan(v1.y / v1.x)];
-};
+Vector2D.cartesianToPolar = (v1) => [v1.mag(), Math.atan(v1.y / v1.x)];
 
 // returns unit vector pointing in random direction
 Vector2D.getRandom = (mag = 1) => {
@@ -183,8 +177,6 @@ Vector2D.getRandom = (mag = 1) => {
   return new Vector2D(x, y);
 };
 
-Vector2D.zero = () => {
-  return new Vector2D(0, 0);
-};
+Vector2D.zero = () => new Vector2D(0, 0);
 
 export default Vector2D;

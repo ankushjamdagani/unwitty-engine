@@ -1,4 +1,4 @@
-import { RESOURCE_TYPE } from "../../constants";
+import { RESOURCE_TYPE } from '../../constants';
 
 class ResourceManager {
   constructor() {
@@ -6,21 +6,21 @@ class ResourceManager {
   }
 
   loadResources(resources = [], cb) {
-    for (let i = 0; i < resources.length; i++) {
+    for (let i = 0; i < resources.length; i += 1) {
       const { type = RESOURCE_TYPE.IMAGE, key = Date.now(), src } = resources[
         i
       ];
       if (!type) {
-        console.warn("Resource TYPE is required");
+        console.warn('Resource TYPE is required');
         return;
       }
       if (!src) {
-        console.warn("Resource SRC is required");
+        console.warn('Resource SRC is required');
         return;
       }
       if (type === RESOURCE_TYPE.AUDIO) {
         const ro = new Audio(src);
-        ro.addEventListener("canplaythrough", () => {
+        ro.addEventListener('canplaythrough', () => {
           if (this.assets[key]) {
             return;
           }
@@ -43,7 +43,7 @@ class ResourceManager {
   }
 
   removeResources(keys) {
-    for (let i = 0; i < keys.length; i++) {
+    for (let i = 0; i < keys.length; i += 1) {
       const key = keys[i];
       this.resources.delete(key);
     }
