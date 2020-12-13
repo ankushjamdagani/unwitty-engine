@@ -3,11 +3,15 @@ import React, { useState, useEffect } from 'react';
 import FPSDebugger from './components/FPSDebugger';
 
 const App = ({ engine: { state } }) => {
-  const [abc, setAbc] = useState(1);
+  const [, setAbc] = useState(1);
   useEffect(() => {
-    setInterval(() => {
-      setAbc(abc + 1);
+    const interval = setInterval(() => {
+      setAbc((abc) => abc + 1);
     }, 100);
+
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
   return (
