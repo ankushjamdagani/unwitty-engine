@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { maximum, minimum } from '../helpers/Math';
 
 function withResistance(ObjectModel) {

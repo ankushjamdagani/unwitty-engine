@@ -1,7 +1,7 @@
 import { Commons } from '../core';
 
 class _node {
-  constructor({ label, entity, children } = {}) {
+  constructor({ label, entity, parent, children } = {}) {
     this.id = Commons.uid();
     this.label = label;
     this.type = null;
@@ -20,7 +20,9 @@ class _node {
     this.parent.onAddChilren(this);
   }
 
-  onAddChilren() {}
+  onAddChilren() {
+    return this;
+  }
 }
 
 export default _node;

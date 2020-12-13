@@ -55,7 +55,7 @@ class GameEngine extends Component {
       activeState: GAME_STATES.HOME,
       score: 0,
       level: 1,
-      lives: 3,
+      // lives: 3,
       env
     };
 
@@ -66,6 +66,18 @@ class GameEngine extends Component {
       gameDialogSceneInstance,
       resultsSceneInstance
     };
+  }
+
+  getScore() {
+    return this.state.score;
+  }
+
+  getState() {
+    return this.state.activeState;
+  }
+
+  getLevel() {
+    return this.state.level;
   }
 
   init() {
@@ -98,18 +110,6 @@ class GameEngine extends Component {
     } else if (key === KEY_CODES.M) {
       env.audioHandler.mute();
     }
-  }
-
-  getScore() {
-    return this.state.score;
-  }
-
-  getState() {
-    return this.state.activeState;
-  }
-
-  getLevel() {
-    return this.state.level;
   }
 
   changeScore(score) {

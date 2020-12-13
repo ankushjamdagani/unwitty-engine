@@ -42,7 +42,7 @@ class AudioHandler extends Component {
   bindToContext(key, asset) {
     const { audioContext } = this.state;
     const track = audioContext.createMediaElementSource(asset);
-    var gain = audioContext.createGain();
+    const gain = audioContext.createGain();
 
     gain.gain.value = 0.5;
 
@@ -77,6 +77,7 @@ class AudioHandler extends Component {
 
   mute() {
     console.log('Muting');
+    return this;
   }
 }
 

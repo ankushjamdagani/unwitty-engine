@@ -30,7 +30,7 @@ class Camera {
   update() {
     if (this.target) {
       const {
-        position: { x, y },
+        position: { x, y }
       } = this.target;
       const { width, height } = this.screen;
 

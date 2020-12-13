@@ -194,9 +194,10 @@ class PlaygroundScene extends Component {
       } else if (ball.state.y + ball.props.radius >= height) {
         // gameInstance.changeState(GAME_STATES.END);
       } else {
-        for (let brIdx = 0; brIdx < bricks.length; brIdx++) {
+        for (let brIdx = 0; brIdx < bricks.length; brIdx += 1) {
           const brick = bricks[brIdx];
           if (brick.disabled) {
+            // eslint-disable-next-line no-continue
             continue;
           }
           const brickCollisionVector = CollisionHandler.isCircleCollidingRect(

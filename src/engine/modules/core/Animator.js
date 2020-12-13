@@ -16,7 +16,9 @@ function Animator({
   this.iterationCount = 0;
 
   const get = () => this.activeVal;
-  const set = (val) => (this.activeVal = val);
+  const set = (val) => {
+    this.activeVal = val;
+  };
   const update = () => {
     if (this.iterationCount > iterationCount) {
       return;

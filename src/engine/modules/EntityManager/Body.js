@@ -114,9 +114,8 @@ class Body extends _node {
   }
 }
 
-Body.getDebugMessage = (body) => {
-  return `Pos :: ${body.position.x}, ${body.position.y}`;
-};
+Body.getDebugMessage = (body) =>
+  `Pos :: ${body.position.x}, ${body.position.y}`;
 
 Body.createArc = ({
   radius,
@@ -124,8 +123,8 @@ Body.createArc = ({
   endAngle = Math.PI * 2,
   position,
   ...restProps
-}) => {
-  return new Body({
+}) =>
+  new Body({
     shape: SHAPES.ARC,
     width: 2 * radius,
     height: 2 * radius,
@@ -135,17 +134,15 @@ Body.createArc = ({
     position,
     ...restProps
   });
-};
 
-Body.createRectangle = ({ width, height, position, ...restProps }) => {
-  return new Body({
+Body.createRectangle = ({ width, height, position, ...restProps }) =>
+  new Body({
     shape: SHAPES.RECTANGLE,
     width,
     height,
     position,
     ...restProps
   });
-};
 
 Body.createPolygon = ({ vertices, eddges, position, ...restProps }) => {
   let minX = 0;
@@ -154,7 +151,7 @@ Body.createPolygon = ({ vertices, eddges, position, ...restProps }) => {
   let maxX = 0;
   let maxY = 0;
 
-  vertices.map(([x, y]) => {
+  vertices.forEach(([x, y]) => {
     minX = Commons.minimum(x, minX);
     maxX = Commons.maximum(x, maxX);
 

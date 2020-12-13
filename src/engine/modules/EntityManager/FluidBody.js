@@ -1,7 +1,7 @@
-import { BODY_TYPE, ENTITY_NODE_TYPES } from "../../constants";
-import Vector2D from "../core/Vector2D";
+import { BODY_TYPE, ENTITY_NODE_TYPES } from '../../constants';
+import Vector2D from '../core/Vector2D';
 
-import Body from "./Body";
+import Body from './Body';
 
 class FluidBody extends Body {
   constructor(props) {
@@ -23,7 +23,7 @@ class FluidBody extends Body {
 
       velocity,
       direction,
-      acceleration,
+      acceleration
     } = props;
 
     this.type = ENTITY_NODE_TYPES.FLUID_BODY;
@@ -46,12 +46,10 @@ class FluidBody extends Body {
   }
 }
 
-FluidBody.getDebugMessage = (body) => {
-  return `
+FluidBody.getDebugMessage = (body) => `
     Pos :: ${body.position.x}, ${body.position.y} \n 
     Vel :: ${body.velocity.x}, ${body.velocity.y} \n
     Acc :: ${body.acceleration.x}, ${body.acceleration.y} \n
   `;
-};
 
 export default FluidBody;

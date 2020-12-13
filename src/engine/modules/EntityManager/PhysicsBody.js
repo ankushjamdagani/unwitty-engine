@@ -1,7 +1,7 @@
-import { BODY_TYPE, ENTITY_NODE_TYPES } from "../../constants";
-import Vector2D from "../core/Vector2D";
+import { BODY_TYPE, ENTITY_NODE_TYPES } from '../../constants';
+import Vector2D from '../core/Vector2D';
 
-import Body from "./Body";
+import Body from './Body';
 
 // ----- Evalutate Essentials -------
 // Bounding Box
@@ -34,8 +34,8 @@ class PhysicsBody extends Body {
 
       velocity,
       // speed
-      direction, // <------ ? vx = cos(a)*speed  && vy = sin(a)*speed 
-      acceleration,
+      direction, // <------ ? vx = cos(a)*speed  && vy = sin(a)*speed
+      acceleration
     } = props;
 
     this.type = ENTITY_NODE_TYPES.PHYSICS_BODY;
@@ -58,12 +58,10 @@ class PhysicsBody extends Body {
   }
 }
 
-PhysicsBody.getDebugMessage = (body) => {
-  return `
+PhysicsBody.getDebugMessage = (body) => `
     Pos :: ${body.position.x}, ${body.position.y} \n 
     Vel :: ${body.velocity.x}, ${body.velocity.y} \n
     Acc :: ${body.acceleration.x}, ${body.acceleration.y} \n
   `;
-};
 
 export default PhysicsBody;

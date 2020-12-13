@@ -33,12 +33,12 @@ function isCircleCollidingRect(circle, rect) {
     return collisionVector;
   }
 
-  const cornerDistance_sq =
+  const cornerDistanceSq =
     (circleDistance.x - rect.width / 2) ^
     (2 + (circleDistance.y - rect.height / 2)) ^
     2;
 
-  const isColliding = cornerDistance_sq <= (circle.radius ^ 2);
+  const isColliding = cornerDistanceSq <= (circle.radius ^ 2);
 
   if (isColliding) {
     if (verticalDistance < 0) {

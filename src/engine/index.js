@@ -1,11 +1,14 @@
+/* eslint-disable import/no-named-as-default */
 import * as Constants from './constants';
 
+// eslint-disable-next-line import/no-named-as-default-member
+import mountEditor from './modules/Editor';
 import ResourceManager from './modules/ResourceManager';
 import EntityManager from './modules/EntityManager';
 import Renderer from './modules/Renderer';
 import { Vector2D } from './modules/core';
 
-import Styles from './styles.css';
+import './styles.css';
 
 // --------------- GAME LOOP STARTS
 // Get Elements to render
@@ -45,10 +48,12 @@ class Engine {
     // this.initControlsBar();
   }
 
-  destroy() {}
+  destroy() {
+    return this;
+  }
 
   initDomManager() {
-    const { name, width, height, containerDOM } = this.props;
+    const { name, width, height, containerDOM, debug } = this.props;
     const uniqueKey = name || 'demo_game';
     const _width = width || window.innerWidth;
     const _height = height || window.innerHeight;
@@ -63,18 +68,19 @@ class Engine {
     canvasWrapper.setAttribute('class', `wrapper_canvas_demo_game`);
     canvasWrapper.setAttribute('id', `wrapper_canvas_${uniqueKey}`);
 
-    const overlaysWrapper = document.createElement('div');
-    overlaysWrapper.setAttribute('class', `wrapper_overlays_demo_game`);
-    overlaysWrapper.setAttribute('id', `wrapper_overlays_${uniqueKey}`);
-
     wrapper.appendChild(canvasWrapper);
-    wrapper.appendChild(overlaysWrapper);
+
+    if (debug) {
+      const overlaysWrapper = document.createElement('div');
+      overlaysWrapper.setAttribute('class', `wrapper_overlays_demo_game`);
+      overlaysWrapper.setAttribute('id', `wrapper_overlays_${uniqueKey}`);
+
+      wrapper.appendChild(overlaysWrapper);
+
+      mountEditor(`wrapper_overlays_${uniqueKey}`, this);
+    }
 
     (containerDOM || document.body).appendChild(wrapper);
-
-    var style = document.createElement('style');
-    style.innerHTML = Styles;
-    document.head.appendChild(style);
   }
 
   getCanvasWrapper() {
@@ -110,9 +116,9 @@ class Engine {
     const currTime = (performance || Date).now();
 
     this.state.timer = {
-      timeSpeed: timeSpeed,
+      timeSpeed,
       lastTime: currTime,
-      currTime: currTime,
+      currTime,
       deltaTime: 1000 / fps,
       fps: 0,
       fpsLastTick: 0,
@@ -173,8 +179,6 @@ class Engine {
         timer.fps = timer.fpsHistory.length;
         timer.fpsLastTick = timer.currTime;
       }
-
-      console.log('FPS :: ', timer.fps);
 
       // Game Loop
       this.update(timer.currTime);

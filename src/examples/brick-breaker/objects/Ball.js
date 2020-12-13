@@ -45,9 +45,9 @@ class Ball extends Component {
     const { env } = this.props;
 
     return (
-      x - radius == 0 ||
+      x - radius === 0 ||
       x + radius === env.width ||
-      y - radius == 0 ||
+      y - radius === 0 ||
       y + radius === env.height
     );
   }

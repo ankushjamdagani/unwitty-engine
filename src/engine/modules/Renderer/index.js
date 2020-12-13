@@ -24,15 +24,15 @@ const MID_CANVAS_KEY = 'BASE';
 class Renderer {
   constructor({ key, width, height, smoothImage, engine }) {
     const screen = {
-      width: width,
-      height: height,
+      width,
+      height,
       aspectRatio: width / height
     };
 
     const camera = new Camera({
       position: Vector2D.zero(),
       rotation: 0,
-      screen: screen
+      screen
     });
 
     this.name = key;
@@ -84,13 +84,6 @@ class Renderer {
     this.state.camera.bindTarget(target);
   }
 
-  getScreenPosition(pos, camera) {
-    return {
-      x: Commons.roundOff(pos.x - camera.position.x),
-      y: Commons.roundOff(pos.y - camera.position.y)
-    };
-  }
-
   renderTree(root, time) {
     const { width, height } = this.state.screen;
 
@@ -125,7 +118,7 @@ class Renderer {
       case ENTITY_NODE_TYPES.LIGHT:
         break;
       case ENTITY_NODE_TYPES.TRANSFORM:
-        this.applyTransform(context, element, camera);
+        Renderer.applyTransform(context, element, camera);
         break;
       case ENTITY_NODE_TYPES.BODY:
       case ENTITY_NODE_TYPES.PHYSICS_BODY:
@@ -140,7 +133,7 @@ class Renderer {
 
         if (element.debug) {
           context.beginPath();
-          this.drawBoundingBox(context, element, camera);
+          Renderer.drawBoundingBox(context, element, camera);
           context.closePath();
         }
         break;
@@ -152,9 +145,9 @@ class Renderer {
       }
     }
 
-    for (const [, val] of element.children) {
-      this.renderNode(val);
-    }
+    element.children.forEach((el) => {
+      this.renderNode(el);
+    });
 
     switch (element.type) {
       case ENTITY_NODE_TYPES.TRANSFORM:
@@ -183,6 +176,8 @@ class Renderer {
     const _image = image && resourceManager.get(image);
     _image && this.renderImage(context, element, camera, _image);
 
+    const _bgImage = backgroundImage && resourceManager.get(backgroundImage);
+
     if (!backgroundColor & !borderColor & !borderSize & !_bgImage) {
       return;
     }
@@ -190,8 +185,6 @@ class Renderer {
     context.fillStyle = backgroundColor || 'transparent';
     context.strokeStyle = borderColor || 'transparent';
     context.lineWidth = borderSize || 0;
-
-    const _bgImage = backgroundImage && resourceManager.get(backgroundImage);
 
     if (_bgImage) {
       const pattern = context.createPattern(_bgImage, repeat || 'repeat');
@@ -201,15 +194,22 @@ class Renderer {
     }
 
     if (element.shape === SHAPES.RECTANGLE) {
-      this.renderRect(context, element, camera);
+      Renderer.renderRect(context, element, camera);
     } else if (element.shape === SHAPES.ARC) {
-      this.renderCircle(context, element, camera);
+      Renderer.renderCircle(context, element, camera);
     } else if (element.shape === SHAPES.POLYGON) {
-      this.renderPolygon(context, element, camera);
+      Renderer.renderPolygon(context, element, camera);
     }
   }
 
-  applyTransform(context, element, camera) {
+  static getScreenPosition(pos, camera) {
+    return {
+      x: Commons.roundOff(pos.x - camera.position.x),
+      y: Commons.roundOff(pos.y - camera.position.y)
+    };
+  }
+
+  static applyTransform(context, element, camera) {
     const {
       rotate,
       transform: [[a, c, e], [b, d, f]],
@@ -223,13 +223,13 @@ class Renderer {
     let coords;
 
     if (Array.isArray(origin)) {
-      const { x, y } = this.getScreenPosition(
+      const { x, y } = Renderer.getScreenPosition(
         { x: origin[0], y: origin[1] },
         camera
       );
       coords = [x, y];
     } else {
-      const { x, y } = this.getScreenPosition(position, camera);
+      const { x, y } = Renderer.getScreenPosition(position, camera);
       const xMax = x + width + margins[1];
       const xMin = x - margins[3];
 
@@ -270,15 +270,15 @@ class Renderer {
     context.translate(-coords[0], -coords[1]);
   }
 
-  renderImage(context, element, camera, image) {
-    const { x, y } = this.getScreenPosition(element.position, camera);
+  static renderImage(context, element, camera, image) {
+    const { x, y } = Renderer.getScreenPosition(element.position, camera);
     const { width, height } = element;
 
     context.drawImage(image, x, y, width, height);
   }
 
-  renderRect(context, element, camera) {
-    const { x, y } = this.getScreenPosition(element.position, camera);
+  static renderRect(context, element, camera) {
+    const { x, y } = Renderer.getScreenPosition(element.position, camera);
     const { width, height } = element;
 
     context.rect(x, y, width, height);
@@ -286,8 +286,8 @@ class Renderer {
     context.stroke();
   }
 
-  renderCircle(context, element, camera) {
-    const { x, y } = this.getScreenPosition(element.position, camera);
+  static renderCircle(context, element, camera) {
+    const { x, y } = Renderer.getScreenPosition(element.position, camera);
     const { radius, startAngle, endAngle } = element;
 
     context.arc(x + radius, y + radius, radius, startAngle, endAngle);
@@ -295,13 +295,13 @@ class Renderer {
     context.stroke();
   }
 
-  renderPolygon(context, element, camera) {
-    const { x, y } = this.getScreenPosition(element.position, camera);
+  static renderPolygon(context, element, camera) {
+    const { x, y } = Renderer.getScreenPosition(element.position, camera);
     const { vertices } = element;
 
     context.moveTo(x + vertices[0][0], y + vertices[0][1]);
 
-    for (let i = 0; i < vertices.length; i++) {
+    for (let i = 0; i < vertices.length; i += 1) {
       const vertex = vertices[i]; // x, y, type :: moveTo, arc, lineTo, quadraticCurveTo, bezierCurveTo etc.
       context.lineTo(x + vertex[0], y + vertex[1]);
     }
@@ -310,8 +310,8 @@ class Renderer {
     context.stroke();
   }
 
-  drawBoundingBox(context, element, camera) {
-    const { x, y } = this.getScreenPosition(element.position, camera);
+  static drawBoundingBox(context, element, camera) {
+    const { x, y } = Renderer.getScreenPosition(element.position, camera);
     const { width, height } = element;
     const { margins, shape, color } = element.boundingBox;
 

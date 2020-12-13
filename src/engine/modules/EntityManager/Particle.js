@@ -55,12 +55,11 @@ class Particle extends _node {
   }
 
   onAddChilren() {
-    console.error('Cannot add children to particle');
+    console.error('Cannot add children to particle', this);
   }
 }
 
-Particle.getDebugMessage = (particle) => {
-  return `Pos :: ${particle.position.x}, ${particle.position.y}`;
-};
+Particle.getDebugMessage = (particle) =>
+  `Pos :: ${particle.position.x}, ${particle.position.y}`;
 
 export default Particle;
