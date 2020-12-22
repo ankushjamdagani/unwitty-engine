@@ -1,5 +1,5 @@
 {
-  "name": "dumb-engine",
+  "name": "unwitty-engine",
   "version": "0.1.0",
   "description": "game engine graphics, audio and logic",
   "main": "src/game/index.js",
