@@ -24,7 +24,7 @@ const uid = () =>
 
 const throttle = (fn, time) => {
   let timer = null;
-  return function (...args) {
+  return function cb(...args) {
     if (timer) {
       return;
     }
