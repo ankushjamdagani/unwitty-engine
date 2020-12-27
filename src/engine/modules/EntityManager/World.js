@@ -1,4 +1,4 @@
-import _node from './_node';
+import Node from './_node';
 import { ENTITY_NODE_TYPES } from '../../constants';
 
 /**
@@ -12,9 +12,10 @@ import { ENTITY_NODE_TYPES } from '../../constants';
  * - Camera
  * - Transformations
  */
-class World extends _node {
-  constructor(props = {}) {
-    super(props);
+const World = {
+  ...Node,
+
+  create(props) {
     const {
       gravity = 0,
       bounds = [
@@ -23,18 +24,28 @@ class World extends _node {
       ]
     } = props;
 
-    this.type = ENTITY_NODE_TYPES.WORLD;
-    this.gravity = gravity;
-    this.bounds = bounds;
-  }
+    const _node = Node.create(props);
+    return {
+      ..._node,
+      type: ENTITY_NODE_TYPES.WORLD,
+      gravity,
+      bounds
+    };
+  },
 
-  setGravity(gravity) {
-    this.gravity = gravity;
-  }
+  setGravity(world, gravity) {
+    return {
+      ...world,
+      gravity
+    };
+  },
 
-  setBounds(bounds) {
-    this.bounds = bounds;
+  setBounds(world, bounds) {
+    return {
+      ...world,
+      bounds
+    };
   }
-}
+};
 
 export default World;

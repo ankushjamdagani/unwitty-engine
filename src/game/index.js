@@ -1,9 +1,12 @@
-import GameEngine from '../engine';
+import mountEditor from '../Editor';
+import GameEngine, { store, Helpers } from '../engine';
 
 // import Image from "../examples/brick-breaker/assets/images/Ball1.svg";
 
-// const { SHAPES } = GameEngine.Constants;
-const { Body, Transform } = GameEngine.helpers;
+// const { SHAPES } = Constants;
+const {
+  EntityManager: { Body, Transform }
+} = Helpers;
 
 const WIDTH = window.innerWidth;
 const HEIGHT = window.innerHeight;
@@ -15,15 +18,17 @@ const engine = new GameEngine({
   height: HEIGHT,
   debug: true
 });
-const { world } = engine.state;
-const { renderer } = engine.managers;
+const { entityManager, renderer } = engine.managers;
+const world = entityManager.getRoot();
+
+mountEditor(store, engine);
 
 const mouse = {
   position: { x: WIDTH / 2, y: HEIGHT / 2 }
 };
 
-const transform1 = new Transform({
-  label: 'transform1',
+const transform1 = Transform.create({
+  name: 'transform1',
   rotate: 1,
   origin: [WIDTH / 2 + 25, HEIGHT / 2 + 25],
   transform: [
@@ -33,14 +38,14 @@ const transform1 = new Transform({
   ]
 });
 
-const transform2 = new Transform({
-  label: 'transform2',
+const transform2 = Transform.create({
+  name: 'transform2',
   rotate: 0,
   origin: [WIDTH / 2 + 115, HEIGHT / 2 + 115]
 });
 
-const sun = new Body.createArc({
-  label: 'sun',
+const sun = Body.createArc({
+  name: 'sun',
   position: [WIDTH / 2, HEIGHT / 2],
   radius: 25,
   styles: {
@@ -49,8 +54,8 @@ const sun = new Body.createArc({
   debug: true
 });
 
-const earth = new Body.createArc({
-  label: 'earth',
+const earth = Body.createArc({
+  name: 'earth',
   position: [WIDTH / 2 + 100, HEIGHT / 2 + 100],
   radius: 15,
   styles: {
@@ -59,8 +64,8 @@ const earth = new Body.createArc({
   debug: true
 });
 
-const moon = new Body.createArc({
-  label: 'moon',
+const moon = Body.createArc({
+  name: 'moon',
   position: [WIDTH / 2 + 130, HEIGHT / 2 + 130],
   radius: 5,
   styles: {
@@ -70,7 +75,7 @@ const moon = new Body.createArc({
 });
 
 const bg = Body.createRectangle({
-  label: 'bg',
+  name: 'bg',
   position: [0, 0],
   width: WIDTH,
   height: HEIGHT,
@@ -80,33 +85,70 @@ const bg = Body.createRectangle({
   debug: true
 });
 
-window.addEventListener('mousemove', (evt) => {
-  const { clientX, clientY } = evt;
-  mouse.position = {
-    x: clientX,
-    y: clientY
-  };
-});
-
-renderer.bindCamera(mouse);
-
-world.add(bg);
-world.add(transform1);
-transform1.add(sun);
-sun.add(transform2);
-transform2.add(earth);
-earth.add(moon);
-
-setInterval(() => {
-  transform1.rotate += 1;
-  transform2.rotate += 1;
-});
+entityManager.addChildren(world, bg);
+entityManager.addChildren(world, transform1);
+entityManager.addChildren(transform1, sun);
+entityManager.addChildren(sun, transform2);
+entityManager.addChildren(transform2, earth);
+entityManager.addChildren(earth, moon);
 
 // world.add(bg);
 // world.add(sun);
 // sun.add(earth);
 // earth.add(moon);
 
-console.log(engine);
-
 engine.autoPilot();
+
+// engine.update();
+// setTimeout(() => {
+//   engine.update();
+// }, 100);
+
+setInterval(() => {
+  const data = store.getState().entityManager;
+  const _transform1 = data.entities[transform1.id];
+  const _transform2 = data.entities[transform2.id];
+  store.dispatch({
+    type: 'CORE_SYNC',
+    data: {
+      ...data,
+      entities: {
+        ...data.entities,
+        [_transform1.id]: {
+          ..._transform1,
+          rotate: (_transform1.rotate += 1)
+        },
+        [_transform2.id]: {
+          ..._transform2,
+          rotate: (_transform2.rotate += 1)
+        }
+      }
+    },
+    context: 'entityManager'
+  });
+});
+
+window.addEventListener('mousemove', (evt) => {
+  const { clientX, clientY } = evt;
+  const data = store.getState().renderManager;
+  store.dispatch({
+    type: 'CORE_SYNC',
+    data: {
+      ...data,
+      camera: {
+        ...data.camera,
+        target: {
+          position: {
+            x: clientX,
+            y: clientY
+          }
+        }
+      }
+    },
+    context: 'renderManager'
+  });
+});
+
+renderer.bindCamera(mouse);
+
+console.log(engine);

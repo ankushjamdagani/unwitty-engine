@@ -1,7 +1,7 @@
 {
   "name": "unwitty-engine",
   "version": "0.1.0",
-  "description": "game engine graphics, audio and logic",
+  "description": "JS game engine for graphics, audio and logic",
   "main": "src/game/index.js",
   "author": "AnkushJ <anqush.jamdagani@gmail.com>",
   "license": "MIT",
@@ -21,9 +21,14 @@
   "dependencies": {
     "@babel/runtime": "^7.11.2",
     "dotenv": "^8.2.0",
+    "immer": "^8.0.0",
+    "immutable": "^4.0.0-rc.12",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "snyk": "^1.316.1"
+    "react-redux": "^7.2.2",
+    "redux": "^4.0.5",
+    "snyk": "^1.316.1",
+    "redux-devtools-extension": "^2.13.8"
   },
   "devDependencies": {
     "@babel/core": "^7.10.5",

@@ -1,31 +1,52 @@
 import { TRANSFORM_ORIGIN, ENTITY_NODE_TYPES } from '../../constants';
 
-import _node from './_node';
+import Node from './_node';
 
 // DOC :: https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Transformations
-class Transform extends _node {
-  constructor(props) {
-    super(props);
+const Transform = {
+  ...Node,
 
-    this.type = ENTITY_NODE_TYPES.TRANSFORM;
+  create(props) {
+    const {
+      origin = TRANSFORM_ORIGIN.CENTER,
+      rotate,
+      transform = [
+        [1, 0, 0],
+        [0, 1, 0],
+        [0, 0, 1]
+      ]
+    } = props;
 
-    this.origin = props.origin || TRANSFORM_ORIGIN.CENTER;
-    this.rotate = props.rotate;
-    this.transform = props.transform || [
-      [1, 0, 0],
-      [0, 1, 0],
-      [0, 0, 1]
-    ];
+    const _node = Node.create(props);
+    return {
+      ..._node,
+      type: ENTITY_NODE_TYPES.TRANSFORM,
+      origin,
+      rotate,
+      transform
+    };
+  },
+
+  // compute position etc. based on assumption that there will be multiple childrens
+  onAddChildren(parent, child) {
+    return {
+      ...parent,
+      position: child.position,
+      boundingBox: child.boundingBox,
+      width: child.width,
+      height: child.height
+    };
+  },
+
+  onRemoveChildren(parent) {
+    return {
+      ...parent,
+      position: undefined,
+      boundingBox: undefined,
+      width: undefined,
+      height: undefined
+    };
   }
-
-  onAddChilren(child) {
-    this.position = child.position;
-    this.boundingBox = child.boundingBox;
-    this.width = child.width;
-    this.height = child.height;
-
-    this.parent.onAddChilren(this);
-  }
-}
+};
 
 export default Transform;

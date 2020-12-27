@@ -13,10 +13,11 @@ import Body from './Body';
 // onCollision() {}
 // getSpeed()
 // getDirection()
-class PhysicsBody extends Body {
-  constructor(props) {
-    super(props);
+// class PhysicsBody extends Body {
+const PhysicsBody = {
+  ...Body,
 
+  create(props) {
     const {
       // check if collision can occer using these
       bodyType = BODY_TYPE.KINEMATIC,
@@ -38,30 +39,33 @@ class PhysicsBody extends Body {
       acceleration
     } = props;
 
-    this.type = ENTITY_NODE_TYPES.PHYSICS_BODY;
+    const _node = Body.create(props);
+    return {
+      ..._node,
+      type: ENTITY_NODE_TYPES.PHYSICS_BODY,
+      bodyType,
+      categoryMask,
+      collisionMask,
+      mass,
+      restitution,
+      friction,
+      gravityScale,
+      linearDrag,
+      angularDrag,
 
-    this.bodyType = bodyType;
-    this.categoryMask = categoryMask;
-    this.collisionMask = collisionMask;
+      velocity: new Vector2D(velocity[0], velocity[1]),
+      direction: new Vector2D(direction[0], direction[1]),
+      acceleration: new Vector2D(acceleration[0], acceleration[1])
+    };
+  },
 
-    this.mass = mass;
-    this.restitution = restitution;
-    this.friction = friction;
-    this.gravityScale = gravityScale;
-
-    this.linearDrag = linearDrag;
-    this.angularDrag = angularDrag;
-
-    this.velocity = new Vector2D(velocity[0], velocity[1]);
-    this.direction = new Vector2D(direction[0], direction[1]);
-    this.acceleration = new Vector2D(acceleration[0], acceleration[1]);
-  }
-}
-
-PhysicsBody.getDebugMessage = (body) => `
+  getDebugMessage(body) {
+    return `
     Pos :: ${body.position.x}, ${body.position.y} \n 
     Vel :: ${body.velocity.x}, ${body.velocity.y} \n
     Acc :: ${body.acceleration.x}, ${body.acceleration.y} \n
   `;
+  }
+};
 
 export default PhysicsBody;

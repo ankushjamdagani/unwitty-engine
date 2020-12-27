@@ -1,4 +1,7 @@
-import { Vector2D, Commons } from '../core';
+/* eslint-disable no-param-reassign */
+import produce from 'immer';
+
+import { Commons } from '../core';
 import { ENTITY_NODE_TYPES, SHAPES, TRANSFORM_ORIGIN } from '../../constants';
 
 import Camera from './Camera';
@@ -22,42 +25,33 @@ const MID_CANVAS_KEY = 'BASE';
  *      i.e. checks if elements are sleeping
  */
 class Renderer {
-  constructor({ key, width, height, smoothImage, engine }) {
-    const screen = {
-      width,
-      height,
-      aspectRatio: width / height
-    };
+  constructor(props) {
+    this.props = props;
+    const { width, height } = this.props.getData();
 
-    const camera = new Camera({
-      position: Vector2D.zero(),
-      rotation: 0,
-      screen
-    });
-
-    this.name = key;
-    this.state = {
-      screen,
-      canvasMap: new Map(),
-      camera,
-      engine,
-      smoothImage,
+    const camera = Camera.create({
       width,
       height
-    };
+    });
+
+    this.props.syncData({
+      canvasMap: new Map(),
+      camera
+    });
 
     this.addCanvas(MID_CANVAS_KEY);
   }
 
   addCanvas(key) {
-    const { width, height, smoothImage, engine, canvasMap } = this.state;
+    const { engine, getData } = this.props;
+    const { width, height, smoothImage, canvasMap } = getData();
 
     if (canvasMap.get(key)) return;
 
     const wrapper = engine.getCanvasWrapper();
 
     const canvas = document.createElement('canvas');
-    canvas.setAttribute('id', `${this.name}_${key}`);
+    canvas.setAttribute('id', key);
     canvas.width = width;
     canvas.height = height;
 
@@ -69,48 +63,75 @@ class Renderer {
 
     wrapper.appendChild(canvas);
 
-    canvasMap.set(
-      key,
-      new Map([
-        ['canvas', canvas],
-        ['context', context],
-        ['lastUpdatedAt', null],
-        ['isActive', true]
-      ])
-    );
+    this.props.syncData({
+      canvasMap: produce(canvasMap, (draft) => {
+        draft.set(
+          key,
+          new Map([
+            ['canvasId', key],
+            ['context', context],
+            ['lastUpdatedAt', null],
+            ['isActive', true]
+          ])
+        );
+      })
+    });
   }
 
   bindCamera(target) {
-    this.state.camera.bindTarget(target);
-  }
-
-  renderTree(root, time) {
-    const { width, height } = this.state.screen;
-
-    this.state.canvasMap.forEach((cv) => {
-      if (cv.get('lastUpdatedAt') - Date.now() < 1000) {
-        cv.get('context').clearRect(0, 0, width, height);
-      } else {
-        cv.set('isActive', false);
-        console.log('----------------');
-      }
+    this.props.syncData({
+      camera: produce(this.props.getData().camera, (draft) => {
+        draft.target = target;
+      })
     });
-    this.state.camera.update();
-
-    this.renderNode(root, time);
   }
 
-  renderNode(element) {
-    const { canvasMap, camera, engine } = this.state;
-    const { resourceManager } = engine.managers;
+  renderTree(root, time, entities) {
+    const { width, height, canvasMap, camera } = this.props.getData();
+
+    const newCanvasMap = produce(canvasMap, (draft) => {
+      draft.forEach((cv) => {
+        if (cv.get('lastUpdatedAt') - Date.now() < 1000) {
+          cv.get('context').clearRect(0, 0, width, height);
+        } else if (cv.get('isActive')) {
+          cv.set('isActive', false);
+        }
+      });
+    });
+
+    this.props.syncData({
+      canvasMap: newCanvasMap,
+      camera: produce(camera, (draft) => {
+        draft.position = Camera.update(camera);
+      })
+    });
+
+    this.renderNode(root, time, entities);
+  }
+
+  renderNode(elementId, time, entities) {
+    const element = entities[elementId];
+
+    if (!element) return;
+
+    const { canvasMap, camera } = this.props.getData();
+    const { resourceManager } = this.props.engine.managers;
 
     const canvasObj = canvasMap.get(element.canvasId || MID_CANVAS_KEY);
+
     if (!canvasObj) {
       this.addCanvas(element.canvasId);
       return;
     }
     const context = canvasObj.get('context');
-    canvasObj.set('lastUpdatedAt', Date.now());
+
+    this.props.syncData({
+      canvasMap: produce(canvasMap, (draft) => {
+        draft
+          .get(element.canvasId || MID_CANVAS_KEY)
+          .set('lastUpdatedAt', Date.now());
+      })
+    });
 
     switch (element.type) {
       case ENTITY_NODE_TYPES.WORLD:
@@ -124,7 +145,7 @@ class Renderer {
       case ENTITY_NODE_TYPES.PHYSICS_BODY:
       case ENTITY_NODE_TYPES.FLUID_BODY: {
         context.beginPath();
-        this.renderBody(element, {
+        Renderer.renderBody(element, {
           context,
           camera,
           resourceManager
@@ -146,7 +167,7 @@ class Renderer {
     }
 
     element.children.forEach((el) => {
-      this.renderNode(el);
+      this.renderNode(el, time, entities);
     });
 
     switch (element.type) {
@@ -161,7 +182,7 @@ class Renderer {
     }
   }
 
-  renderBody(element, envProps) {
+  static renderBody(element, envProps) {
     const { context, camera, resourceManager } = envProps;
     const {
       image,
@@ -174,7 +195,7 @@ class Renderer {
     } = element.styles;
 
     const _image = image && resourceManager.get(image);
-    _image && this.renderImage(context, element, camera, _image);
+    _image && Renderer.renderImage(context, element, camera, _image);
 
     const _bgImage = backgroundImage && resourceManager.get(backgroundImage);
 

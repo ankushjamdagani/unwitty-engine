@@ -1,11 +1,12 @@
 import { RESOURCE_TYPE } from '../../constants';
 
 class ResourceManager {
-  constructor() {
-    this.resources = new Map();
+  constructor(props) {
+    this.props = props;
   }
 
   loadResources(resources = [], cb) {
+    const { resource: currResources } = this.props.getData();
     for (let i = 0; i < resources.length; i += 1) {
       const { type = RESOURCE_TYPE.IMAGE, key = Date.now(), src } = resources[
         i
@@ -18,43 +19,45 @@ class ResourceManager {
         console.warn('Resource SRC is required');
         return;
       }
+      if (currResources[key]) {
+        return;
+      }
+
       if (type === RESOURCE_TYPE.AUDIO) {
         const ro = new Audio(src);
         ro.addEventListener('canplaythrough', () => {
-          if (this.assets[key]) {
-            return;
-          }
-          this.resources.set(key, ro);
+          this.props.syncData({
+            resources: { ...currResources, [key]: ro }
+          });
           cb && cb(key, ro);
         });
       } else if (type === RESOURCE_TYPE.IMAGE) {
         const ro = new Image();
         ro.src = src;
         ro.onload = () => {
-          this.resources.set(key, ro);
+          this.props.syncData({
+            resources: { ...currResources, [key]: ro }
+          });
           cb && cb(key, ro);
         };
       }
     }
   }
 
-  hasResource(key) {
-    return this.resources.has(key);
-  }
-
   removeResources(keys) {
+    const { resource: currResources } = this.props.getData();
+    const newResources = { ...currResources };
     for (let i = 0; i < keys.length; i += 1) {
       const key = keys[i];
-      this.resources.delete(key);
+      delete newResources[key];
     }
+    this.props.syncData({
+      resources: { ...newResources }
+    });
   }
 
   removeAll() {
-    this.resources.clear();
-  }
-
-  get(key) {
-    return this.resources.get(key);
+    this.props.clearData();
   }
 }
 

@@ -1,3 +1,5 @@
+import { Vector2D } from '../core';
+
 /**
  * @todo
  * - Zoom in / Zoom out
@@ -5,38 +7,32 @@
  * - Camera types [follow all, follow-x, follow-y, etc.]
  */
 class Camera {
-  constructor(props = {}) {
-    const { position, rotation = 0, screen } = props;
-
-    this.position = position;
-    this.rotation = rotation;
-    this.screen = screen;
-    this.target = null;
+  static create({ width, height }) {
+    return {
+      position: Vector2D.zero(),
+      rotation: 0,
+      width,
+      height
+    };
   }
 
-  setRotation(angle) {
-    this.rotation = angle;
+  static bindTarget(target) {
+    return target;
   }
 
-  setPosition(pos) {
-    this.position.x = pos.x;
-    this.position.y = pos.y;
-  }
-
-  bindTarget(target) {
-    this.target = target;
-  }
-
-  update() {
-    if (this.target) {
+  static update(camera) {
+    const { width, height, target } = camera;
+    if (target) {
       const {
         position: { x, y }
-      } = this.target;
-      const { width, height } = this.screen;
+      } = target;
 
-      this.position.x = x - width / 2;
-      this.position.y = y - height / 2;
+      return {
+        x: x - width / 2,
+        y: y - height / 2
+      };
     }
+    return camera;
   }
 }
 

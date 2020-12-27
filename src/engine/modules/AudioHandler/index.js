@@ -76,7 +76,6 @@ class AudioHandler extends Component {
   }
 
   mute() {
-    console.log('Muting');
     return this;
   }
 }
