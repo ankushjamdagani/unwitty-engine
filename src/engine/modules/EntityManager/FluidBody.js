@@ -41,9 +41,9 @@ const FluidBody = {
       linearDrag,
       angularDrag,
 
-      velocity: new Vector2D(velocity[0], velocity[1]),
-      direction: new Vector2D(direction[0], direction[1]),
-      acceleration: new Vector2D(acceleration[0], acceleration[1])
+      velocity: Vector2D.create(velocity),
+      direction: Vector2D.create(direction),
+      acceleration: Vector2D.create(acceleration)
     };
   },
 

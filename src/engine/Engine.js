@@ -153,8 +153,8 @@ class Engine {
     const world = EntityManager.createWorld({
       gravity: 0,
       bounds: [
-        new Vector2D(-Infinity, -Infinity),
-        new Vector2D(Infinity, Infinity)
+        Vector2D.create([-Infinity, -Infinity]),
+        Vector2D.create([Infinity, Infinity])
       ]
     });
     const light = EntityManager.createLight({ position: Vector2D.zero() });
