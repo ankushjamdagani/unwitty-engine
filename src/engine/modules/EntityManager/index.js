@@ -16,23 +16,23 @@ class EntityManager {
   setRoot(elem) {
     this.props.syncData({
       entities: {
-        [elem.id || 'root']: elem
+        world: elem
       }
     });
   }
 
   getRoot() {
-    return this.props.getData().entities.root;
+    return this.props.getData().entities.world;
   }
 
   getEntityById(nodeId) {
     const { entities } = this.props.getData();
-    return entities[nodeId || 'root'];
+    return entities[nodeId || 'world'];
   }
 
   getItemsToRender(nodeId) {
     const { entities } = this.props.getData();
-    const elem = entities[nodeId || 'root'];
+    const elem = entities[nodeId || 'world'];
 
     let items = [];
 
@@ -207,7 +207,7 @@ class EntityManager {
   }
 
   static createWorld(props) {
-    return World.create({ ...props, name: 'root' });
+    return World.create({ ...props, name: 'world' });
   }
 
   static createLight(props) {

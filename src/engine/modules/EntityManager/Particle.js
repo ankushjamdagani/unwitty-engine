@@ -1,4 +1,5 @@
 import { SHAPES, ENTITY_NODE_TYPES } from '../../constants';
+import { Vector2D } from '../core';
 
 const defaultState = {
   shape: SHAPES.ARC,
@@ -40,7 +41,7 @@ const Particle = {
       radius,
       startAngle: 0,
       endAngle: Math.PI * 2,
-      position,
+      position: Vector2D.create(position),
       styles,
       debug,
       boundingBox: { ...defaultState.boundingBox, ...boundingBox },

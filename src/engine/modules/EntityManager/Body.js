@@ -1,4 +1,5 @@
 import { SHAPES, ENTITY_NODE_TYPES } from '../../constants';
+import { Vector2D } from '../core';
 import Commons from '../core/Commons';
 
 import Node from './_node';
@@ -54,7 +55,7 @@ const Body = {
       endAngle,
       vertices,
       eddges,
-      position,
+      position: Vector2D.create(position),
       styles,
       canvasId,
       debug,

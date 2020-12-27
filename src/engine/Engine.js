@@ -157,7 +157,10 @@ class Engine {
         Vector2D.create([Infinity, Infinity])
       ]
     });
-    const light = EntityManager.createLight({ position: Vector2D.zero() });
+    const light = EntityManager.createLight({
+      name: 'primary_light',
+      position: Vector2D.zero()
+    });
 
     entityManager.setRoot(world);
     entityManager.addChildren(world, light);
@@ -215,7 +218,7 @@ class Engine {
       }
 
       // Game Loop
-      this.managers.renderer.renderTree('root', timerClone.currTime, entities);
+      this.managers.renderer.renderTree('world', timerClone.currTime, entities);
     }
 
     this.syncStore(timerClone, 'timer');
