@@ -1,4 +1,4 @@
-import mountEditor from '../Editor';
+import mountEditor from '../editor';
 import GameEngine, { store, Helpers } from '../engine';
 
 // import Image from "../examples/brick-breaker/assets/images/Ball1.svg";

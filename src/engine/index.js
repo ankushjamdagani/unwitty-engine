@@ -1,7 +1,7 @@
 import { enableMapSet } from 'immer';
 
 import Engine from './Engine';
-import Constants from './constants';
+import * as Constants from './constants/index';
 
 import EntityManager from './modules/EntityManager';
 

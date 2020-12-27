@@ -3,13 +3,15 @@ import { connect } from 'react-redux';
 
 import FPSDebugger from './components/FPSDebugger';
 
-const App = ({ engine, ...props }) => (
+const App = ({ fps }) => (
   <div
     style={{
       color: 'white'
     }}
   >
-    <FPSDebugger fps={props.timer && props.timer.fps} />
+    <FPSDebugger fps={fps} />
   </div>
 );
-export default connect((state) => state)(App);
+export default connect((state) => ({ fps: state.timer && state.timer.fps }))(
+  App
+);
