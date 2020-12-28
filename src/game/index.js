@@ -104,30 +104,6 @@ engine.autoPilot();
 //   engine.update();
 // }, 100);
 
-setInterval(() => {
-  const data = store.getState().entityManager;
-  const _transform1 = data.entities[transform1.id];
-  const _transform2 = data.entities[transform2.id];
-  store.dispatch({
-    type: 'CORE_SYNC',
-    data: {
-      ...data,
-      entities: {
-        ...data.entities,
-        [_transform1.id]: {
-          ..._transform1,
-          rotate: (_transform1.rotate += 1)
-        },
-        [_transform2.id]: {
-          ..._transform2,
-          rotate: (_transform2.rotate += 1)
-        }
-      }
-    },
-    context: 'entityManager'
-  });
-});
-
 window.addEventListener('mousemove', (evt) => {
   const { clientX, clientY } = evt;
   const data = store.getState().renderManager;

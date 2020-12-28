@@ -86,7 +86,7 @@ class Renderer {
     });
   }
 
-  renderTree(root, time, entities) {
+  renderTree(root, entities) {
     const { width, height, canvasMap, camera } = this.props.getData();
 
     const newCanvasMap = produce(canvasMap, (draft) => {
@@ -106,10 +106,10 @@ class Renderer {
       })
     });
 
-    this.renderNode(root, time, entities);
+    this.renderNode(root, entities);
   }
 
-  renderNode(elementId, time, entities) {
+  renderNode(elementId, entities) {
     const element = entities[elementId];
 
     if (!element) return;
@@ -167,7 +167,7 @@ class Renderer {
     }
 
     element.children.forEach((el) => {
-      this.renderNode(el, time, entities);
+      this.renderNode(el, entities);
     });
 
     switch (element.type) {

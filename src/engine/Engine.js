@@ -4,6 +4,7 @@ import EntityManager from './modules/EntityManager';
 import Renderer from './modules/Renderer';
 import { Vector2D } from './modules/core';
 
+import observeStore from './DataStore/observeStore';
 import { syncStore, clearStore } from './DataStore/reducers/core.actions';
 
 import './styles.css';
@@ -39,15 +40,17 @@ class Engine {
     containerDOM
   } = {}) {
     this.props = {};
-    this.state = {};
     this.managers = {};
     this.store = store;
 
     // @TODO :: maybe // if not performance concerns
-    // this.props = this.store.getState();
-    this.store.subscribe(() => {
-      this.props = this.store.getState();
-    });
+    observeStore(
+      store,
+      (state) => state,
+      (state) => {
+        this.props = state;
+      }
+    );
 
     this.syncStore(
       {
@@ -120,12 +123,14 @@ class Engine {
     this.syncStore(
       {
         timeSpeed,
-        lastTime: currTime,
+        lastTime: 0,
         currTime,
-        deltaTime: 1000 / fps,
-        fps: 0,
+        deltaTime: 0,
+        timestep: 1000 / fps,
+        fps,
         fpsLastTick: 0,
-        fpsHistory: []
+        fpsHistory: [],
+        fpsUpdateTime: 500
       },
       'timer'
     );
@@ -180,48 +185,90 @@ class Engine {
     });
   }
 
-  // https://stackoverflow.com/questions/19764018/controlling-fps-with-requestanimationframe
+  /**
+   * ============ RENDER STEP
+   * https://stackoverflow.com/questions/19764018/controlling-fps-with-requestanimationframe
+   */
   autoPilot() {
     requestAnimationFrame(this.autoPilot.bind(this));
 
-    this.update();
-  }
-
-  update() {
-    /**
-     * ============ RENDER STEP
-     */
     const {
-      timer: { ...timerClone },
-      entityManager: { entities }
+      timer: { ...timerClone }
     } = this.props;
 
-    const now = (performance || Date).now();
-    const elapsed = now - timerClone.lastTime;
+    const currTime = (performance || Date).now();
+    let deltaTime = currTime - timerClone.lastTime;
 
-    timerClone.currTime = now;
-    if (elapsed >= timerClone.deltaTime) {
+    if (deltaTime >= timerClone.timestep) {
       // compute FPS
+      // fps buffer have frames for 1sec. Length of it will give FPS
       while (
         timerClone.fpsHistory.length > 0 &&
-        timerClone.fpsHistory[0] <= now - 1000
+        timerClone.fpsHistory[0] <= currTime - 1000
       ) {
         timerClone.fpsHistory.shift();
       }
-      timerClone.fpsHistory.push(now);
 
-      timerClone.lastTime = now - (elapsed % 10);
+      timerClone.fpsHistory.push(currTime);
 
-      if (timerClone.currTime - timerClone.fpsLastTick >= 500) {
+      if (currTime - timerClone.fpsLastTick >= timerClone.fpsUpdateTime) {
         timerClone.fps = timerClone.fpsHistory.length;
-        timerClone.fpsLastTick = timerClone.currTime;
+        timerClone.fpsLastTick = currTime;
       }
 
-      // Game Loop
-      this.managers.renderer.renderTree('world', timerClone.currTime, entities);
-    }
+      // processInput
 
-    this.syncStore(timerClone, 'timer');
+      // update
+      let ctr = 0;
+      const MAX_FRAMES_TO_SKIP = 5;
+      while (deltaTime >= timerClone.timestep && ctr < MAX_FRAMES_TO_SKIP) {
+        this.update(timerClone.timestep);
+        deltaTime -= timerClone.timestep;
+        ctr += 1;
+      }
+
+      deltaTime = deltaTime < 0 ? 0 : deltaTime;
+
+      // render
+      // @todo :: add interpolation to remove stutter
+      const timeToInterpolate = deltaTime / timerClone.timestep;
+      this.render(timeToInterpolate);
+
+      timerClone.deltaTime = deltaTime;
+      timerClone.lastTime = currTime - (deltaTime % 10);
+      this.syncStore(timerClone, 'timer');
+    }
+  }
+
+  update(deltaTime) {
+    const data = this.store.getState().entityManager;
+    const _transform1 = data.entities.transform1;
+    const _transform2 = data.entities.transform2;
+    this.store.dispatch({
+      type: 'CORE_SYNC',
+      data: {
+        ...data,
+        entities: {
+          ...data.entities,
+          [_transform1.id]: {
+            ..._transform1,
+            rotate: (_transform1.rotate += deltaTime / 10)
+          },
+          [_transform2.id]: {
+            ..._transform2,
+            rotate: (_transform2.rotate += deltaTime / 10)
+          }
+        }
+      },
+      context: 'entityManager'
+    });
+  }
+
+  render() {
+    const {
+      entityManager: { entities }
+    } = this.props;
+    this.managers.renderer.renderTree('world', entities);
   }
 }
 

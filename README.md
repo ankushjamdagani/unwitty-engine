@@ -1,5 +1,18 @@
 # Game
 
+## Next Steps
+
+- Time management - control speed, etc.
+- time based movements
+- user actions / events - channeling
+  - data management from user's side
+- multiple canvas support
+  - zIndex and layerIndex
+- offscreen canvas
+- scenes / screens
+- inactive node and inactive canvas
+- add perspective
+
 ## Notes
 
 - Offline and optimised
