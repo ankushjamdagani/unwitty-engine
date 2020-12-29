@@ -2,7 +2,7 @@
 import ResourceManager from './modules/ResourceManager';
 import EntityManager from './modules/EntityManager';
 import Renderer from './modules/Renderer';
-import { Vector2D } from './modules/core';
+import { Vector2D, Base } from './modules/core';
 
 import observeStore from './DataStore/observeStore';
 import { syncStore, clearStore } from './DataStore/reducers/core.actions';
@@ -25,20 +25,24 @@ import './styles.css';
 // Unload Resources
 // Exit
 
-class Engine {
+class Engine extends Base {
   /**
    * @prop { name, width, height, smoothImage, containerDOM, timeScale, fps }
    */
-  constructor({
-    name = 'demo_game',
-    width = window.innerWidth,
-    height = window.innerHeight,
-    smoothImage = false,
-    timeScale = 1,
-    fps = 100,
-    store,
-    containerDOM
-  } = {}) {
+  constructor(props) {
+    super(props);
+
+    const {
+      name = 'demo_game',
+      width = window.innerWidth,
+      height = window.innerHeight,
+      smoothImage = false,
+      timeScale = 1,
+      fps = 100,
+      store,
+      containerDOM
+    } = props || {};
+
     this.props = {};
     this.managers = {};
     this.store = store;
@@ -68,10 +72,14 @@ class Engine {
     this.initResourceManager();
     this.initEntityManager();
     this.initGameRenderer();
+
+    this.dispatchEvent(new Event('on_ready'));
   }
 
   destroy() {
-    return this;
+    this.dispatchEvent(new Event('before_destroy'));
+    this.clearStore();
+    this.dispatchEvent(new Event('on_destroy'));
   }
 
   syncStore(...args) {
@@ -269,6 +277,8 @@ class Engine {
     const _transform1 = entityManager.entities.transform1;
     const _transform2 = entityManager.entities.transform2;
 
+    this.dispatchEvent(new Event('before_update'));
+
     this.syncStore(
       {
         entities: {
@@ -285,10 +295,21 @@ class Engine {
       },
       'entityManager'
     );
+
+    this.dispatchEvent(new Event('on_update'));
+    // this.dispatchEvent(
+    //   new CustomEvent('on_update', {
+    //     detail: { currTime, lastTime, deltaTime }
+    //   })
+    // );
   }
 
   render() {
+    this.dispatchEvent(new Event('before_render'));
+
     this.managers.renderer.renderTree('world');
+
+    this.dispatchEvent(new Event('on_render'));
   }
 }
 

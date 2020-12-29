@@ -1,4 +1,5 @@
 import { ENTITY_NODE_TYPES } from '../../constants';
+import { Base } from '../core';
 
 import World from './World';
 import Light from './Light';
@@ -8,8 +9,9 @@ import Body from './Body';
 import PhysicsBody from './PhysicsBody';
 import FluidBody from './FluidBody';
 
-class EntityManager {
+class EntityManager extends Base {
   constructor(props) {
+    super(props);
     this.props = props;
   }
 

@@ -1,7 +1,9 @@
 import { RESOURCE_TYPE } from '../../constants';
+import { Base } from '../core';
 
-class ResourceManager {
+class ResourceManager extends Base {
   constructor(props) {
+    super(props);
     this.props = props;
   }
 

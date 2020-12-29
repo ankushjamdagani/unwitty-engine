@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import produce from 'immer';
 
-import { Commons } from '../core';
+import { Commons, Base } from '../core';
 import { ENTITY_NODE_TYPES, SHAPES, TRANSFORM_ORIGIN } from '../../constants';
 
 import Camera from './Camera';
@@ -24,8 +24,9 @@ const MID_CANVAS_KEY = 'BASE';
  *   - Checks which ones are ideal and don't need updating
  *      i.e. checks if elements are sleeping
  */
-class Renderer {
+class Renderer extends Base {
   constructor(props) {
+    super(props);
     this.props = props;
     const { width, height } = this.props.getData();
 

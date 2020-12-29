@@ -105,6 +105,10 @@ engine.autoPilot();
 //   engine.update();
 // }, 100);
 
+// engine.addEventListener('on_update', (evt) => {
+//   console.log(evt.target);
+// });
+
 window.addEventListener('keydown', (evt) => {
   const { key } = evt;
   const { entities } = store.getState().entityManager;
