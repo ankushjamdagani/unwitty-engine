@@ -12,7 +12,7 @@ const WIDTH = window.innerWidth;
 const HEIGHT = window.innerHeight;
 
 const engine = new GameEngine({
-  timeSpeed: 1,
+  timeScale: 1,
   fps: 60,
   width: WIDTH,
   height: HEIGHT,
@@ -92,13 +92,7 @@ entityManager.addChildren(sun, transform2);
 entityManager.addChildren(transform2, earth);
 entityManager.addChildren(earth, moon);
 
-// world.add(bg);
-// world.add(sun);
-// sun.add(earth);
-// earth.add(moon);
-
 engine.autoPilot();
-
 // engine.update();
 // setTimeout(() => {
 //   engine.update();
@@ -124,6 +118,29 @@ window.addEventListener('mousemove', (evt) => {
     context: 'renderManager'
   });
 });
+
+setInterval(() => {
+  const data = store.getState().timer;
+  if (data.timeScale < 1) {
+    store.dispatch({
+      type: 'CORE_SYNC',
+      data: {
+        ...data,
+        timeScale: 1
+      },
+      context: 'timer'
+    });
+  } else {
+    store.dispatch({
+      type: 'CORE_SYNC',
+      data: {
+        ...data,
+        timeScale: -0.05
+      },
+      context: 'timer'
+    });
+  }
+}, 1500);
 
 renderer.bindCamera(mouse);
 

@@ -27,14 +27,14 @@ import './styles.css';
 
 class Engine {
   /**
-   * @prop { name, width, height, smoothImage, containerDOM, timeSpeed, fps }
+   * @prop { name, width, height, smoothImage, containerDOM, timeScale, fps }
    */
   constructor({
     name = 'demo_game',
     width = window.innerWidth,
     height = window.innerHeight,
     smoothImage = false,
-    timeSpeed = 1,
+    timeScale = 1,
     fps = 100,
     store,
     containerDOM
@@ -64,7 +64,7 @@ class Engine {
     );
 
     this.initDomManager(containerDOM);
-    this.initTimer(timeSpeed, fps);
+    this.initTimer(timeScale, fps);
     this.initResourceManager();
     this.initEntityManager();
     this.initGameRenderer();
@@ -117,15 +117,17 @@ class Engine {
   }
 
   // Take frame per second in consideration
-  initTimer(timeSpeed, fps) {
+  initTimer(timeScale, fps) {
     const currTime = (performance || Date).now();
 
     this.syncStore(
       {
-        timeSpeed,
+        timeScale,
         lastTime: 0,
         currTime,
-        deltaTime: 0,
+        deltaTime: 1000 / fps,
+        deltaTimeMin: 1000 / fps,
+        deltaTimeMax: 1000 / (fps * 0.5),
         timestep: 1000 / fps,
         fps,
         fpsLastTick: 0,
@@ -192,28 +194,44 @@ class Engine {
   autoPilot() {
     requestAnimationFrame(this.autoPilot.bind(this));
 
-    const {
-      timer: { ...timerClone }
-    } = this.props;
+    const { timer } = this.props;
 
     const currTime = (performance || Date).now();
-    let deltaTime = currTime - timerClone.lastTime;
+    const elapsedTime = currTime - timer.lastTime;
 
-    if (deltaTime >= timerClone.timestep) {
+    if (elapsedTime >= timer.timestep) {
+      const {
+        timestep,
+        timeScale,
+        fpsUpdateTime,
+        fpsHistory,
+        deltaTime: prevDeltaTime,
+        deltaTimeMin,
+        deltaTimeMax
+      } = timer;
+      let { lastTime, fps, fpsLastTick } = timer;
+
+      let deltaTime = prevDeltaTime + elapsedTime;
+
+      /**
+       * @DANGER
+       * elapsed time can be huge, because RAF get's paused when out of focus
+       * - pause the game on out of focus
+       * - maybe - keep update running with a slightly bigger steps and render only when on next focus
+       * - optionally - can limit delta in a range
+       */
+      deltaTime = deltaTime < deltaTimeMin ? deltaTimeMin : deltaTime;
+      deltaTime = deltaTime > deltaTimeMax ? deltaTimeMax : deltaTime;
+
       // compute FPS
       // fps buffer have frames for 1sec. Length of it will give FPS
-      while (
-        timerClone.fpsHistory.length > 0 &&
-        timerClone.fpsHistory[0] <= currTime - 1000
-      ) {
-        timerClone.fpsHistory.shift();
+      while (fpsHistory.length > 0 && fpsHistory[0] <= currTime - 1000) {
+        fpsHistory.shift();
       }
-
-      timerClone.fpsHistory.push(currTime);
-
-      if (currTime - timerClone.fpsLastTick >= timerClone.fpsUpdateTime) {
-        timerClone.fps = timerClone.fpsHistory.length;
-        timerClone.fpsLastTick = currTime;
+      fpsHistory.push(currTime);
+      if (currTime - fpsLastTick >= fpsUpdateTime) {
+        fps = fpsHistory.length;
+        fpsLastTick = currTime;
       }
 
       // processInput
@@ -221,35 +239,40 @@ class Engine {
       // update
       let ctr = 0;
       const MAX_FRAMES_TO_SKIP = 5;
-      while (deltaTime >= timerClone.timestep && ctr < MAX_FRAMES_TO_SKIP) {
-        this.update(timerClone.timestep);
-        deltaTime -= timerClone.timestep;
+      while (deltaTime >= timestep && ctr < MAX_FRAMES_TO_SKIP) {
+        this.update(timestep * timeScale);
+        deltaTime -= timestep;
         ctr += 1;
       }
 
       deltaTime = deltaTime < 0 ? 0 : deltaTime;
+      lastTime = currTime - (deltaTime % 10);
 
       // render
       // @todo :: add interpolation to remove stutter
-      const timeToInterpolate = deltaTime / timerClone.timestep;
-      this.render(timeToInterpolate);
+      this.render(deltaTime / timestep);
 
-      timerClone.deltaTime = deltaTime;
-      timerClone.lastTime = currTime - (deltaTime % 10);
-      this.syncStore(timerClone, 'timer');
+      this.syncStore(
+        {
+          lastTime,
+          fps,
+          fpsLastTick,
+          fpsHistory,
+          deltaTime
+        },
+        'timer'
+      );
     }
   }
 
   update(deltaTime) {
-    const data = this.store.getState().entityManager;
-    const _transform1 = data.entities.transform1;
-    const _transform2 = data.entities.transform2;
-    this.store.dispatch({
-      type: 'CORE_SYNC',
-      data: {
-        ...data,
+    const { entityManager } = this.store.getState();
+    const _transform1 = entityManager.entities.transform1;
+    const _transform2 = entityManager.entities.transform2;
+    this.syncStore(
+      {
         entities: {
-          ...data.entities,
+          ...entityManager.entities,
           [_transform1.id]: {
             ..._transform1,
             rotate: (_transform1.rotate += deltaTime / 10)
@@ -260,8 +283,8 @@ class Engine {
           }
         }
       },
-      context: 'entityManager'
-    });
+      'entityManager'
+    );
   }
 
   render() {
