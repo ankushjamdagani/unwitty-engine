@@ -8,6 +8,7 @@ function mountEditor(store, engine) {
   const {
     core: { key }
   } = store.getState();
+
   const wrapper =
     document.getElementById(`wrapper_${key}`) ||
     document.getElementById('wrapper_demo_game');
