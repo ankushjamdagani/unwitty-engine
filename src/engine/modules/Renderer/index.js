@@ -86,8 +86,8 @@ class Renderer {
     });
   }
 
-  renderTree(root, entities) {
-    const { width, height, canvasMap, camera } = this.props.getData();
+  renderTree(root) {
+    const { width, height, canvasMap, camera, entities } = this.props.getData();
 
     const newCanvasMap = produce(canvasMap, (draft) => {
       draft.forEach((cv) => {
@@ -101,9 +101,7 @@ class Renderer {
 
     this.props.syncData({
       canvasMap: newCanvasMap,
-      camera: produce(camera, (draft) => {
-        draft.position = Camera.update(camera);
-      })
+      camera: produce(camera, (draft) => Camera.update(draft, entities))
     });
 
     this.renderNode(root, entities);

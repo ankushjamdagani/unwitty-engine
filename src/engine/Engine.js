@@ -182,7 +182,8 @@ class Engine {
       clearData: () => this.clearStore('renderManager'),
       getData: () => ({
         ...this.props.renderManager,
-        ...this.props.core
+        ...this.props.core,
+        ...this.props.entityManager
       })
     });
   }
@@ -205,9 +206,7 @@ class Engine {
         timeScale,
         fpsUpdateTime,
         fpsHistory,
-        deltaTime: prevDeltaTime,
-        deltaTimeMin,
-        deltaTimeMax
+        deltaTime: prevDeltaTime
       } = timer;
       let { lastTime, fps, fpsLastTick } = timer;
 
@@ -218,10 +217,10 @@ class Engine {
        * elapsed time can be huge, because RAF get's paused when out of focus
        * - pause the game on out of focus
        * - maybe - keep update running with a slightly bigger steps and render only when on next focus
-       * - optionally - can limit delta in a range
+       * - optionally - can limit delta in a range but this somehow lowers FPS
        */
-      deltaTime = deltaTime < deltaTimeMin ? deltaTimeMin : deltaTime;
-      deltaTime = deltaTime > deltaTimeMax ? deltaTimeMax : deltaTime;
+      // deltaTime = deltaTime < deltaTimeMin ? deltaTimeMin : deltaTime;
+      // deltaTime = deltaTime > deltaTimeMax ? deltaTimeMax : deltaTime;
 
       // compute FPS
       // fps buffer have frames for 1sec. Length of it will give FPS
@@ -269,6 +268,7 @@ class Engine {
     const { entityManager } = this.store.getState();
     const _transform1 = entityManager.entities.transform1;
     const _transform2 = entityManager.entities.transform2;
+
     this.syncStore(
       {
         entities: {
@@ -288,10 +288,7 @@ class Engine {
   }
 
   render() {
-    const {
-      entityManager: { entities }
-    } = this.props;
-    this.managers.renderer.renderTree('world', entities);
+    this.managers.renderer.renderTree('world');
   }
 }
 

@@ -20,16 +20,18 @@ class Camera {
     return target;
   }
 
-  static update(camera) {
+  static update(camera, entities) {
     const { width, height, target } = camera;
     if (target) {
-      const {
-        position: { x, y }
-      } = target;
+      const { position, id } = target;
+      const targetPos = id ? entities[id].position : position;
 
       return {
-        x: x - width / 2,
-        y: y - height / 2
+        ...camera,
+        position: {
+          x: targetPos.x - width / 2,
+          y: targetPos.y - height / 2
+        }
       };
     }
     return camera;

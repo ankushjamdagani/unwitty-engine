@@ -23,10 +23,6 @@ const world = entityManager.getRoot();
 
 mountEditor(store, engine);
 
-const mouse = {
-  position: { x: WIDTH / 2, y: HEIGHT / 2 }
-};
-
 const transform1 = Transform.create({
   name: 'transform1',
   rotate: 1,
@@ -85,8 +81,19 @@ const bg = Body.createRectangle({
   debug: true
 });
 
+const runner = Body.createArc({
+  name: 'runner',
+  position: [WIDTH / 2, HEIGHT / 2],
+  radius: 25,
+  styles: {
+    backgroundColor: 'red'
+  },
+  debug: true
+});
+
 entityManager.addChildren(world, bg);
 entityManager.addChildren(world, transform1);
+entityManager.addChildren(world, runner);
 entityManager.addChildren(transform1, sun);
 entityManager.addChildren(sun, transform2);
 entityManager.addChildren(transform2, earth);
@@ -98,24 +105,31 @@ engine.autoPilot();
 //   engine.update();
 // }, 100);
 
-window.addEventListener('mousemove', (evt) => {
-  const { clientX, clientY } = evt;
-  const data = store.getState().renderManager;
+window.addEventListener('keydown', (evt) => {
+  const { key } = evt;
+  const { entities } = store.getState().entityManager;
+  let { x, y } = entities.runner.position;
+
+  if (key === 'ArrowLeft') x = entities.runner.position.x - 50;
+  if (key === 'ArrowRight') x = entities.runner.position.x + 50;
+  if (key === 'ArrowUp') y = entities.runner.position.y - 50;
+  if (key === 'ArrowDown') y = entities.runner.position.y + 50;
+
   store.dispatch({
     type: 'CORE_SYNC',
     data: {
-      ...data,
-      camera: {
-        ...data.camera,
-        target: {
+      entities: {
+        ...entities,
+        runner: {
+          ...entities.runner,
           position: {
-            x: clientX,
-            y: clientY
+            x,
+            y
           }
         }
       }
     },
-    context: 'renderManager'
+    context: 'entityManager'
   });
 });
 
@@ -135,13 +149,13 @@ setInterval(() => {
       type: 'CORE_SYNC',
       data: {
         ...data,
-        timeScale: -0.05
+        timeScale: 0.05
       },
       context: 'timer'
     });
   }
 }, 1500);
 
-renderer.bindCamera(mouse);
+renderer.bindCamera(runner);
 
 console.log(engine);
