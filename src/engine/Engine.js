@@ -218,28 +218,12 @@ class Engine extends Base {
   }
 
   update(deltaTime) {
-    const { entityManager } = this.props;
-    const _transform1 = entityManager.entities.transform1;
-    const _transform2 = entityManager.entities.transform2;
-
     this.dispatchEvent(new Event('before_update'));
 
-    DataStore.setData(
-      {
-        entities: {
-          ...entityManager.entities,
-          [_transform1.id]: {
-            ..._transform1,
-            rotate: _transform1.rotate + deltaTime / 10
-          },
-          [_transform2.id]: {
-            ..._transform2,
-            rotate: _transform2.rotate + deltaTime / 10
-          }
-        }
-      },
-      'entityManager'
-    );
+    DataStore.setData((entityManager) => {
+      entityManager.entities.transform1.rotate += deltaTime / 10;
+      entityManager.entities.transform2.rotate += deltaTime / 10;
+    }, 'entityManager');
 
     this.dispatchEvent(new Event('on_update'));
     // this.dispatchEvent(
