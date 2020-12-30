@@ -1,13 +1,17 @@
 // eslint-disable-next-line import/no-named-as-default-member
-import ResourceManager from './modules/ResourceManager';
-import EntityManager from './modules/EntityManager';
-import RenderManager from './modules/RenderManager';
-import { Vector2D, Base } from './modules/core';
-
-import observeStore from './DataStore/observeStore';
-import { syncStore, clearStore } from './DataStore/reducers/core.actions';
+import {
+  ResourceManager,
+  EntityManager,
+  RenderManager,
+  TimeManager,
+  DataStore,
+  core
+} from './modules';
 
 import './styles.css';
+
+const { Vector2D, Base } = core;
+const { observeStore, Actions } = DataStore;
 
 // --------------- GAME LOOP STARTS
 // Get Elements to render
@@ -85,11 +89,11 @@ class Engine extends Base {
   }
 
   syncStore(...args) {
-    this.store.dispatch(syncStore.apply(this, args));
+    this.store.dispatch(Actions.syncStore.apply(this, args));
   }
 
   clearStore(...args) {
-    this.store.dispatch(clearStore.apply(this, args));
+    this.store.dispatch(Actions.clearStore.apply(this, args));
   }
 
   initDomManager({ containerDOM }) {
@@ -127,25 +131,15 @@ class Engine extends Base {
   }
 
   // Take frame per second in consideration
-  initTimeManager({ timeScale, fps }) {
-    const currTime = (performance || Date).now();
+  initTimeManager(props) {
+    const timeManager = new TimeManager({
+      data: props,
+      syncData: (data) => this.syncStore(data, 'timeManager'),
+      clearData: () => this.clearStore('timeManager'),
+      getData: () => this.props.timeManager
+    });
 
-    this.syncStore(
-      {
-        timeScale,
-        lastTime: 0,
-        currTime,
-        deltaTime: 1000 / fps,
-        deltaTimeMin: 1000 / fps,
-        deltaTimeMax: 1000 / (fps * 0.5),
-        timestep: 1000 / fps,
-        fps,
-        fpsLastTick: 0,
-        fpsHistory: [],
-        fpsUpdateTime: 500
-      },
-      'timeManager'
-    );
+    this.managers.timeManager = timeManager;
   }
 
   /**
@@ -203,79 +197,35 @@ class Engine extends Base {
     });
   }
 
-  /**
-   * ============ RENDER STEP
-   * https://stackoverflow.com/questions/19764018/controlling-fps-with-requestanimationframe
-   */
   autoPilot() {
     this.rafId = requestAnimationFrame(this.autoPilot.bind(this));
 
-    const { timeManager } = this.props;
+    const [
+      shouldUpdate,
+      { updateCount, fixedDelta, interpolationTime } = {}
+    ] = this.managers.timeManager.update();
 
-    const currTime = (performance || Date).now();
-    const elapsedTime = currTime - timeManager.lastTime;
-
-    if (elapsedTime >= timeManager.timestep) {
-      const {
-        timestep,
-        timeScale,
-        fpsUpdateTime,
-        fpsHistory,
-        deltaTime: prevDeltaTime
-      } = timeManager;
-      let { lastTime, fps, fpsLastTick } = timeManager;
-
-      let deltaTime = prevDeltaTime + elapsedTime;
+    if (shouldUpdate) {
+      /**
+       * PROCESS INPUT
+       * -------------
+       * @TODO :: where to do it
+       */
 
       /**
-       * @DANGER
-       * elapsed time can be huge, because RAF get's paused when out of focus
-       * - pause the game on out of focus
-       * - maybe - keep update running with a slightly bigger steps and render only when on next focus
-       * - optionally - can limit delta in a range but this somehow lowers FPS
+       * UPDATE
+       * ------
        */
-      // deltaTime = deltaTime < deltaTimeMin ? deltaTimeMin : deltaTime;
-      // deltaTime = deltaTime > deltaTimeMax ? deltaTimeMax : deltaTime;
-
-      // compute FPS
-      // fps buffer have frames for 1sec. Length of it will give FPS
-      while (fpsHistory.length > 0 && fpsHistory[0] <= currTime - 1000) {
-        fpsHistory.shift();
-      }
-      fpsHistory.push(currTime);
-      if (currTime - fpsLastTick >= fpsUpdateTime) {
-        fps = fpsHistory.length;
-        fpsLastTick = currTime;
+      for (let i = 0; i < updateCount; i += 1) {
+        this.update(fixedDelta);
       }
 
-      // processInput
-
-      // update
-      let ctr = 0;
-      const MAX_FRAMES_TO_SKIP = 5;
-      while (deltaTime >= timestep && ctr < MAX_FRAMES_TO_SKIP) {
-        this.update(timestep * timeScale);
-        deltaTime -= timestep;
-        ctr += 1;
-      }
-
-      deltaTime = deltaTime < 0 ? 0 : deltaTime;
-      lastTime = currTime - (deltaTime % 10);
-
-      // render
-      // @todo :: add interpolation to remove stutter
-      this.render(deltaTime / timestep);
-
-      this.syncStore(
-        {
-          lastTime,
-          fps,
-          fpsLastTick,
-          fpsHistory,
-          deltaTime
-        },
-        'timeManager'
-      );
+      /**
+       * RENDER
+       * ------
+       * @TODO :: add interpolation to remove stutter
+       */
+      this.render(interpolationTime);
     }
   }
 

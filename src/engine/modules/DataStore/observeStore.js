@@ -1,4 +1,4 @@
-function observeStore(store, select, onChange) {
+export default function observeStore(store, select, onChange) {
   let currentState;
 
   function handleChange() {
@@ -13,5 +13,3 @@ function observeStore(store, select, onChange) {
   handleChange();
   return unsubscribe;
 }
-
-export default observeStore;

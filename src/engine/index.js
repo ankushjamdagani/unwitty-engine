@@ -1,13 +1,10 @@
 import { enableMapSet } from 'immer';
 
-import Engine from './Engine';
+import { EntityManager, DataStore } from './modules';
 import * as Constants from './constants/index';
+import Engine from './Engine';
 
-import EntityManager from './modules/EntityManager';
-
-import configureStore from './DataStore/configureStore';
-
-const store = configureStore();
+const store = DataStore.configureStore();
 enableMapSet();
 
 function GameEngine(props) {
