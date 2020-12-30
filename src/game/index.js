@@ -1,25 +1,26 @@
-import mountEditor from '../editor';
-import GameEngine, { DataStore, Helpers } from '../engine';
+import Editor from '../editor';
+import Engine from '../engine';
 
-const store = DataStore.getStore();
 const {
+  DataStore,
   EntityManager: { Body, Transform }
-} = Helpers;
+} = Engine;
 
 const WIDTH = window.innerWidth;
 const HEIGHT = window.innerHeight;
 
-const engine = new GameEngine({
+const engine = Engine.init({
   timeScale: 1,
   fps: 60,
   width: WIDTH,
   height: HEIGHT,
   debug: true
 });
+
+Editor.init(DataStore, engine);
+
 const { entityManager, renderManager } = engine.managers;
 const world = entityManager.root;
-
-mountEditor(store, engine);
 
 const transform1 = Transform.create({
   name: 'transform1',

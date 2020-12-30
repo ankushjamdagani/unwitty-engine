@@ -4,26 +4,30 @@ import { Provider } from 'react-redux';
 
 import App from './App';
 
-function mountEditor(store, engine) {
-  const {
-    core: { key }
-  } = store.getState();
+const Editor = {
+  init: (DataStore, engine) => {
+    const store = DataStore.getStore();
 
-  const wrapper =
-    document.getElementById(`wrapper_${key}`) ||
-    document.getElementById('wrapper_unwitty_game');
+    const {
+      core: { key }
+    } = store.getState();
 
-  const overlaysWrapper = document.createElement('div');
-  overlaysWrapper.setAttribute('class', `wrapper_overlays_unwitty_game`);
-  overlaysWrapper.setAttribute('id', `wrapper_overlays_${key}`);
+    const wrapper =
+      document.getElementById(`wrapper_${key}`) ||
+      document.getElementById('wrapper_unwitty_game');
 
-  wrapper.appendChild(overlaysWrapper);
-  ReactDOM.render(
-    <Provider store={store}>
-      <App engine={engine} />
-    </Provider>,
-    document.getElementById(`wrapper_overlays_${key}`)
-  );
-}
+    const overlaysWrapper = document.createElement('div');
+    overlaysWrapper.setAttribute('class', `wrapper_overlays_unwitty_game`);
+    overlaysWrapper.setAttribute('id', `wrapper_overlays_${key}`);
 
-export default mountEditor;
+    wrapper.appendChild(overlaysWrapper);
+    ReactDOM.render(
+      <Provider store={store}>
+        <App engine={engine} />
+      </Provider>,
+      document.getElementById(`wrapper_overlays_${key}`)
+    );
+  }
+};
+
+export default Editor;

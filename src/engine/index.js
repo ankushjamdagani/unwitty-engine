@@ -1,4 +1,4 @@
-import { enableMapSet, setAutoFreeze } from 'immer';
+import { enableMapSet } from 'immer';
 
 import {
   DataStore,
@@ -12,21 +12,16 @@ import Engine from './Engine';
 
 // for immer
 enableMapSet();
-setAutoFreeze(true);
+// setAutoFreeze(false);
 
 // for resux store
 DataStore.configureStore();
 
-function GameEngine(props) {
-  return new Engine(props);
-}
+Engine.DataStore = DataStore;
+Engine.Constants = Constants;
+Engine.EntityManager = EntityManager;
+Engine.RenderManager = RenderManager;
+Engine.ResourceManager = ResourceManager;
+Engine.TimeManager = TimeManager;
 
-const Helpers = {
-  EntityManager,
-  RenderManager,
-  ResourceManager,
-  TimeManager
-};
-
-export { DataStore, Constants, Helpers };
-export default GameEngine;
+export default Engine;

@@ -29,6 +29,10 @@ const { Vector2D, Base } = core;
 // Exit
 
 class Engine extends Base {
+  static init(props) {
+    return new Engine(props);
+  }
+
   /**
    * @prop { name, width, height, smoothImage, containerDOM, timeScale, fps }
    */
