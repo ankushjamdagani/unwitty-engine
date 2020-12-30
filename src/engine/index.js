@@ -17,6 +17,8 @@ enableMapSet();
 // for resux store
 DataStore.configureStore();
 
+Engine.init = (props) => new Engine(props);
+
 Engine.DataStore = DataStore;
 Engine.Constants = Constants;
 Engine.EntityManager = EntityManager;
