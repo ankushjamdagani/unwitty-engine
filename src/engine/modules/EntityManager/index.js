@@ -15,7 +15,7 @@ class EntityManager extends Base {
     this.props = props;
   }
 
-  setRoot(elem) {
+  set root(elem) {
     this.props.syncData({
       entities: {
         world: elem
@@ -23,7 +23,7 @@ class EntityManager extends Base {
     });
   }
 
-  getRoot() {
+  get root() {
     return this.props.getData().entities.world;
   }
 
@@ -206,34 +206,6 @@ class EntityManager extends Base {
 
   static get FluidBody() {
     return FluidBody;
-  }
-
-  static createWorld(props) {
-    return World.create({ ...props, name: 'world' });
-  }
-
-  static createLight(props) {
-    return Light.create(props);
-  }
-
-  static createTransform(props) {
-    return Transform.create(props);
-  }
-
-  static createLayer(props) {
-    return Layer.create(props);
-  }
-
-  static createBody(props) {
-    return Body.create(props);
-  }
-
-  static createPhysicsBody(props) {
-    return PhysicsBody.create(props);
-  }
-
-  static createFluidBody(props) {
-    return FluidBody.create(props);
   }
 }
 

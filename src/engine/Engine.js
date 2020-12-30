@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-named-as-default-member
 import ResourceManager from './modules/ResourceManager';
 import EntityManager from './modules/EntityManager';
-import Renderer from './modules/Renderer';
+import RenderManager from './modules/RenderManager';
 import { Vector2D, Base } from './modules/core';
 
 import observeStore from './DataStore/observeStore';
@@ -67,17 +67,19 @@ class Engine extends Base {
       'core'
     );
 
-    this.initDomManager(containerDOM);
-    this.initTimer(timeScale, fps);
+    this.initDomManager({ containerDOM });
+    this.initTimeManager({ timeScale, fps });
     this.initResourceManager();
     this.initEntityManager();
-    this.initGameRenderer();
+    this.initRenderManager();
 
     this.dispatchEvent(new Event('on_ready'));
   }
 
   destroy() {
     this.dispatchEvent(new Event('before_destroy'));
+    cancelAnimationFrame(this.rafId);
+    this.rafId = null;
     this.clearStore();
     this.dispatchEvent(new Event('on_destroy'));
   }
@@ -90,19 +92,19 @@ class Engine extends Base {
     this.store.dispatch(clearStore.apply(this, args));
   }
 
-  initDomManager(containerDOM) {
+  initDomManager({ containerDOM }) {
     const {
       core: { key, width, height }
     } = this.props;
 
     const wrapper = document.createElement('div');
-    wrapper.setAttribute('class', `wrapper_demo_game`);
+    wrapper.setAttribute('class', `wrapper_unwitty_game`);
     wrapper.setAttribute('id', `wrapper_${key}`);
     wrapper.style.width = `${width}px`;
     wrapper.style.height = `${height}px`;
 
     const canvasWrapper = document.createElement('div');
-    canvasWrapper.setAttribute('class', `wrapper_canvas_demo_game`);
+    canvasWrapper.setAttribute('class', `wrapper_canvas_unwitty_game`);
     canvasWrapper.setAttribute('id', `wrapper_canvas_${key}`);
 
     wrapper.appendChild(canvasWrapper);
@@ -125,7 +127,7 @@ class Engine extends Base {
   }
 
   // Take frame per second in consideration
-  initTimer(timeScale, fps) {
+  initTimeManager({ timeScale, fps }) {
     const currTime = (performance || Date).now();
 
     this.syncStore(
@@ -142,7 +144,7 @@ class Engine extends Base {
         fpsHistory: [],
         fpsUpdateTime: 500
       },
-      'timer'
+      'timeManager'
     );
   }
 
@@ -165,33 +167,38 @@ class Engine extends Base {
       clearData: () => this.clearStore('entityManager'),
       getData: () => this.props.entityManager
     });
-    const world = EntityManager.createWorld({
+    const world = EntityManager.World.create({
+      name: 'world',
       gravity: 0,
       bounds: [
         Vector2D.create([-Infinity, -Infinity]),
         Vector2D.create([Infinity, Infinity])
       ]
     });
-    const light = EntityManager.createLight({
+    const light = EntityManager.Light.create({
       name: 'primary_light',
       position: Vector2D.zero()
     });
 
-    entityManager.setRoot(world);
+    entityManager.root = world;
     entityManager.addChildren(world, light);
 
     this.managers.entityManager = entityManager;
   }
 
-  initGameRenderer() {
-    this.managers.renderer = new Renderer({
+  initRenderManager() {
+    this.managers.renderManager = new RenderManager({
+      /**
+       * Remove dependency on engine
+       */
       engine: this,
       syncData: (data) => this.syncStore(data, 'renderManager'),
       clearData: () => this.clearStore('renderManager'),
       getData: () => ({
         ...this.props.renderManager,
         ...this.props.core,
-        ...this.props.entityManager
+        ...this.props.entityManager,
+        ...this.props.resourceManager
       })
     });
   }
@@ -201,22 +208,22 @@ class Engine extends Base {
    * https://stackoverflow.com/questions/19764018/controlling-fps-with-requestanimationframe
    */
   autoPilot() {
-    requestAnimationFrame(this.autoPilot.bind(this));
+    this.rafId = requestAnimationFrame(this.autoPilot.bind(this));
 
-    const { timer } = this.props;
+    const { timeManager } = this.props;
 
     const currTime = (performance || Date).now();
-    const elapsedTime = currTime - timer.lastTime;
+    const elapsedTime = currTime - timeManager.lastTime;
 
-    if (elapsedTime >= timer.timestep) {
+    if (elapsedTime >= timeManager.timestep) {
       const {
         timestep,
         timeScale,
         fpsUpdateTime,
         fpsHistory,
         deltaTime: prevDeltaTime
-      } = timer;
-      let { lastTime, fps, fpsLastTick } = timer;
+      } = timeManager;
+      let { lastTime, fps, fpsLastTick } = timeManager;
 
       let deltaTime = prevDeltaTime + elapsedTime;
 
@@ -267,7 +274,7 @@ class Engine extends Base {
           fpsHistory,
           deltaTime
         },
-        'timer'
+        'timeManager'
       );
     }
   }
@@ -307,7 +314,7 @@ class Engine extends Base {
   render() {
     this.dispatchEvent(new Event('before_render'));
 
-    this.managers.renderer.renderTree('world');
+    this.managers.renderManager.renderTree('world');
 
     this.dispatchEvent(new Event('on_render'));
   }

@@ -1,12 +1,15 @@
 import { SYNC, CLEAR } from './core.actionTypes';
 
 const INITIAL_STATE = {
-  core: {
-    debug: false,
-    smoothImage: true
+  core: {},
+  timeManager: {},
+  resourceManager: {
+    resources: {}
   },
-  timer: {},
-  resourceManager: {}
+  entityManager: {
+    entities: {}
+  },
+  renderManager: {}
 };
 
 export default function coreReducer(state = INITIAL_STATE, action) {

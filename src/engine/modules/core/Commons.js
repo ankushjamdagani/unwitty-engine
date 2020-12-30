@@ -36,6 +36,18 @@ const throttle = (fn, time) => {
   };
 };
 
+const debounce = (fn, time) => {
+  let timer = null;
+  return function cb(...args) {
+    timer && clearTimeout(timer);
+
+    setTimeout(() => {
+      fn.apply(this, args);
+      timer = null;
+    }, time);
+  };
+};
+
 export default {
   roundOff,
   minimum,
@@ -45,5 +57,6 @@ export default {
   isNegative,
   hasValue,
   uid,
-  throttle
+  throttle,
+  debounce
 };

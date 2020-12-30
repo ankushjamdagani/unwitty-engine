@@ -1,3 +1,6 @@
+/* eslint-disable no-param-reassign */
+import produce from 'immer';
+
 import { Vector2D } from '../core';
 
 /**
@@ -16,8 +19,13 @@ class Camera {
     };
   }
 
-  static bindTarget(target) {
-    return target;
+  static bindTarget(camera, target) {
+    return produce(camera, (draft) => {
+      draft.target = {
+        id: target.id,
+        position: target.position
+      };
+    });
   }
 
   static update(camera, entities) {
@@ -26,13 +34,12 @@ class Camera {
       const { position, id } = target;
       const targetPos = id ? entities[id].position : position;
 
-      return {
-        ...camera,
-        position: {
+      return produce(camera, (draft) => {
+        draft.position = {
           x: targetPos.x - width / 2,
           y: targetPos.y - height / 2
-        }
-      };
+        };
+      });
     }
     return camera;
   }

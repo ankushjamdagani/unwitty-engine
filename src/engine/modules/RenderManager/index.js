@@ -24,7 +24,7 @@ const MID_CANVAS_KEY = 'BASE';
  *   - Checks which ones are ideal and don't need updating
  *      i.e. checks if elements are sleeping
  */
-class Renderer extends Base {
+class RenderManager extends Base {
   constructor(props) {
     super(props);
     this.props = props;
@@ -81,9 +81,7 @@ class Renderer extends Base {
 
   bindCamera(target) {
     this.props.syncData({
-      camera: produce(this.props.getData().camera, (draft) => {
-        draft.target = target;
-      })
+      camera: Camera.bindTarget(this.props.getData().camera, target)
     });
   }
 
@@ -102,7 +100,7 @@ class Renderer extends Base {
 
     this.props.syncData({
       canvasMap: newCanvasMap,
-      camera: produce(camera, (draft) => Camera.update(draft, entities))
+      camera: Camera.update(camera, entities)
     });
 
     this.renderNode(root, entities);
@@ -113,8 +111,7 @@ class Renderer extends Base {
 
     if (!element) return;
 
-    const { canvasMap, camera } = this.props.getData();
-    const { resourceManager } = this.props.engine.managers;
+    const { canvasMap, camera, resources } = this.props.getData();
 
     const canvasObj = canvasMap.get(element.canvasId || MID_CANVAS_KEY);
 
@@ -138,22 +135,22 @@ class Renderer extends Base {
       case ENTITY_NODE_TYPES.LIGHT:
         break;
       case ENTITY_NODE_TYPES.TRANSFORM:
-        Renderer.applyTransform(context, element, camera);
+        RenderManager.applyTransform(context, element, camera);
         break;
       case ENTITY_NODE_TYPES.BODY:
       case ENTITY_NODE_TYPES.PHYSICS_BODY:
       case ENTITY_NODE_TYPES.FLUID_BODY: {
         context.beginPath();
-        Renderer.renderBody(element, {
+        RenderManager.renderBody(element, {
           context,
           camera,
-          resourceManager
+          resources
         });
         context.closePath();
 
         if (element.debug) {
           context.beginPath();
-          Renderer.drawBoundingBox(context, element, camera);
+          RenderManager.drawBoundingBox(context, element, camera);
           context.closePath();
         }
         break;
@@ -182,7 +179,7 @@ class Renderer extends Base {
   }
 
   static renderBody(element, envProps) {
-    const { context, camera, resourceManager } = envProps;
+    const { context, camera, resources } = envProps;
     const {
       image,
       backgroundImage,
@@ -193,10 +190,10 @@ class Renderer extends Base {
       borderSize
     } = element.styles;
 
-    const _image = image && resourceManager.get(image);
-    _image && Renderer.renderImage(context, element, camera, _image);
+    const _image = image && resources.get(image);
+    _image && RenderManager.renderImage(context, element, camera, _image);
 
-    const _bgImage = backgroundImage && resourceManager.get(backgroundImage);
+    const _bgImage = backgroundImage && resources.get(backgroundImage);
 
     if (!backgroundColor & !borderColor & !borderSize & !_bgImage) {
       return;
@@ -214,11 +211,11 @@ class Renderer extends Base {
     }
 
     if (element.shape === SHAPES.RECTANGLE) {
-      Renderer.renderRect(context, element, camera);
+      RenderManager.renderRect(context, element, camera);
     } else if (element.shape === SHAPES.ARC) {
-      Renderer.renderCircle(context, element, camera);
+      RenderManager.renderCircle(context, element, camera);
     } else if (element.shape === SHAPES.POLYGON) {
-      Renderer.renderPolygon(context, element, camera);
+      RenderManager.renderPolygon(context, element, camera);
     }
   }
 
@@ -243,13 +240,13 @@ class Renderer extends Base {
     let coords;
 
     if (Array.isArray(origin)) {
-      const { x, y } = Renderer.getScreenPosition(
+      const { x, y } = RenderManager.getScreenPosition(
         { x: origin[0], y: origin[1] },
         camera
       );
       coords = [x, y];
     } else {
-      const { x, y } = Renderer.getScreenPosition(position, camera);
+      const { x, y } = RenderManager.getScreenPosition(position, camera);
       const xMax = x + width + margins[1];
       const xMin = x - margins[3];
 
@@ -291,14 +288,14 @@ class Renderer extends Base {
   }
 
   static renderImage(context, element, camera, image) {
-    const { x, y } = Renderer.getScreenPosition(element.position, camera);
+    const { x, y } = RenderManager.getScreenPosition(element.position, camera);
     const { width, height } = element;
 
     context.drawImage(image, x, y, width, height);
   }
 
   static renderRect(context, element, camera) {
-    const { x, y } = Renderer.getScreenPosition(element.position, camera);
+    const { x, y } = RenderManager.getScreenPosition(element.position, camera);
     const { width, height } = element;
 
     context.rect(x, y, width, height);
@@ -307,7 +304,7 @@ class Renderer extends Base {
   }
 
   static renderCircle(context, element, camera) {
-    const { x, y } = Renderer.getScreenPosition(element.position, camera);
+    const { x, y } = RenderManager.getScreenPosition(element.position, camera);
     const { radius, startAngle, endAngle } = element;
 
     context.arc(x + radius, y + radius, radius, startAngle, endAngle);
@@ -316,7 +313,7 @@ class Renderer extends Base {
   }
 
   static renderPolygon(context, element, camera) {
-    const { x, y } = Renderer.getScreenPosition(element.position, camera);
+    const { x, y } = RenderManager.getScreenPosition(element.position, camera);
     const { vertices } = element;
 
     context.moveTo(x + vertices[0][0], y + vertices[0][1]);
@@ -331,7 +328,7 @@ class Renderer extends Base {
   }
 
   static drawBoundingBox(context, element, camera) {
-    const { x, y } = Renderer.getScreenPosition(element.position, camera);
+    const { x, y } = RenderManager.getScreenPosition(element.position, camera);
     const { width, height } = element;
     const { margins, shape, color } = element.boundingBox;
 
@@ -353,4 +350,4 @@ class Renderer extends Base {
   }
 }
 
-export default Renderer;
+export default RenderManager;

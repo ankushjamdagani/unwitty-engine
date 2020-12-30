@@ -7,7 +7,7 @@ import EntityManager from './modules/EntityManager';
 
 import configureStore from './DataStore/configureStore';
 
-const store = configureStore({});
+const store = configureStore();
 enableMapSet();
 
 function GameEngine(props) {

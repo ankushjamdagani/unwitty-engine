@@ -1,9 +1,6 @@
 import mountEditor from '../editor';
 import GameEngine, { store, Helpers } from '../engine';
 
-// import Image from "../examples/brick-breaker/assets/images/Ball1.svg";
-
-// const { SHAPES } = Constants;
 const {
   EntityManager: { Body, Transform }
 } = Helpers;
@@ -18,8 +15,8 @@ const engine = new GameEngine({
   height: HEIGHT,
   debug: true
 });
-const { entityManager, renderer } = engine.managers;
-const world = entityManager.getRoot();
+const { entityManager, renderManager } = engine.managers;
+const world = entityManager.root;
 
 mountEditor(store, engine);
 
@@ -138,7 +135,7 @@ window.addEventListener('keydown', (evt) => {
 });
 
 setInterval(() => {
-  const data = store.getState().timer;
+  const data = store.getState().timeManager;
   if (data.timeScale < 1) {
     store.dispatch({
       type: 'CORE_SYNC',
@@ -146,7 +143,7 @@ setInterval(() => {
         ...data,
         timeScale: 1
       },
-      context: 'timer'
+      context: 'timeManager'
     });
   } else {
     store.dispatch({
@@ -155,11 +152,11 @@ setInterval(() => {
         ...data,
         timeScale: 0.05
       },
-      context: 'timer'
+      context: 'timeManager'
     });
   }
 }, 1500);
 
-renderer.bindCamera(runner);
+renderManager.bindCamera(runner);
 
 console.log(engine);
