@@ -1,6 +1,7 @@
 import mountEditor from '../editor';
-import GameEngine, { store, Helpers } from '../engine';
+import GameEngine, { DataStore, Helpers } from '../engine';
 
+const store = DataStore.getStore();
 const {
   EntityManager: { Body, Transform }
 } = Helpers;
@@ -108,7 +109,7 @@ engine.autoPilot();
 
 window.addEventListener('keydown', (evt) => {
   const { key } = evt;
-  const { entities } = store.getState().entityManager;
+  const { entities } = DataStore.getData('entityManager');
   let { x, y } = entities.runner.position;
 
   if (key === 'ArrowLeft') x = entities.runner.position.x - 50;
@@ -116,9 +117,8 @@ window.addEventListener('keydown', (evt) => {
   if (key === 'ArrowUp') y = entities.runner.position.y - 50;
   if (key === 'ArrowDown') y = entities.runner.position.y + 50;
 
-  store.dispatch({
-    type: 'CORE_SYNC',
-    data: {
+  DataStore.setData(
+    {
       entities: {
         ...entities,
         runner: {
@@ -130,30 +130,28 @@ window.addEventListener('keydown', (evt) => {
         }
       }
     },
-    context: 'entityManager'
-  });
+    'entityManager'
+  );
 });
 
 setInterval(() => {
-  const data = store.getState().timeManager;
+  const data = DataStore.getData('timeManager');
   if (data.timeScale < 1) {
-    store.dispatch({
-      type: 'CORE_SYNC',
-      data: {
+    DataStore.setData(
+      {
         ...data,
         timeScale: 1
       },
-      context: 'timeManager'
-    });
+      'timeManager'
+    );
   } else {
-    store.dispatch({
-      type: 'CORE_SYNC',
-      data: {
+    DataStore.setData(
+      {
         ...data,
         timeScale: 0.05
       },
-      context: 'timeManager'
-    });
+      'timeManager'
+    );
   }
 }, 1500);
 

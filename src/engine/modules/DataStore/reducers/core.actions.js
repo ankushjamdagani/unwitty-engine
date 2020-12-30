@@ -1,6 +1,6 @@
 import { SYNC, CLEAR } from './core.actionTypes';
 
-function syncStore(data, context) {
+function setData(data, context) {
   return {
     type: SYNC,
     data,
@@ -8,7 +8,7 @@ function syncStore(data, context) {
   };
 }
 
-function clearStore(data, context) {
+function clearData(data, context) {
   return {
     type: CLEAR,
     data,
@@ -16,4 +16,4 @@ function clearStore(data, context) {
   };
 }
 
-export { syncStore, clearStore };
+export { setData, clearData };

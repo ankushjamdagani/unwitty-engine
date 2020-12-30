@@ -24,10 +24,12 @@ export default function coreReducer(state = INITIAL_STATE, action) {
       };
     }
     case CLEAR: {
-      return {
-        ...state,
-        [action.context]: INITIAL_STATE[action.context] || {}
-      };
+      return action.context
+        ? {
+            ...state,
+            [action.context]: INITIAL_STATE[action.context] || {}
+          }
+        : INITIAL_STATE;
     }
     default: {
       return state;

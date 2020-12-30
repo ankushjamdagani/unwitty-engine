@@ -11,7 +11,6 @@ import {
 import './styles.css';
 
 const { Vector2D, Base } = core;
-const { observeStore, Actions } = DataStore;
 
 // --------------- GAME LOOP STARTS
 // Get Elements to render
@@ -43,24 +42,21 @@ class Engine extends Base {
       smoothImage = false,
       timeScale = 1,
       fps = 100,
-      store,
       containerDOM
     } = props || {};
 
     this.props = {};
     this.managers = {};
-    this.store = store;
 
     // @TODO :: maybe // if not performance concerns
-    observeStore(
-      store,
+    DataStore.observeStore(
       (state) => state,
       (state) => {
         this.props = state;
       }
     );
 
-    this.syncStore(
+    DataStore.setData(
       {
         key: name,
         width,
@@ -84,16 +80,8 @@ class Engine extends Base {
     this.dispatchEvent(new Event('before_destroy'));
     cancelAnimationFrame(this.rafId);
     this.rafId = null;
-    this.clearStore();
+    DataStore.clearData();
     this.dispatchEvent(new Event('on_destroy'));
-  }
-
-  syncStore(...args) {
-    this.store.dispatch(Actions.syncStore.apply(this, args));
-  }
-
-  clearStore(...args) {
-    this.store.dispatch(Actions.clearStore.apply(this, args));
   }
 
   initDomManager({ containerDOM }) {
@@ -134,8 +122,8 @@ class Engine extends Base {
   initTimeManager(props) {
     const timeManager = new TimeManager({
       data: props,
-      syncData: (data) => this.syncStore(data, 'timeManager'),
-      clearData: () => this.clearStore('timeManager'),
+      syncData: (data) => DataStore.setData(data, 'timeManager'),
+      clearData: () => DataStore.clearData('timeManager'),
       getData: () => this.props.timeManager
     });
 
@@ -147,8 +135,8 @@ class Engine extends Base {
    */
   initResourceManager() {
     const resourceManager = new ResourceManager({
-      syncData: (data) => this.syncStore(data, 'resourceManager'),
-      clearData: () => this.clearStore('resourceManager'),
+      syncData: (data) => DataStore.setData(data, 'resourceManager'),
+      clearData: () => DataStore.clearData('resourceManager'),
       getData: () => this.props.resourceManager
     });
 
@@ -157,8 +145,8 @@ class Engine extends Base {
 
   initEntityManager() {
     const entityManager = new EntityManager({
-      syncData: (data) => this.syncStore(data, 'entityManager'),
-      clearData: () => this.clearStore('entityManager'),
+      syncData: (data) => DataStore.setData(data, 'entityManager'),
+      clearData: () => DataStore.clearData('entityManager'),
       getData: () => this.props.entityManager
     });
     const world = EntityManager.World.create({
@@ -186,8 +174,8 @@ class Engine extends Base {
        * Remove dependency on engine
        */
       engine: this,
-      syncData: (data) => this.syncStore(data, 'renderManager'),
-      clearData: () => this.clearStore('renderManager'),
+      syncData: (data) => DataStore.setData(data, 'renderManager'),
+      clearData: () => DataStore.clearData('renderManager'),
       getData: () => ({
         ...this.props.renderManager,
         ...this.props.core,
@@ -230,13 +218,13 @@ class Engine extends Base {
   }
 
   update(deltaTime) {
-    const { entityManager } = this.store.getState();
+    const { entityManager } = this.props;
     const _transform1 = entityManager.entities.transform1;
     const _transform2 = entityManager.entities.transform2;
 
     this.dispatchEvent(new Event('before_update'));
 
-    this.syncStore(
+    DataStore.setData(
       {
         entities: {
           ...entityManager.entities,
