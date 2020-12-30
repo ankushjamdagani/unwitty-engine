@@ -230,11 +230,11 @@ class Engine extends Base {
           ...entityManager.entities,
           [_transform1.id]: {
             ..._transform1,
-            rotate: (_transform1.rotate += deltaTime / 10)
+            rotate: _transform1.rotate + deltaTime / 10
           },
           [_transform2.id]: {
             ..._transform2,
-            rotate: (_transform2.rotate += deltaTime / 10)
+            rotate: _transform2.rotate + deltaTime / 10
           }
         }
       },

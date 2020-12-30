@@ -28,8 +28,8 @@ class ResourceManager extends Base {
       if (type === RESOURCE_TYPE.AUDIO) {
         const ro = new Audio(src);
         ro.addEventListener('canplaythrough', () => {
-          this.props.syncData({
-            resources: { ...currResources, [key]: ro }
+          this.props.syncData((resourceM) => {
+            resourceM.resources[key] = ro;
           });
           cb && cb(key, ro);
         });
@@ -37,8 +37,8 @@ class ResourceManager extends Base {
         const ro = new Image();
         ro.src = src;
         ro.onload = () => {
-          this.props.syncData({
-            resources: { ...currResources, [key]: ro }
+          this.props.syncData((resourceM) => {
+            resourceM.resources[key] = ro;
           });
           cb && cb(key, ro);
         };
@@ -47,14 +47,11 @@ class ResourceManager extends Base {
   }
 
   removeResources(keys) {
-    const { resource: currResources } = this.props.getData();
-    const newResources = { ...currResources };
-    for (let i = 0; i < keys.length; i += 1) {
-      const key = keys[i];
-      delete newResources[key];
-    }
-    this.props.syncData({
-      resources: { ...newResources }
+    this.props.syncData((resourceM) => {
+      for (let i = 0; i < keys.length; i += 1) {
+        const key = keys[i];
+        delete resourceM.resources[key];
+      }
     });
   }
 

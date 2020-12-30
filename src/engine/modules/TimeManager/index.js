@@ -37,10 +37,9 @@ class TimeManager extends Base {
         timestep,
         timeScale,
         fpsUpdateTime,
-        fpsHistory,
         deltaTime: prevDeltaTime
       } = currData;
-      let { lastTime, fps, fpsLastTick } = currData;
+      let { fpsHistory, lastTime, fps, fpsLastTick } = currData;
 
       let deltaTime = prevDeltaTime + elapsedTime;
 
@@ -57,9 +56,10 @@ class TimeManager extends Base {
       // compute FPS
       // fps buffer have frames for 1sec. Length of it will give FPS
       while (fpsHistory.length > 0 && fpsHistory[0] <= currTime - 1000) {
-        fpsHistory.shift();
+        const [, ...restFpsHistory] = fpsHistory;
+        fpsHistory = restFpsHistory;
       }
-      fpsHistory.push(currTime);
+      fpsHistory = [...fpsHistory, currTime];
       if (currTime - fpsLastTick >= fpsUpdateTime) {
         fps = fpsHistory.length;
         fpsLastTick = currTime;
@@ -75,12 +75,12 @@ class TimeManager extends Base {
       deltaTime = deltaTime < 0 ? 0 : deltaTime;
       lastTime = currTime - (deltaTime % 10);
 
-      this.props.syncData({
-        lastTime,
-        fps,
-        fpsLastTick,
-        fpsHistory,
-        deltaTime
+      this.props.syncData((timer) => {
+        timer.lastTime = lastTime;
+        timer.fps = fps;
+        timer.fpsLastTick = fpsLastTick;
+        timer.fpsHistory = fpsHistory;
+        timer.deltaTime = deltaTime;
       });
       return [
         true,

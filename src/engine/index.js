@@ -1,4 +1,4 @@
-import { enableMapSet } from 'immer';
+import { enableMapSet, setAutoFreeze } from 'immer';
 
 import {
   DataStore,
@@ -10,8 +10,12 @@ import {
 import * as Constants from './constants/index';
 import Engine from './Engine';
 
-DataStore.configureStore();
+// for immer
 enableMapSet();
+setAutoFreeze(true);
+
+// for resux store
+DataStore.configureStore();
 
 function GameEngine(props) {
   return new Engine(props);

@@ -109,50 +109,23 @@ engine.autoPilot();
 
 window.addEventListener('keydown', (evt) => {
   const { key } = evt;
-  const { entities } = DataStore.getData('entityManager');
-  let { x, y } = entities.runner.position;
 
-  if (key === 'ArrowLeft') x = entities.runner.position.x - 50;
-  if (key === 'ArrowRight') x = entities.runner.position.x + 50;
-  if (key === 'ArrowUp') y = entities.runner.position.y - 50;
-  if (key === 'ArrowDown') y = entities.runner.position.y + 50;
-
-  DataStore.setData(
-    {
-      entities: {
-        ...entities,
-        runner: {
-          ...entities.runner,
-          position: {
-            x,
-            y
-          }
-        }
-      }
-    },
-    'entityManager'
-  );
+  DataStore.setData((data) => {
+    if (key === 'ArrowLeft') data.entities.runner.position.x -= 50;
+    if (key === 'ArrowRight') data.entities.runner.position.x += 50;
+    if (key === 'ArrowUp') data.entities.runner.position.y -= 50;
+    if (key === 'ArrowDown') data.entities.runner.position.y += 50;
+  }, 'entityManager');
 });
 
 setInterval(() => {
-  const data = DataStore.getData('timeManager');
-  if (data.timeScale < 1) {
-    DataStore.setData(
-      {
-        ...data,
-        timeScale: 1
-      },
-      'timeManager'
-    );
-  } else {
-    DataStore.setData(
-      {
-        ...data,
-        timeScale: 0.05
-      },
-      'timeManager'
-    );
-  }
+  DataStore.setData((data) => {
+    if (data.timeScale < 1) {
+      data.timeScale = 1;
+    } else {
+      data.timeScale = 0.05;
+    }
+  }, 'timeManager');
 }, 1500);
 
 renderManager.bindCamera(runner);

@@ -1,5 +1,3 @@
-import produce from 'immer';
-
 import { Commons, Base } from '../core';
 import { ENTITY_NODE_TYPES, SHAPES, TRANSFORM_ORIGIN } from '../../constants';
 
@@ -34,9 +32,9 @@ class RenderManager extends Base {
       height
     });
 
-    this.props.syncData({
-      canvasMap: new Map(),
-      camera
+    this.props.syncData((renderM) => {
+      renderM.canvasMap = new Map();
+      renderM.camera = camera;
     });
 
     this.addCanvas(MID_CANVAS_KEY);
@@ -63,43 +61,38 @@ class RenderManager extends Base {
 
     wrapper.appendChild(canvas);
 
-    this.props.syncData({
-      canvasMap: produce(canvasMap, (draft) => {
-        draft.set(
-          key,
-          new Map([
-            ['canvasId', key],
-            ['context', context],
-            ['lastUpdatedAt', null],
-            ['isActive', true]
-          ])
-        );
-      })
+    this.props.syncData((renderM) => {
+      renderM.canvasMap.set(
+        key,
+        new Map([
+          ['canvasId', key],
+          ['context', context],
+          ['lastUpdatedAt', null],
+          ['isActive', true]
+        ])
+      );
     });
   }
 
   bindCamera(target) {
-    this.props.syncData({
-      camera: Camera.bindTarget(this.props.getData().camera, target)
+    this.props.syncData((renderM) => {
+      renderM.camera = Camera.bindTarget(renderM.camera, target);
     });
   }
 
   renderTree(root) {
-    const { width, height, canvasMap, camera, entities } = this.props.getData();
+    const { width, height, entities } = this.props.getData();
 
-    const newCanvasMap = produce(canvasMap, (draft) => {
-      draft.forEach((cv) => {
+    this.props.syncData((renderM) => {
+      renderM.canvasMap.forEach((cv) => {
         if (cv.get('lastUpdatedAt') - Date.now() < 1000) {
           cv.get('context').clearRect(0, 0, width, height);
         } else if (cv.get('isActive')) {
           cv.set('isActive', false);
         }
       });
-    });
 
-    this.props.syncData({
-      canvasMap: newCanvasMap,
-      camera: Camera.update(camera, entities)
+      renderM.camera = Camera.update(renderM.camera, entities);
     });
 
     this.renderNode(root, entities);
@@ -120,12 +113,10 @@ class RenderManager extends Base {
     }
     const context = canvasObj.get('context');
 
-    this.props.syncData({
-      canvasMap: produce(canvasMap, (draft) => {
-        draft
-          .get(element.canvasId || MID_CANVAS_KEY)
-          .set('lastUpdatedAt', Date.now());
-      })
+    this.props.syncData((renderM) => {
+      renderM.canvasMap
+        .get(element.canvasId || MID_CANVAS_KEY)
+        .set('lastUpdatedAt', Date.now());
     });
 
     switch (element.type) {

@@ -16,10 +16,8 @@ class EntityManager extends Base {
   }
 
   set root(elem) {
-    this.props.syncData({
-      entities: {
-        world: elem
-      }
+    this.props.syncData((entityM) => {
+      entityM.entities.world = elem;
     });
   }
 
@@ -117,6 +115,11 @@ class EntityManager extends Base {
       }
     });
 
+    // this.props.syncData((entityManager) => {
+    //   entityManager.entities[_parent.id] = _parent;
+    //   entityManager.entities[children.id] = children;
+    // });
+
     _parent.parent && this.addChildren({ id: _parent.parent }, _parent);
   }
 
@@ -176,6 +179,11 @@ class EntityManager extends Base {
         [children.id]: _children
       }
     });
+
+    // this.props.syncData((entityManager) => {
+    //   entityManager.entities[_parent.id] = _parent;
+    //   entityManager.entities[children.id] = children;
+    // });
 
     _parent.parent && this.removeChildren({ id: _parent.parent }, _parent);
   }

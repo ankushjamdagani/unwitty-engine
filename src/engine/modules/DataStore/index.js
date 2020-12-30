@@ -1,3 +1,4 @@
+import produce from 'immer';
 import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
@@ -18,8 +19,13 @@ const DataStore = {
     return context ? _store.getState()[context] : _store.getState();
   },
 
-  setData(data, context) {
-    _store.dispatch(Actions.setData(data, context));
+  setData(dataGetter, context) {
+    if (typeof dataGetter === 'function') {
+      const _data = produce(DataStore.getData(context), dataGetter);
+      _store.dispatch(Actions.setData(_data, context));
+    } else {
+      _store.dispatch(Actions.setData(dataGetter, context));
+    }
   },
 
   clearData(data, context) {

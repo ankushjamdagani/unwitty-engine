@@ -17,17 +17,14 @@ export default function coreReducer(state = INITIAL_STATE, action) {
     case SYNC: {
       return {
         ...state,
-        [action.context]: {
-          ...(state[action.context] || {}),
-          ...action.data
-        }
+        [action.context]: action.data
       };
     }
     case CLEAR: {
       return action.context
         ? {
             ...state,
-            [action.context]: INITIAL_STATE[action.context] || {}
+            [action.context]: INITIAL_STATE[action.context]
           }
         : INITIAL_STATE;
     }
