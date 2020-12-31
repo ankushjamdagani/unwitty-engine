@@ -98,36 +98,27 @@ entityManager.addChildren(sun, transform2);
 entityManager.addChildren(transform2, earth);
 entityManager.addChildren(earth, moon);
 
-engine.autoPilot();
-// engine.update();
-// setTimeout(() => {
-//   engine.update();
-// }, 100);
+engine.addEventListener('on_ready', () => {
+  window.addEventListener('keydown', (evt) => {
+    const { key } = evt;
 
-// engine.addEventListener('on_update', (evt) => {
-//   console.log(evt.target);
-// });
-
-window.addEventListener('keydown', (evt) => {
-  const { key } = evt;
-
-  DataStore.setData((data) => {
-    if (key === 'ArrowLeft') data.entities.runner.position.x -= 50;
-    if (key === 'ArrowRight') data.entities.runner.position.x += 50;
-    if (key === 'ArrowUp') data.entities.runner.position.y -= 50;
-    if (key === 'ArrowDown') data.entities.runner.position.y += 50;
-  }, 'entityManager');
+    DataStore.setData((data) => {
+      if (key === 'ArrowLeft') data.entities.runner.position.x -= 50;
+      if (key === 'ArrowRight') data.entities.runner.position.x += 50;
+      if (key === 'ArrowUp') data.entities.runner.position.y -= 50;
+      if (key === 'ArrowDown') data.entities.runner.position.y += 50;
+    }, 'entityManager');
+  });
+  setInterval(() => {
+    DataStore.setData((data) => {
+      if (data.timeScale < 1) {
+        data.timeScale = 1;
+      } else {
+        data.timeScale = 0.05;
+      }
+    }, 'timeManager');
+  }, 1500);
 });
-
-setInterval(() => {
-  DataStore.setData((data) => {
-    if (data.timeScale < 1) {
-      data.timeScale = 1;
-    } else {
-      data.timeScale = 0.05;
-    }
-  }, 'timeManager');
-}, 1500);
 
 renderManager.bindCamera(runner);
 

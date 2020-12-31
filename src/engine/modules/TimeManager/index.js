@@ -26,11 +26,12 @@ class TimeManager extends Base {
   }
 
   // https://stackoverflow.com/questions/19764018/controlling-fps-with-requestanimationframe
-  update() {
+  update(fromTime, toTime) {
     const currData = this.props.getData();
 
-    const currTime = (performance || Date).now();
-    const elapsedTime = currTime - currData.lastTime;
+    const currTime = toTime || (performance || Date).now();
+    let lastTime = fromTime || currData.lastTime;
+    const elapsedTime = currTime - lastTime;
 
     if (elapsedTime >= currData.timestep) {
       const {
@@ -39,7 +40,7 @@ class TimeManager extends Base {
         fpsUpdateTime,
         deltaTime: prevDeltaTime
       } = currData;
-      let { fpsHistory, lastTime, fps, fpsLastTick } = currData;
+      let { fpsHistory, fps, fpsLastTick } = currData;
 
       let deltaTime = prevDeltaTime + elapsedTime;
 

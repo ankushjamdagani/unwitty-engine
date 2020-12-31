@@ -17,7 +17,11 @@ enableMapSet();
 // for resux store
 DataStore.configureStore();
 
-Engine.init = (props) => new Engine(props);
+Engine.init = (props) => {
+  const _engine = new Engine(props);
+  window.__UNWITTY_ENGINE__ = _engine;
+  return _engine;
+};
 
 Engine.DataStore = DataStore;
 Engine.Constants = Constants;

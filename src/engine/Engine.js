@@ -62,7 +62,8 @@ class Engine extends Base {
         width,
         height,
         aspectRatio: width / height,
-        smoothImage
+        smoothImage,
+        gameState: 'PLAY'
       },
       'core'
     );
@@ -73,13 +74,17 @@ class Engine extends Base {
     this.initEntityManager();
     this.initRenderManager();
 
-    this.dispatchEvent(new Event('on_ready'));
+    this.pause();
+
+    setTimeout(() => {
+      this.dispatchEvent(new Event('on_ready'));
+    });
   }
 
   destroy() {
     this.dispatchEvent(new Event('before_destroy'));
-    cancelAnimationFrame(this.rafId);
-    this.rafId = null;
+    cancelAnimationFrame(this.autoPilotCycle);
+    this.autoPilotCycle = null;
     DataStore.clearData();
     this.dispatchEvent(new Event('on_destroy'));
   }
@@ -102,20 +107,6 @@ class Engine extends Base {
     wrapper.appendChild(canvasWrapper);
 
     (containerDOM || document.body).appendChild(wrapper);
-  }
-
-  getCanvasWrapper() {
-    const {
-      core: { key }
-    } = this.props;
-    return document.getElementById(`wrapper_canvas_${key}`);
-  }
-
-  getOverlaysWrapper() {
-    const {
-      core: { key }
-    } = this.props;
-    return document.getElementById(`wrapper_overlays_${key}`);
   }
 
   // Take frame per second in consideration
@@ -186,12 +177,16 @@ class Engine extends Base {
   }
 
   autoPilot() {
-    this.rafId = requestAnimationFrame(this.autoPilot.bind(this));
+    this.autoPilotCycle = requestAnimationFrame(this.autoPilot.bind(this));
 
+    this.tick();
+  }
+
+  tick(fromTime, toTime) {
     const [
       shouldUpdate,
       { updateCount, fixedDelta, interpolationTime } = {}
-    ] = this.managers.timeManager.update();
+    ] = this.managers.timeManager.update(fromTime, toTime);
 
     if (shouldUpdate) {
       /**
@@ -239,6 +234,109 @@ class Engine extends Base {
     this.managers.renderManager.renderTree('world');
 
     this.dispatchEvent(new Event('on_render'));
+  }
+
+  play() {
+    DataStore.setData((core) => {
+      core.gameState = 'PLAY';
+    }, 'core');
+
+    DataStore.setData((timer) => {
+      timer.lastTime = (performance || Date).now();
+    }, 'timeManager');
+
+    !this.autoPilotCycle && this.autoPilot();
+  }
+
+  pause() {
+    this.pauseRenderCycle && clearInterval(this.pauseRenderCycle);
+
+    DataStore.setData((core) => {
+      core.gameState = 'PAUSE';
+    }, 'core');
+
+    cancelAnimationFrame(this.autoPilotCycle);
+
+    this.autoPilotCycle = null;
+
+    this.pauseRenderCycle = setInterval(() => {
+      this.currTick();
+      // DataStore.setData((data) => {
+      //   if (data.timeScale < 1) {
+      //     data.timeScale = 1;
+      //   } else {
+      //     data.timeScale = 0.05;
+      //   }
+      // }, 'timeManager');
+    }, 200);
+  }
+
+  stop() {
+    DataStore.setData((core) => {
+      core.gameState = 'STOP';
+    }, 'core');
+
+    cancelAnimationFrame(this.autoPilotCycle);
+
+    this.autoPilotCycle = null;
+  }
+
+  rewind() {
+    DataStore.setData((timer) => {
+      timer.timeScale = -1;
+    }, 'timeManager');
+
+    this.play();
+  }
+
+  forward() {
+    DataStore.setData((timer) => {
+      timer.timeScale = 1;
+    }, 'timeManager');
+
+    this.play();
+  }
+
+  currTick() {
+    this.render();
+  }
+
+  nextTick() {
+    const currTime = (performance || Date).now();
+    this.tick(currTime, currTime + this.props.timeManager.timestep + 0.0001);
+  }
+
+  /**
+   * @todo :: not working right now
+   * - all calculations goes wrong if time is negative
+   */
+  // prevTick() {
+  //   const currTime = (performance || Date).now();
+  //   this.tick(currTime, currTime - this.props.timeManager.timestep - 0.0001);
+  // }
+
+  /**
+   * @todo :: not working right now
+   * - all calculations goes wrong if time is negative
+   * - toTime is w.r.t a range recorded and moved by difference of toTime and lastTime + deltaTime
+   */
+  // seekTick(toTime, range = []) {
+
+  //   this.tick(toTime - this.props.timeManager.timestep - 0.0001, toTime);
+  // }
+
+  getCanvasWrapper() {
+    const {
+      core: { key }
+    } = this.props;
+    return document.getElementById(`wrapper_canvas_${key}`);
+  }
+
+  getOverlaysWrapper() {
+    const {
+      core: { key }
+    } = this.props;
+    return document.getElementById(`wrapper_overlays_${key}`);
   }
 }
 
