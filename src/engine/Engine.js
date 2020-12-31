@@ -306,14 +306,10 @@ class Engine extends Base {
     this.tick(currTime, currTime + this.props.timeManager.timestep + 0.0001);
   }
 
-  /**
-   * @todo :: not working right now
-   * - all calculations goes wrong if time is negative
-   */
-  // prevTick() {
-  //   const currTime = (performance || Date).now();
-  //   this.tick(currTime, currTime - this.props.timeManager.timestep - 0.0001);
-  // }
+  prevTick() {
+    const currTime = (performance || Date).now();
+    this.tick(currTime, currTime - this.props.timeManager.timestep - 0.0001);
+  }
 
   /**
    * @todo :: not working right now

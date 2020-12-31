@@ -31,7 +31,8 @@ class TimeManager extends Base {
 
     const currTime = toTime || (performance || Date).now();
     let lastTime = fromTime || currData.lastTime;
-    const elapsedTime = currTime - lastTime;
+    const elapsedTime = Math.abs(currTime - lastTime);
+    const timeDirection = Math.sign(currTime - lastTime);
 
     if (elapsedTime >= currData.timestep) {
       const {
@@ -87,7 +88,7 @@ class TimeManager extends Base {
         true,
         {
           updateCount,
-          fixedDelta: timestep * timeScale,
+          fixedDelta: timestep * timeScale * timeDirection,
           interpolationTime: deltaTime / timestep
         }
       ];
