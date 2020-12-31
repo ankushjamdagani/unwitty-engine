@@ -1,0 +1,31 @@
+.game-state-controller {
+  display: flex;
+  padding: 16px;
+  align-items: center;
+  justify-content: flex-end;
+  color: white;
+  z-index: 111;
+}
+.game-state-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 4px;
+  height: 24px;
+  width: 24px;
+}
+.mr-2 {
+  margin-right: 8px;
+}
+.game-state-round-button {
+  border-radius: 100%;
+}
+.game-state-white-button {
+  color: #000;
+  background-color: #fff;
+}
+.game-state-big-button {
+  height: 32px;
+  width: 32px;
+}
