@@ -7,7 +7,11 @@ import GameStateController from './components/GameStateController';
 const App = ({ timeManager: { fps }, engine }) => (
   <div
     style={{
-      color: 'white'
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'flex-end',
+      flexDirection: 'column',
+      height: '100%'
     }}
   >
     <FPSDebugger fps={fps} />

@@ -4,6 +4,10 @@ import { Provider } from 'react-redux';
 
 import App from './App';
 
+/**
+ * ICONS ::  https://material.io/resources/icons/?style=baseline
+ */
+
 const Editor = {
   init: (DataStore, engine) => {
     const store = DataStore.getStore();
@@ -20,7 +24,7 @@ const Editor = {
     overlaysWrapper.setAttribute('class', `wrapper_overlays_unwitty_game`);
     overlaysWrapper.setAttribute('id', `wrapper_overlays_${key}`);
 
-    wrapper.appendChild(overlaysWrapper);
+    wrapper.prepend(overlaysWrapper);
     ReactDOM.render(
       <Provider store={store}>
         <App engine={engine} />
