@@ -1,4 +1,4 @@
-import Component from './Component';
+import { Base } from '../core';
 
 import OnGameStart from '../assets/sounds/retro_43.mp3';
 import OnGameEnd from '../assets/sounds/retro_11.mp3';
@@ -16,7 +16,7 @@ import OnBreakerBounce from '../assets/sounds/sfx_wpn_laser5.wav';
 // Canon
 // sfx_wpn_cannon1, sfx_wpn_cannon4, sfx_weapon_singleshot13
 
-class AudioHandler extends Component {
+class AudioHandler extends Base {
   constructor(props) {
     super(props);
 
@@ -76,7 +76,6 @@ class AudioHandler extends Component {
   }
 
   mute() {
-    console.log('Muting');
     return this;
   }
 }

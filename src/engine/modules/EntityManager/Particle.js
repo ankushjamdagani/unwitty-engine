@@ -1,8 +1,5 @@
 import { SHAPES, ENTITY_NODE_TYPES } from '../../constants';
-import Vector2D from '../core/Vector2D';
-// import Commons from "../core/Commons";
-
-import _node from './_node';
+import { Vector2D } from '../core';
 
 const defaultState = {
   shape: SHAPES.ARC,
@@ -17,10 +14,10 @@ const defaultState = {
 
 // Styles and textures will be applied to all children as well
 // children can have overriden styles as well, inherit unspecified values
-class Particle extends _node {
-  constructor(props) {
-    super(props);
+const Particle = {
+  ...Node,
 
+  create(props) {
     const {
       shape = defaultState.shape,
       radius,
@@ -36,30 +33,25 @@ class Particle extends _node {
       ...restProps
     } = props;
 
-    this.type = ENTITY_NODE_TYPES.BODY;
+    const _node = Node.create(props);
+    return {
+      ..._node,
+      type: ENTITY_NODE_TYPES.BODY,
+      shape,
+      radius,
+      startAngle: 0,
+      endAngle: Math.PI * 2,
+      position: Vector2D.create(position),
+      styles,
+      debug,
+      boundingBox: { ...defaultState.boundingBox, ...boundingBox },
+      restProps
+    };
+  },
 
-    this.shape = shape;
-    this.radius = radius;
-    this.startAngle = 0;
-    this.endAngle = Math.PI * 2;
-
-    // users will be giving center pos by default
-    this.position = new Vector2D(position[0], position[1]);
-
-    this.styles = styles;
-
-    this.debug = debug;
-    this.boundingBox = { ...defaultState.boundingBox, ...boundingBox };
-
-    this.restProps = restProps;
+  getDebugMessage(particle) {
+    return `Pos :: ${particle.position.x}, ${particle.position.y}`;
   }
-
-  onAddChilren() {
-    console.error('Cannot add children to particle', this);
-  }
-}
-
-Particle.getDebugMessage = (particle) =>
-  `Pos :: ${particle.position.x}, ${particle.position.y}`;
+};
 
 export default Particle;

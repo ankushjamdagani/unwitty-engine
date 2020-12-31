@@ -1,29 +1,29 @@
-import GameEngine from '../engine';
+import Editor from '../editor';
+import Engine from '../engine';
 
-// import Image from "../examples/brick-breaker/assets/images/Ball1.svg";
-
-// const { SHAPES } = GameEngine.Constants;
-const { Body, Transform } = GameEngine.helpers;
+const {
+  DataStore,
+  EntityManager: { Body, Transform }
+} = Engine;
 
 const WIDTH = window.innerWidth;
 const HEIGHT = window.innerHeight;
 
-const engine = new GameEngine({
-  timeSpeed: 1,
+const engine = Engine.init({
+  timeScale: 1,
   fps: 60,
   width: WIDTH,
   height: HEIGHT,
   debug: true
 });
-const { world } = engine.state;
-const { renderer } = engine.managers;
 
-const mouse = {
-  position: { x: WIDTH / 2, y: HEIGHT / 2 }
-};
+Editor.init(DataStore, engine);
 
-const transform1 = new Transform({
-  label: 'transform1',
+const { entityManager, renderManager } = engine.managers;
+const world = entityManager.root;
+
+const transform1 = Transform.create({
+  name: 'transform1',
   rotate: 1,
   origin: [WIDTH / 2 + 25, HEIGHT / 2 + 25],
   transform: [
@@ -33,14 +33,14 @@ const transform1 = new Transform({
   ]
 });
 
-const transform2 = new Transform({
-  label: 'transform2',
+const transform2 = Transform.create({
+  name: 'transform2',
   rotate: 0,
   origin: [WIDTH / 2 + 115, HEIGHT / 2 + 115]
 });
 
-const sun = new Body.createArc({
-  label: 'sun',
+const sun = Body.createArc({
+  name: 'sun',
   position: [WIDTH / 2, HEIGHT / 2],
   radius: 25,
   styles: {
@@ -49,8 +49,8 @@ const sun = new Body.createArc({
   debug: true
 });
 
-const earth = new Body.createArc({
-  label: 'earth',
+const earth = Body.createArc({
+  name: 'earth',
   position: [WIDTH / 2 + 100, HEIGHT / 2 + 100],
   radius: 15,
   styles: {
@@ -59,8 +59,8 @@ const earth = new Body.createArc({
   debug: true
 });
 
-const moon = new Body.createArc({
-  label: 'moon',
+const moon = Body.createArc({
+  name: 'moon',
   position: [WIDTH / 2 + 130, HEIGHT / 2 + 130],
   radius: 5,
   styles: {
@@ -70,7 +70,7 @@ const moon = new Body.createArc({
 });
 
 const bg = Body.createRectangle({
-  label: 'bg',
+  name: 'bg',
   position: [0, 0],
   width: WIDTH,
   height: HEIGHT,
@@ -80,33 +80,46 @@ const bg = Body.createRectangle({
   debug: true
 });
 
-window.addEventListener('mousemove', (evt) => {
-  const { clientX, clientY } = evt;
-  mouse.position = {
-    x: clientX,
-    y: clientY
-  };
+const runner = Body.createArc({
+  name: 'runner',
+  position: [WIDTH / 2, HEIGHT / 2],
+  radius: 25,
+  styles: {
+    backgroundColor: 'red'
+  },
+  debug: true
 });
 
-renderer.bindCamera(mouse);
+entityManager.addChildren(world, bg);
+entityManager.addChildren(world, transform1);
+entityManager.addChildren(world, runner);
+entityManager.addChildren(transform1, sun);
+entityManager.addChildren(sun, transform2);
+entityManager.addChildren(transform2, earth);
+entityManager.addChildren(earth, moon);
 
-world.add(bg);
-world.add(transform1);
-transform1.add(sun);
-sun.add(transform2);
-transform2.add(earth);
-earth.add(moon);
+engine.addEventListener('on_ready', () => {
+  window.addEventListener('keydown', (evt) => {
+    const { key } = evt;
 
-setInterval(() => {
-  transform1.rotate += 1;
-  transform2.rotate += 1;
+    DataStore.setData((data) => {
+      if (key === 'ArrowLeft') data.entities.runner.position.x -= 50;
+      if (key === 'ArrowRight') data.entities.runner.position.x += 50;
+      if (key === 'ArrowUp') data.entities.runner.position.y -= 50;
+      if (key === 'ArrowDown') data.entities.runner.position.y += 50;
+    }, 'entityManager');
+  });
+  setInterval(() => {
+    DataStore.setData((data) => {
+      if (data.timeScale < 1) {
+        data.timeScale = 1;
+      } else {
+        data.timeScale = 0.05;
+      }
+    }, 'timeManager');
+  }, 1500);
 });
 
-// world.add(bg);
-// world.add(sun);
-// sun.add(earth);
-// earth.add(moon);
+renderManager.bindCamera(runner);
 
 console.log(engine);
-
-engine.autoPilot();

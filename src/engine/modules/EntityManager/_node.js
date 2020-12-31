@@ -1,28 +1,25 @@
 import { Commons } from '../core';
 
-class _node {
-  constructor({ label, entity, parent, children } = {}) {
-    this.id = Commons.uid();
-    this.label = label;
-    this.type = null;
-    this.entity = entity || null;
-    this.parent = parent || null;
-    this.children = new Map(children || []);
-  }
+const Node = {
+  create({ name, entity, parent, children } = {}) {
+    const id = name || Commons.uid();
+    return {
+      id,
+      label: id,
+      type: null,
+      entity: entity || null,
+      parent: parent || null,
+      children: children || []
+    };
+  },
 
-  add(entity) {
-    this.children.set(entity.id, entity);
-    entity.addTo(this);
-  }
+  onAddChildren(parernt) {
+    return parernt;
+  },
 
-  addTo(parent) {
-    this.parent = parent;
-    this.parent.onAddChilren(this);
+  onRemoveChildren(parernt) {
+    return parernt;
   }
+};
 
-  onAddChilren() {
-    return this;
-  }
-}
-
-export default _node;
+export default Node;

@@ -24,12 +24,24 @@ const uid = () =>
 
 const throttle = (fn, time) => {
   let timer = null;
-  return function (...args) {
+  return function cb(...args) {
     if (timer) {
       return;
     }
 
     timer = setTimeout(() => {
+      fn.apply(this, args);
+      timer = null;
+    }, time);
+  };
+};
+
+const debounce = (fn, time) => {
+  let timer = null;
+  return function cb(...args) {
+    timer && clearTimeout(timer);
+
+    setTimeout(() => {
       fn.apply(this, args);
       timer = null;
     }, time);
@@ -45,5 +57,6 @@ export default {
   isNegative,
   hasValue,
   uid,
-  throttle
+  throttle,
+  debounce
 };

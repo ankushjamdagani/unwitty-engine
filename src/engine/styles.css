@@ -1,15 +1,15 @@
-.wrapper_demo_game {
+.wrapper_unwitty_game {
   background: #000000;
   position: relative;
 }
 
-.wrapper_canvas_demo_game {
+.wrapper_canvas_unwitty_game {
   height: 100%;
   width: 100%;
   position: relative;
 }
 
-.wrapper_canvas_demo_game canvas {
+.wrapper_canvas_unwitty_game canvas {
   background: transparent;
   margin: 0 auto;
   display: block;
@@ -21,7 +21,7 @@
   bottom: 0;
 }
 
-.wrapper_overlays_demo_game {
+.wrapper_overlays_unwitty_game {
   height: 100%;
   width: 100%;
   position: absolute;

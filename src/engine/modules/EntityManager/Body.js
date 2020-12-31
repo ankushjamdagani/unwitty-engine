@@ -1,8 +1,8 @@
 import { SHAPES, ENTITY_NODE_TYPES } from '../../constants';
-import Vector2D from '../core/Vector2D';
+import { Vector2D } from '../core';
 import Commons from '../core/Commons';
 
-import _node from './_node';
+import Node from './_node';
 
 const defaultState = {
   shape: SHAPES.RECTANGLE,
@@ -17,10 +17,10 @@ const defaultState = {
 
 // Styles and textures will be applied to all children as well
 // children can have overriden styles as well, inherit unspecified values
-class Body extends _node {
-  constructor(props) {
-    super(props);
+const Body = {
+  ...Node,
 
+  create(props) {
     const {
       shape = defaultState.shape,
       width,
@@ -43,33 +43,30 @@ class Body extends _node {
       ...restProps
     } = props;
 
-    this.type = ENTITY_NODE_TYPES.BODY;
+    const _node = Node.create(props);
+    return {
+      ..._node,
+      type: ENTITY_NODE_TYPES.BODY,
+      shape,
+      width,
+      height,
+      radius,
+      startAngle,
+      endAngle,
+      vertices,
+      eddges,
+      position: Vector2D.create(position),
+      styles,
+      canvasId,
+      debug,
+      boundingBox: { ...defaultState.boundingBox, ...boundingBox },
+      restProps
+    };
+  },
 
-    this.shape = shape;
-    this.width = width;
-    this.height = height;
-    this.radius = radius;
-    this.startAngle = startAngle;
-    this.endAngle = endAngle;
-    this.vertices = vertices;
-    this.eddges = eddges;
-
-    // should I save corners? and edges?
-    // users will be giving center pos by default
-    this.position = new Vector2D(position[0], position[1]);
-
-    this.styles = styles;
-
-    this.canvasId = canvasId;
-    this.debug = debug;
-    this.boundingBox = { ...defaultState.boundingBox, ...boundingBox };
-
-    this.restProps = restProps;
-  }
-
-  onAddChilren(child) {
-    if (!this.position || !child.position) {
-      return;
+  onAddChildren(parent, child) {
+    if (!parent.position || !child.position) {
+      return parent;
     }
 
     const {
@@ -83,7 +80,7 @@ class Body extends _node {
       boundingBox: { margins: pBoundingBoxMargin },
       width: pWidth,
       height: pHeight
-    } = this;
+    } = parent;
 
     const xMin = Commons.minimum(
       pPosition.x - pBoundingBoxMargin[3],
@@ -103,70 +100,77 @@ class Body extends _node {
       cPosition.y + cHeight + cBoundingBoxMargin[2]
     );
 
-    this.boundingBox.margins = [
-      pPosition.y - yMin,
-      xMax - (pPosition.x + pWidth),
-      yMax - (pPosition.y + pHeight),
-      pPosition.x - xMin
-    ];
+    return {
+      ...parent,
+      boundingBox: {
+        ...parent.boundingBox,
+        margins: [
+          pPosition.y - yMin,
+          xMax - (pPosition.x + pWidth),
+          yMax - (pPosition.y + pHeight),
+          pPosition.x - xMin
+        ]
+      }
+    };
+  },
 
-    this.parent.onAddChilren(this);
-  }
-}
+  getDebugMessage(body) {
+    return `Pos :: ${body.position.x}, ${body.position.y}`;
+  },
 
-Body.getDebugMessage = (body) =>
-  `Pos :: ${body.position.x}, ${body.position.y}`;
-
-Body.createArc = ({
-  radius,
-  startAngle = 0,
-  endAngle = Math.PI * 2,
-  position,
-  ...restProps
-}) =>
-  new Body({
-    shape: SHAPES.ARC,
-    width: 2 * radius,
-    height: 2 * radius,
-    startAngle,
-    endAngle,
+  createArc({
     radius,
+    startAngle = 0,
+    endAngle = Math.PI * 2,
     position,
     ...restProps
-  });
+  }) {
+    return Body.create({
+      shape: SHAPES.ARC,
+      width: 2 * radius,
+      height: 2 * radius,
+      startAngle,
+      endAngle,
+      radius,
+      position,
+      ...restProps
+    });
+  },
 
-Body.createRectangle = ({ width, height, position, ...restProps }) =>
-  new Body({
-    shape: SHAPES.RECTANGLE,
-    width,
-    height,
-    position,
-    ...restProps
-  });
+  createRectangle({ width, height, position, ...restProps }) {
+    return Body.create({
+      shape: SHAPES.RECTANGLE,
+      width,
+      height,
+      position,
+      ...restProps
+    });
+  },
 
-Body.createPolygon = ({ vertices, eddges, position, ...restProps }) => {
-  let minX = 0;
-  let minY = 0;
+  createPolygon({ vertices, eddges, position, ...restProps }) {
+    let minX = 0;
+    let minY = 0;
 
-  let maxX = 0;
-  let maxY = 0;
+    let maxX = 0;
+    let maxY = 0;
 
-  vertices.forEach(([x, y]) => {
-    minX = Commons.minimum(x, minX);
-    maxX = Commons.maximum(x, maxX);
+    vertices.forEach(([x, y]) => {
+      minX = Commons.minimum(x, minX);
+      maxX = Commons.maximum(x, maxX);
 
-    minY = Commons.minimum(y, minY);
-    maxY = Commons.maximum(y, maxY);
-  });
-  return new Body({
-    shape: SHAPES.POLYGON,
-    width: maxX - minX,
-    height: maxY - minY,
-    position,
-    vertices,
-    eddges,
-    ...restProps
-  });
+      minY = Commons.minimum(y, minY);
+      maxY = Commons.maximum(y, maxY);
+    });
+    return Body.create({
+      shape: SHAPES.POLYGON,
+      width: maxX - minX,
+      height: maxY - minY,
+      position,
+      vertices,
+      eddges,
+      ...restProps
+    });
+  }
 };
 
 export default Body;

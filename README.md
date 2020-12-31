@@ -1,5 +1,18 @@
 # Game
 
+## Next Steps
+
+- Time management - control speed, etc.
+- time based movements
+- user actions / events - channeling
+  - data management from user's side
+- multiple canvas support
+  - zIndex and layerIndex
+- offscreen canvas
+- scenes / screens
+- inactive node and inactive canvas
+- add perspective
+
 ## Notes
 
 - Offline and optimised
@@ -16,6 +29,17 @@
   - Quiz
     - theme based
     - preselected questions by other players
+  - Speed of light
+  - slow motion
+  - load textures, fonts and all other assets in offscreen canvas - using rectangle packing system
+  - render only changed areas of canvas - maybe use bounding box
+  - ui layout system - resizing support
+  - user events - click, hover, etc
+  - post effects - explosion, particle system
+  - blur, color grading, ...effects
+  - scripting
+  - [Optimizing_canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Optimizing_canvas)
+  - [creating_html5_animations](https://cloudinary.com/blog/creating_html5_animations)
 
 ## For Read
 
@@ -91,7 +115,7 @@ Start Game
 ```js
     AABB Collision (when up direction is positive)
 
-        Circle with circle - 
+        Circle with circle -
         (r1 + r2)^2 > (x2-x1)^2 + (y2-y1)^2
 
         Rectangle with Rectangle -
