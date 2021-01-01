@@ -1,8 +1,13 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
 import { Provider } from 'react-redux';
+import { ThemeProvider } from 'styled-components';
 
 import App from './App';
+
+import CommonStyle from './styles/common';
+import ResetStyle from './styles/reset';
+import theme from './styles/theme';
 
 /**
  * ICONS ::  https://material.io/resources/icons/?style=baseline
@@ -27,7 +32,13 @@ const Editor = {
     wrapper.prepend(overlaysWrapper);
     ReactDOM.render(
       <Provider store={store}>
-        <App engine={engine} />
+        <ThemeProvider theme={theme}>
+          <>
+            <ResetStyle />
+            <CommonStyle />
+            <App engine={engine} />
+          </>
+        </ThemeProvider>
       </Provider>,
       document.getElementById(`wrapper_overlays_${key}`)
     );

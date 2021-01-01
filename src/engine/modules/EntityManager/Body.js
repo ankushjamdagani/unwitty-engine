@@ -11,7 +11,7 @@ const defaultState = {
   boundingBox: {
     margins: [0, 0, 0, 0],
     shape: SHAPES.RECTANGLE,
-    color: 'red'
+    color: 'white'
   }
 };
 

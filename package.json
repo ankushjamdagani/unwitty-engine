@@ -20,15 +20,20 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.11.2",
+    "@styled-system/prop-types": "^5.1.5",
+    "@styled-system/theme-get": "^5.1.2",
     "dotenv": "^8.2.0",
     "immer": "^8.0.0",
     "immutable": "^4.0.0-rc.12",
+    "prop-types": "^15.7.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-redux": "^7.2.2",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",
-    "snyk": "^1.316.1"
+    "snyk": "^1.316.1",
+    "styled-components": "^5",
+    "styled-system": "^5.1.5"
   },
   "devDependencies": {
     "@babel/core": "^7.10.5",
