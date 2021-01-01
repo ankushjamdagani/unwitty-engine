@@ -74,9 +74,6 @@ const bg = Body.createRectangle({
   position: [0, 0],
   width: WIDTH,
   height: HEIGHT,
-  styles: {
-    backgroundColor: '#000'
-  },
   debug: true
 });
 

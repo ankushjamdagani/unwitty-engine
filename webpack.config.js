@@ -30,7 +30,14 @@ module.exports = {
     }
   },
   resolve: {
-    extensions: ['.js', '.jsx']
+    extensions: ['.js', '.jsx'],
+    alias: {
+      __ASSETS: path.resolve(__dirname, 'src/editor/assets/'),
+      __COMPONENTS: path.resolve(__dirname, 'src/editor/components/'),
+      __CONSTANTS: path.resolve(__dirname, 'src/editor/constants/'),
+      __STYLES: path.resolve(__dirname, 'src/editor/styles/'),
+      __UTILS: path.resolve(__dirname, 'src/editor/utils/')
+    }
   },
   devtool: 'inline-source-map',
   devServer: {

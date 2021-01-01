@@ -178,7 +178,7 @@ class RenderManager extends Base {
       backgroundGradient,
       borderColor,
       borderSize
-    } = element.styles;
+    } = element.styles || {};
 
     const _image = image && resources.get(image);
     _image && RenderManager.renderImage(context, element, camera, _image);
@@ -324,7 +324,6 @@ class RenderManager extends Base {
 
     context.strokeStyle = color;
     context.lineWidth = 1;
-    context.setLineDash([25, 5, 5, 5, 5, 5, 5, 5]);
     if (shape === SHAPES.ARC) {
       const radius = width / 2 + margins[1] - margins[3];
       context.arc(x + radius, y + radius, radius, 0, Math.PI * 2);

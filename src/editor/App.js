@@ -1,21 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import FPSDebugger from './components/FPSDebugger';
-import GameStateController from './components/GameStateController';
+import { FPSDebugger, GameStateController } from './components/organisms';
+import { FlexBox } from './components/atoms';
 
 const App = ({ timeManager: { fps }, engine }) => (
-  <div
-    style={{
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'flex-end',
-      flexDirection: 'column',
-      height: '100%'
-    }}
+  <FlexBox
+    flexDirection='column'
+    alignItems='flex-end'
+    justifyContent='space-between'
+    height='100%'
   >
     <FPSDebugger fps={fps} />
     <GameStateController engine={engine} />
-  </div>
+  </FlexBox>
 );
 export default connect((state) => ({ timeManager: state.timeManager }))(App);
