@@ -1,16 +1,6 @@
 import * as core from './core';
 
 import DataStore from './DataStore';
-import EntityManager from './EntityManager';
-import RenderManager from './RenderManager';
-import ResourceManager from './ResourceManager';
-import TimeManager from './TimeManager';
+import Entity from './Entity';
 
-export {
-  core,
-  DataStore,
-  EntityManager,
-  RenderManager,
-  ResourceManager,
-  TimeManager
-};
+export { core, DataStore, Entity };

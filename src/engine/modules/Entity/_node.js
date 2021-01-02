@@ -19,7 +19,15 @@ const Node = {
 
   onRemoveChildren(parernt) {
     return parernt;
-  }
+  },
+
+  preRender() {},
+  render() {},
+  postRender() {},
+
+  preUpdate() {},
+  update() {},
+  postUpdate() {}
 };
 
 export default Node;

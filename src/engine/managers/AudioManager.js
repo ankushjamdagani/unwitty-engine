@@ -1,11 +1,13 @@
-import { Base } from '../core';
+import { core } from '../modules';
 
-import OnGameStart from '../assets/sounds/retro_43.mp3';
-import OnGameEnd from '../assets/sounds/retro_11.mp3';
-import OnGameBg from '../assets/sounds/retro_47.mp3';
-import OnPoints from '../assets/sounds/sfx_wpn_cannon4.wav';
-import OnWallBounce from '../assets/sounds/sfx_wpn_laser7.wav';
-import OnBreakerBounce from '../assets/sounds/sfx_wpn_laser5.wav';
+const { Base } = core;
+
+// import OnGameStart from '../assets/sounds/retro_43.mp3';
+// import OnGameEnd from '../assets/sounds/retro_11.mp3';
+// import OnGameBg from '../assets/sounds/retro_47.mp3';
+// import OnPoints from '../assets/sounds/sfx_wpn_cannon4.wav';
+// import OnWallBounce from '../assets/sounds/sfx_wpn_laser7.wav';
+// import OnBreakerBounce from '../assets/sounds/sfx_wpn_laser5.wav';
 
 // Bounce
 // retro_jump_24, retro_jump_26
@@ -16,7 +18,7 @@ import OnBreakerBounce from '../assets/sounds/sfx_wpn_laser5.wav';
 // Canon
 // sfx_wpn_cannon1, sfx_wpn_cannon4, sfx_weapon_singleshot13
 
-class AudioHandler extends Base {
+class AudioManager extends Base {
   constructor(props) {
     super(props);
 
@@ -28,12 +30,12 @@ class AudioHandler extends Base {
 
     this.preload(
       [
-        { key: 'OnGameBg', src: OnGameBg, type: 'audio' },
-        { key: 'OnGameStart', src: OnGameStart, type: 'audio' },
-        { key: 'OnPoints', src: OnPoints, type: 'audio' },
-        { key: 'OnWallBounce', src: OnWallBounce, type: 'audio' },
-        { key: 'OnBreakerBounce', src: OnBreakerBounce, type: 'audio' },
-        { key: 'OnGameEnd', src: OnGameEnd, type: 'audio' }
+        // { key: 'OnGameBg', src: OnGameBg, type: 'audio' },
+        // { key: 'OnGameStart', src: OnGameStart, type: 'audio' },
+        // { key: 'OnPoints', src: OnPoints, type: 'audio' },
+        // { key: 'OnWallBounce', src: OnWallBounce, type: 'audio' },
+        // { key: 'OnBreakerBounce', src: OnBreakerBounce, type: 'audio' },
+        // { key: 'OnGameEnd', src: OnGameEnd, type: 'audio' }
       ],
       this.bindToContext
     );
@@ -80,4 +82,4 @@ class AudioHandler extends Base {
   }
 }
 
-export default AudioHandler;
+export default AudioManager;

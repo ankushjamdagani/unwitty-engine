@@ -1,15 +1,30 @@
 import { SYNC, CLEAR } from './core.actionTypes';
 
+// const INITIAL_STATE = {
+//   core: {},
+//   timeManager: {},
+//   resourceManager: {
+//     resources: {}
+//   },
+//   entityManager: {
+//     entities: {}
+//   },
+//   renderManager: {}
+// };
+
 const INITIAL_STATE = {
   core: {},
-  timeManager: {},
-  resourceManager: {
-    resources: {}
-  },
-  entityManager: {
-    entities: {}
-  },
-  renderManager: {}
+  timing: {},
+  resources: {},
+  entities: {},
+  canvasMap: new Map(),
+  AudioManager: {},
+  DomManager: {},
+  EntityManager: {},
+  RenderManager: {},
+  ResourceManager: {},
+  TimeManager: {},
+  UpdateManager: {}
 };
 
 export default function coreReducer(state = INITIAL_STATE, action) {

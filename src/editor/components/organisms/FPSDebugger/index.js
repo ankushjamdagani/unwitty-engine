@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 import { FlexBox, Text } from '__COMPONENTS/atoms';
@@ -15,4 +16,4 @@ const FPSDebugger = ({ fps }) => (
   </Wrapper>
 );
 
-export default FPSDebugger;
+export default connect((state) => ({ fps: state.timing.fps }))(FPSDebugger);

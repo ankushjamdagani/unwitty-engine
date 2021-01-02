@@ -11,7 +11,7 @@ const GameStateController = ({ gameState, engine }) => (
       mr={1}
       color='text'
     />
-    {gameState === 'PAUSE' && (
+    {(gameState === 'STOP' || gameState === 'PAUSE') && (
       <Button
         title='Play'
         icon='play_arrow'

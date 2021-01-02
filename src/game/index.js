@@ -3,7 +3,7 @@ import Engine from '../engine';
 
 const {
   DataStore,
-  EntityManager: { Body, Transform }
+  Entity: { Body, Transform }
 } = Engine;
 
 const WIDTH = window.innerWidth;
@@ -19,7 +19,7 @@ const engine = Engine.init({
 
 Editor.init(DataStore, engine);
 
-const { entityManager, renderManager } = engine.managers;
+const { entityManager } = engine.managers;
 const world = entityManager.root;
 
 const transform1 = Transform.create({
@@ -72,8 +72,8 @@ const moon = Body.createArc({
 const bg = Body.createRectangle({
   name: 'bg',
   position: [0, 0],
-  width: WIDTH,
-  height: HEIGHT,
+  width: 1.5 * WIDTH,
+  height: 1.5 * HEIGHT,
   debug: true
 });
 
@@ -99,24 +99,24 @@ engine.addEventListener('on_ready', () => {
   window.addEventListener('keydown', (evt) => {
     const { key } = evt;
 
-    DataStore.setData((data) => {
-      if (key === 'ArrowLeft') data.entities.runner.position.x -= 50;
-      if (key === 'ArrowRight') data.entities.runner.position.x += 50;
-      if (key === 'ArrowUp') data.entities.runner.position.y -= 50;
-      if (key === 'ArrowDown') data.entities.runner.position.y += 50;
-    }, 'entityManager');
+    DataStore.setData((entities) => {
+      if (key === 'ArrowLeft') entities.runner.position.x -= 50;
+      if (key === 'ArrowRight') entities.runner.position.x += 50;
+      if (key === 'ArrowUp') entities.runner.position.y -= 50;
+      if (key === 'ArrowDown') entities.runner.position.y += 50;
+    }, 'entities');
   });
   setInterval(() => {
-    DataStore.setData((data) => {
-      if (data.timeScale < 1) {
-        data.timeScale = 1;
+    DataStore.setData((timing) => {
+      if (timing.timeScale < 1) {
+        timing.timeScale = 1;
       } else {
-        data.timeScale = 0.05;
+        timing.timeScale = 0.05;
       }
-    }, 'timeManager');
+    }, 'timing');
   }, 1500);
 });
 
-renderManager.bindCamera(runner);
+entityManager.bindCamera(runner);
 
 console.log(engine);

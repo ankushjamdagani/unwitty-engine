@@ -118,6 +118,37 @@ const Body = {
     return `Pos :: ${body.position.x}, ${body.position.y}`;
   },
 
+  render(element, envProps) {
+    switch (element.shape) {
+      case SHAPES.TRIANGLE: {
+        // this.renderTriangle();
+        break;
+      }
+      case SHAPES.RECTANGLE: {
+        this.renderRect(element, envProps);
+        break;
+      }
+      case SHAPES.PENTAGON: {
+        // this.renderPentagon();
+        break;
+      }
+      case SHAPES.HEXAGON: {
+        // this.renderHexagon();
+        break;
+      }
+      case SHAPES.ARC: {
+        this.renderArc(element, envProps);
+        break;
+      }
+      case SHAPES.POLYGON: {
+        this.renderPolygon(element, envProps);
+        break;
+      }
+      default:
+        null;
+    }
+  },
+
   createArc({
     radius,
     startAngle = 0,
@@ -137,6 +168,15 @@ const Body = {
     });
   },
 
+  renderArc(element, { context, localCoords }) {
+    const { x, y } = localCoords;
+    const { radius, startAngle, endAngle } = element;
+
+    context.arc(x + radius, y + radius, radius, startAngle, endAngle);
+    context.fill();
+    context.stroke();
+  },
+
   createRectangle({ width, height, position, ...restProps }) {
     return Body.create({
       shape: SHAPES.RECTANGLE,
@@ -145,6 +185,15 @@ const Body = {
       position,
       ...restProps
     });
+  },
+
+  renderRect(element, { context, localCoords }) {
+    const { x, y } = localCoords;
+    const { width, height } = element;
+
+    context.rect(x, y, width, height);
+    context.fill();
+    context.stroke();
   },
 
   createPolygon({ vertices, eddges, position, ...restProps }) {
@@ -170,6 +219,21 @@ const Body = {
       eddges,
       ...restProps
     });
+  },
+
+  renderPolygon(element, { context, localCoords }) {
+    const { x, y } = localCoords;
+    const { vertices } = element;
+
+    context.moveTo(x + vertices[0][0], y + vertices[0][1]);
+
+    for (let i = 0; i < vertices.length; i += 1) {
+      const vertex = vertices[i]; // x, y, type :: moveTo, arc, lineTo, quadraticCurveTo, bezierCurveTo etc.
+      context.lineTo(x + vertex[0], y + vertex[1]);
+    }
+
+    context.fill();
+    context.stroke();
   }
 };
 
