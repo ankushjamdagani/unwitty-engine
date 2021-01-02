@@ -13,12 +13,7 @@ class UpdateManager extends Base {
   updateTree(nodeId, deltaTime) {
     const { entities, canvasMap } = this.props.getData();
 
-    DataStore.setData((entities) => {
-      entities.transform1.rotate += deltaTime / 10;
-      entities.transform2.rotate += deltaTime / 10;
-    }, 'entities');
-
-    this.updateNode(nodeId, { entities, canvasMap });
+    this.updateNode(nodeId, { entities, canvasMap, deltaTime });
   }
 
   updateNode(elementId, envProps) {

@@ -1,17 +1,5 @@
 import { SYNC, CLEAR } from './core.actionTypes';
 
-// const INITIAL_STATE = {
-//   core: {},
-//   timeManager: {},
-//   resourceManager: {
-//     resources: {}
-//   },
-//   entityManager: {
-//     entities: {}
-//   },
-//   renderManager: {}
-// };
-
 const INITIAL_STATE = {
   core: {},
   timing: {},

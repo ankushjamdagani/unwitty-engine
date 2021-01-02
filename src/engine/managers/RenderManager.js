@@ -43,7 +43,7 @@ class RenderManager extends Base {
 
   renderTree(root) {
     const {
-      core: { width, height },
+      core: { width, height, activeSceneId },
       entities,
       canvasMap,
       resources
@@ -53,12 +53,13 @@ class RenderManager extends Base {
       cv.get('isActive') && cv.get('context').clearRect(0, 0, width, height);
     });
 
-    this.renderNode(root, { entities, resources, canvasMap });
+    const camera = entities[`camera_${activeSceneId}`];
+
+    this.renderNode(root, { entities, resources, canvasMap, camera });
   }
 
-  renderNode(elementId, { entities, resources, canvasMap }) {
+  renderNode(elementId, { entities, resources, canvasMap, camera }) {
     const element = entities[elementId];
-    const { camera } = entities;
 
     if (!element) return;
 
@@ -83,7 +84,7 @@ class RenderManager extends Base {
     context.closePath();
 
     element.children.forEach((el) => {
-      this.renderNode(el, { entities, resources, canvasMap });
+      this.renderNode(el, { entities, resources, canvasMap, camera });
     });
 
     EntityManager.postRender(element, { context, resources, localCoords });

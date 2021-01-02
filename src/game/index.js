@@ -20,7 +20,10 @@ const engine = Engine.init({
 Editor.init(DataStore, engine);
 
 const { entityManager } = engine.managers;
-const world = entityManager.root;
+
+// eslint-disable-next-line no-unused-vars
+const defaultScene = entityManager.createScene({ name: 'defaultScene' });
+const worldDefaultScene = entityManager.root;
 
 const transform1 = Transform.create({
   name: 'transform1',
@@ -77,6 +80,14 @@ const bg = Body.createRectangle({
   debug: true
 });
 
+const bg1 = Body.createRectangle({
+  name: 'bg1',
+  position: [0, 0],
+  width: 1.5 * WIDTH,
+  height: 1.5 * HEIGHT,
+  debug: true
+});
+
 const runner = Body.createArc({
   name: 'runner',
   position: [WIDTH / 2, HEIGHT / 2],
@@ -87,13 +98,19 @@ const runner = Body.createArc({
   debug: true
 });
 
-entityManager.addChildren(world, bg);
-entityManager.addChildren(world, transform1);
-entityManager.addChildren(world, runner);
+entityManager.addChildren(worldDefaultScene, bg);
+entityManager.addChildren(worldDefaultScene, transform1);
 entityManager.addChildren(transform1, sun);
 entityManager.addChildren(sun, transform2);
 entityManager.addChildren(transform2, earth);
 entityManager.addChildren(earth, moon);
+
+// eslint-disable-next-line no-unused-vars
+const defaultScene1 = entityManager.createScene({ name: 'defaultScene1' });
+const worldDefaultScene1 = entityManager.root;
+
+entityManager.addChildren(worldDefaultScene1, bg1);
+entityManager.addChildren(worldDefaultScene1, runner);
 
 engine.addEventListener('on_ready', () => {
   window.addEventListener('keydown', (evt) => {
@@ -106,6 +123,7 @@ engine.addEventListener('on_ready', () => {
       if (key === 'ArrowDown') entities.runner.position.y += 50;
     }, 'entities');
   });
+
   setInterval(() => {
     DataStore.setData((timing) => {
       if (timing.timeScale < 1) {
@@ -115,6 +133,15 @@ engine.addEventListener('on_ready', () => {
       }
     }, 'timing');
   }, 1500);
+});
+
+engine.addEventListener('on_update', ({ detail }) => {
+  const { deltaTime } = detail;
+
+  DataStore.setData((entities) => {
+    entities.transform1.rotate += deltaTime / 10;
+    entities.transform2.rotate += deltaTime / 10;
+  }, 'entities');
 });
 
 entityManager.bindCamera(runner);

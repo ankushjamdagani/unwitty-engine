@@ -72,7 +72,7 @@ class Engine extends Base {
     this.initDomManager();
     this.initTimeManager({ timeScale, fps });
     this.initResourceManager();
-    this.initEntityManager({ width, height });
+    this.initEntityManager();
     this.initUpdateManager();
     this.initRenderManager();
 
@@ -132,9 +132,8 @@ class Engine extends Base {
     this.managers.resourceManager = resourceManager;
   }
 
-  initEntityManager(data) {
+  initEntityManager() {
     const entityManager = new EntityManager({
-      data,
       getData: () => ({
         core: this.props.core,
         entities: this.props.entities,
@@ -203,19 +202,30 @@ class Engine extends Base {
   }
 
   update(deltaTime) {
-    this.dispatchEvent(new Event('before_update'));
+    this.dispatchEvent(
+      new CustomEvent('before_update', { detail: { deltaTime } })
+    );
 
-    this.managers.updateManager.updateTree('world', deltaTime);
+    this.managers.updateManager.updateTree(
+      `world_${this.props.core.activeSceneId}`,
+      deltaTime
+    );
 
-    this.dispatchEvent(new Event('on_update'));
+    this.dispatchEvent(new CustomEvent('on_update', { detail: { deltaTime } }));
   }
 
-  render() {
-    this.dispatchEvent(new Event('before_render'));
+  render(interpolationTime) {
+    this.dispatchEvent(
+      new CustomEvent('before_render', { detail: { interpolationTime } })
+    );
 
-    this.managers.renderManager.renderTree('world');
+    this.managers.renderManager.renderTree(
+      `world_${this.props.core.activeSceneId}`
+    );
 
-    this.dispatchEvent(new Event('on_render'));
+    this.dispatchEvent(
+      new CustomEvent('on_render', { detail: { interpolationTime } })
+    );
   }
 
   play() {
@@ -296,18 +306,12 @@ class Engine extends Base {
   //   this.tick(toTime - this.props.timeManager.timestep - 0.0001, toTime);
   // }
 
-  getCanvasWrapper() {
-    const {
-      core: { key }
-    } = this.props;
-    return document.getElementById(`wrapper_canvas_${key}`);
+  changeActiveScene(id) {
+    this.managers.entityManager.activeScene = { id };
   }
 
-  getOverlaysWrapper() {
-    const {
-      core: { key }
-    } = this.props;
-    return document.getElementById(`wrapper_overlays_${key}`);
+  getActiveScene() {
+    return this.managers.entityManager.activeScene;
   }
 }
 

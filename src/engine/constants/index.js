@@ -47,16 +47,17 @@ export const RESOURCE_TYPE = {
 };
 
 export const ENTITY_NODE_TYPES = {
-  WORLD: 0,
-  LIGHT: 1,
-  CAMERA: 2,
-  GRID: 3,
-  TILE_MAP: 4,
-  BODY: 5,
-  PHYSICS_BODY: 6,
-  FLUID_BODY: 7,
-  TRANSFORM: 8,
-  LAYER: 9
+  SCENE: 'scene',
+  WORLD: 'world',
+  LIGHT: 'light',
+  CAMERA: 'camera',
+  LAYER: 'layer',
+  GRID: 'grid',
+  TILE_MAP: 'tile_map',
+  BODY: 'body',
+  PHYSICS_BODY: 'physics_body',
+  FLUID_BODY: 'fluid_body',
+  TRANSFORM: 'transform'
 };
 
 export const TRANSFORM_ORIGIN = {

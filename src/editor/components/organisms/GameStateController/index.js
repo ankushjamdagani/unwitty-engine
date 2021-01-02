@@ -2,8 +2,28 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { FlexBox, Button } from '__COMPONENTS/atoms';
 
-const GameStateController = ({ gameState, engine }) => (
+const GameStateController = ({ gameState, activeSceneId, engine }) => (
   <FlexBox p={4} alignItems='center' justifyContent='flex-end' zIndex='111'>
+    <Button
+      text='defaultScene'
+      buttonStyle={activeSceneId === 'defaultScene' ? 'filled' : 'outline'}
+      px={2}
+      onClick={() => {
+        engine.changeActiveScene('defaultScene');
+      }}
+      mr={1}
+      color='text'
+    />
+    <Button
+      text='defaultScene1'
+      buttonStyle={activeSceneId === 'defaultScene1' ? 'filled' : 'outline'}
+      px={2}
+      onClick={() => {
+        engine.changeActiveScene('defaultScene1');
+      }}
+      mr={1}
+      color='text'
+    />
     <Button
       title='Previous tick'
       icon='undo'
@@ -52,6 +72,8 @@ const GameStateController = ({ gameState, engine }) => (
     />
   </FlexBox>
 );
-export default connect((state) => ({ gameState: state.core.gameState }))(
-  GameStateController
-);
+
+export default connect((state) => ({
+  gameState: state.core.gameState,
+  activeSceneId: state.core.activeSceneId
+}))(GameStateController);

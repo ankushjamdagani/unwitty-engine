@@ -7,28 +7,55 @@ const { Base, Vector2D } = core;
 class EntityManager extends Base {
   constructor(props) {
     super(props);
-    const { data, ...restProps } = props;
-
-    this.props = restProps;
-
-    this.createScene(data);
+    this.props = props;
   }
 
-  set root(elem) {
-    DataStore.setData((entities) => {
-      entities.world = elem;
-    }, 'entities');
+  get activeScene() {
+    const {
+      core: { activeSceneId },
+      entities
+    } = this.props.getData();
 
-    return this;
+    return entities[activeSceneId];
+  }
+
+  set activeScene({ id }) {
+    DataStore.setData((core) => {
+      core.activeSceneId = id; // make it array to support multiple active scenes
+    }, 'core');
   }
 
   get root() {
-    return this.props.getData().entities.world;
+    const {
+      core: { activeSceneId },
+      entities
+    } = this.props.getData();
+
+    if (!entities[activeSceneId]) {
+      throw Error('Need to make a scene first.');
+    }
+
+    const worldId = entities[activeSceneId].children[0];
+
+    return entities[worldId];
   }
 
-  createScene({ width, height }) {
+  getEntityById(nodeId) {
+    const { entities } = this.props.getData();
+    return entities[nodeId];
+  }
+
+  createScene({ name }) {
+    const {
+      core: { width, height }
+    } = this.props.getData();
+
+    const scene = Entity.Scene.create({
+      name
+    });
     const world = Entity.World.create({
-      name: 'world',
+      name: `world_${scene.id}`,
+      label: 'world',
       gravity: 0,
       bounds: [
         Vector2D.create([-Infinity, -Infinity]),
@@ -40,7 +67,7 @@ class EntityManager extends Base {
       position: Vector2D.zero()
     });
     const camera = Entity.Camera.create({
-      name: 'camera',
+      name: `camera_${scene.id}`,
       position: Vector2D.zero(),
       rotation: 0,
       width,
@@ -49,39 +76,27 @@ class EntityManager extends Base {
       maxPosition: [width * 1.5 + 100 - width, height * 1.5 + 100 - height] // (map size + buffer) - width
     });
 
-    this.root = world;
+    DataStore.setData((entities) => {
+      entities[scene.id] = scene;
+    }, 'entities');
+
+    this.addChildren(scene, world);
     this.addChildren(world, light);
     this.addChildren(world, camera);
+
+    this.activeScene = { id: scene.id };
+
+    return scene;
   }
 
-  getEntityById(nodeId) {
-    const { entities } = this.props.getData();
-    return entities[nodeId || 'world'];
-  }
-
-  remove({ id }) {
-    const { entities } = this.props.getData();
-    const _parent = entities[id];
+  addChildren({ id }, children) {
+    let _parent = this.getEntityById(id);
 
     if (!_parent) {
       return;
     }
 
-    DataStore.setData((entities) => {
-      delete entities[id];
-    }, 'entities');
-
-    _parent.children.forEach((id) => {
-      this.remove({ id });
-    });
-  }
-
-  addChildren({ id }, children) {
-    const { entities } = this.props.getData();
-
-    let _parent = entities[id];
     const _children = { ...children, parent: _parent.id };
-
     _parent = {
       ..._parent,
       children: !_parent.children.includes(_children.id)
@@ -89,9 +104,9 @@ class EntityManager extends Base {
         : _parent.children
     };
 
-    const comp = Entity.get(_parent.type);
-    if (comp.onAddChildren) {
-      _parent = comp.onAddChildren(_parent, _children);
+    const Comp = Entity.get(_parent.type);
+    if (Comp.onAddChildren) {
+      _parent = Comp.onAddChildren(_parent, _children);
     }
 
     DataStore.setData((entities) => {
@@ -103,17 +118,21 @@ class EntityManager extends Base {
   }
 
   removeChildren({ id }, children) {
-    const { entities } = this.props.getData();
-    let _parent = entities[id];
+    let _parent = this.getEntityById(id);
+
+    if (!_parent) {
+      return;
+    }
+
+    const _children = undefined;
     _parent = {
       ..._parent,
       children: _parent.children.filter((nd) => nd.id !== children.id)
     };
-    const _children = undefined;
 
-    const comp = Entity.get(_parent.type);
-    if (comp.onRemoveChildren) {
-      _parent = comp.onRemoveChildren(_parent, _children);
+    const Comp = Entity.get(_parent.type);
+    if (Comp.onRemoveChildren) {
+      _parent = Comp.onRemoveChildren(_parent, _children);
     }
 
     DataStore.setData((entities) => {
@@ -125,8 +144,14 @@ class EntityManager extends Base {
   }
 
   bindCamera(target) {
+    const {
+      core: { activeSceneId }
+    } = this.props.getData();
     DataStore.setData((entities) => {
-      entities.camera = Entity.Camera.bindTarget(entities.camera, target);
+      entities[`camera_${activeSceneId}`] = Entity.Camera.bindTarget(
+        entities[`camera_${activeSceneId}`],
+        target
+      );
     }, 'entities');
   }
 

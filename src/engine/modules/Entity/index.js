@@ -1,5 +1,6 @@
 import { ENTITY_NODE_TYPES } from '../../constants';
 
+import Scene from './Scene';
 import World from './World';
 import Light from './Light';
 import Camera from './Camera';
@@ -10,6 +11,7 @@ import PhysicsBody from './PhysicsBody';
 import FluidBody from './FluidBody';
 
 const ENTITY_COMPONENT_FROM_TYPE = {
+  [ENTITY_NODE_TYPES.SCENE]: Scene,
   [ENTITY_NODE_TYPES.WORLD]: World,
   [ENTITY_NODE_TYPES.LIGHT]: Light,
   [ENTITY_NODE_TYPES.CAMERA]: Camera,
@@ -21,6 +23,7 @@ const ENTITY_COMPONENT_FROM_TYPE = {
 };
 
 const Entity = {
+  Scene,
   World,
   Light,
   Camera,

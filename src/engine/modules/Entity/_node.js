@@ -1,11 +1,11 @@
 import { Commons } from '../core';
 
 const Node = {
-  create({ name, entity, parent, children } = {}) {
+  create({ name, label, entity, parent, children } = {}) {
     const id = name || Commons.uid();
     return {
       id,
-      label: id,
+      label: label || id,
       type: null,
       entity: entity || null,
       parent: parent || null,

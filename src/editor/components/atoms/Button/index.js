@@ -13,7 +13,7 @@ const BUTTON_STYLES = ['none', 'outline', 'filled'];
 const SIZES = ['sm', 'md', 'lg'];
 
 const ButtonTabWrapper = styled(FlexBox)`
-  border-radius: ${themeGet('radii.2')};
+  border-radius: ${themeGet('radii.1')};
   background: transparent;
   box-shadow: none;
   outline: none;
@@ -40,8 +40,7 @@ const ButtonTabWrapper = styled(FlexBox)`
     props.buttonStyle === 'filled' &&
     css`
       background: ${themeGet(`colors.${props.color}`)};
-      i,
-      span {
+      ${Text}, i, span {
         color: ${themeGet(`colors.background`)};
       }
     `}
@@ -67,8 +66,7 @@ const ButtonWrapper = styled.button`
       &:hover ${ButtonTabWrapper} {
         background: ${themeGet(`colors.${props.color}`)};
 
-        i,
-        span {
+        ${Text}, i, span {
           color: ${themeGet('colors.background')};
         }
       }
