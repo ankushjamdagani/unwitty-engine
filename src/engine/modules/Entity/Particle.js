@@ -49,6 +49,15 @@ const Particle = {
     };
   },
 
+  render({ context, element, localCoords }) {
+    const { x, y } = localCoords;
+    const { radius, startAngle, endAngle } = element;
+
+    context.arc(x + radius, y + radius, radius, startAngle, endAngle);
+    context.fill();
+    context.stroke();
+  },
+
   getDebugMessage(particle) {
     return `Pos :: ${particle.position.x}, ${particle.position.y}`;
   }

@@ -1,4 +1,6 @@
-import { Base, Commons } from '../core';
+import { core, DataStore } from '../modules';
+
+const { Base, Commons } = core;
 
 class TimeManager extends Base {
   constructor(props) {
@@ -10,24 +12,27 @@ class TimeManager extends Base {
 
     const currTime = (performance || Date).now();
 
-    this.props.syncData({
-      timeScale,
-      lastTime: 0,
-      currTime,
-      deltaTime: 1000 / fps,
-      deltaTimeMin: 1000 / fps,
-      deltaTimeMax: 1000 / (fps * 0.5),
-      timestep: 1000 / fps,
-      fps,
-      fpsLastTick: 0,
-      fpsHistory: [],
-      fpsUpdateTime: 500
-    });
+    DataStore.setData(
+      {
+        timeScale,
+        lastTime: 0,
+        currTime,
+        deltaTime: 1000 / fps,
+        deltaTimeMin: 1000 / fps,
+        deltaTimeMax: 1000 / (fps * 0.5),
+        timestep: 1000 / fps,
+        fps,
+        fpsLastTick: 0,
+        fpsHistory: [],
+        fpsUpdateTime: 500
+      },
+      'timing'
+    );
   }
 
   // https://stackoverflow.com/questions/19764018/controlling-fps-with-requestanimationframe
   update(fromTime, toTime) {
-    const currData = this.props.getData();
+    const { timing: currData } = this.props.getData();
 
     const currTime = toTime || (performance || Date).now();
     let lastTime = fromTime || currData.lastTime;
@@ -77,13 +82,13 @@ class TimeManager extends Base {
       deltaTime = deltaTime < 0 ? 0 : deltaTime;
       lastTime = currTime - (deltaTime % 10);
 
-      this.props.syncData((timer) => {
-        timer.lastTime = lastTime;
-        timer.fps = fps;
-        timer.fpsLastTick = fpsLastTick;
-        timer.fpsHistory = fpsHistory;
-        timer.deltaTime = deltaTime;
-      });
+      DataStore.setData((timing) => {
+        timing.lastTime = lastTime;
+        timing.fps = fps;
+        timing.fpsLastTick = fpsLastTick;
+        timing.fpsHistory = fpsHistory;
+        timing.deltaTime = deltaTime;
+      }, 'timing');
       return [
         true,
         {

@@ -1,16 +1,18 @@
 // eslint-disable-next-line import/no-named-as-default-member
-import {
-  ResourceManager,
-  EntityManager,
-  RenderManager,
-  TimeManager,
-  DataStore,
-  core
-} from './modules';
-
 import './styles.css';
 
-const { Vector2D, Base } = core;
+import {
+  DomManager,
+  EntityManager,
+  RenderManager,
+  ResourceManager,
+  TimeManager,
+  UpdateManager
+} from './managers';
+
+import { DataStore, core } from './modules';
+
+const { Base } = core;
 
 // --------------- GAME LOOP STARTS
 // Get Elements to render
@@ -30,19 +32,18 @@ const { Vector2D, Base } = core;
 
 class Engine extends Base {
   /**
-   * @prop { name, width, height, smoothImage, containerDOM, timeScale, fps }
+   * @prop { key, width, height, smoothImage, timeScale, fps }
    */
   constructor(props) {
     super(props);
 
     const {
-      name = 'demo_game',
+      key = 'demo_game',
       width = window.innerWidth,
       height = window.innerHeight,
       smoothImage = false,
       timeScale = 1,
-      fps = 100,
-      containerDOM
+      fps = 100
     } = props || {};
 
     this.props = {};
@@ -58,7 +59,7 @@ class Engine extends Base {
 
     DataStore.setData(
       {
-        key: name,
+        key,
         width,
         height,
         aspectRatio: width / height,
@@ -68,10 +69,11 @@ class Engine extends Base {
       'core'
     );
 
-    this.initDomManager({ containerDOM });
+    this.initDomManager();
     this.initTimeManager({ timeScale, fps });
     this.initResourceManager();
     this.initEntityManager();
+    this.initUpdateManager();
     this.initRenderManager();
 
     this.pause();
@@ -89,33 +91,28 @@ class Engine extends Base {
     this.dispatchEvent(new Event('on_destroy'));
   }
 
-  initDomManager({ containerDOM }) {
-    const {
-      core: { key, width, height }
-    } = this.props;
+  initDomManager() {
+    const props = this.props.core;
+    const domManager = new DomManager({
+      data: props,
+      getData: () => ({
+        domManager: this.props.domManager,
+        canvasMap: this.props.canvasMap,
+        core: this.props.core
+      })
+    });
 
-    const wrapper = document.createElement('div');
-    wrapper.setAttribute('class', `wrapper_unwitty_game`);
-    wrapper.setAttribute('id', `wrapper_${key}`);
-    wrapper.style.width = `${width}px`;
-    wrapper.style.height = `${height}px`;
-
-    const canvasWrapper = document.createElement('div');
-    canvasWrapper.setAttribute('class', `wrapper_canvas_unwitty_game`);
-    canvasWrapper.setAttribute('id', `wrapper_canvas_${key}`);
-
-    wrapper.appendChild(canvasWrapper);
-
-    (containerDOM || document.body).appendChild(wrapper);
+    this.managers.domManager = domManager;
   }
 
   // Take frame per second in consideration
   initTimeManager(props) {
     const timeManager = new TimeManager({
       data: props,
-      syncData: (data) => DataStore.setData(data, 'timeManager'),
-      clearData: () => DataStore.clearData('timeManager'),
-      getData: () => this.props.timeManager
+      getData: () => ({
+        timing: this.props.timing,
+        timingManager: this.props.timingManager
+      })
     });
 
     this.managers.timeManager = timeManager;
@@ -126,9 +123,10 @@ class Engine extends Base {
    */
   initResourceManager() {
     const resourceManager = new ResourceManager({
-      syncData: (data) => DataStore.setData(data, 'resourceManager'),
-      clearData: () => DataStore.clearData('resourceManager'),
-      getData: () => this.props.resourceManager
+      getData: () => ({
+        resources: this.props.resources,
+        resourceManager: this.props.resourceManager
+      })
     });
 
     this.managers.resourceManager = resourceManager;
@@ -136,42 +134,33 @@ class Engine extends Base {
 
   initEntityManager() {
     const entityManager = new EntityManager({
-      syncData: (data) => DataStore.setData(data, 'entityManager'),
-      clearData: () => DataStore.clearData('entityManager'),
-      getData: () => this.props.entityManager
+      getData: () => ({
+        core: this.props.core,
+        entities: this.props.entities,
+        entityManager: this.props.entityManager
+      })
     });
-    const world = EntityManager.World.create({
-      name: 'world',
-      gravity: 0,
-      bounds: [
-        Vector2D.create([-Infinity, -Infinity]),
-        Vector2D.create([Infinity, Infinity])
-      ]
-    });
-    const light = EntityManager.Light.create({
-      name: 'primary_light',
-      position: Vector2D.zero()
-    });
-
-    entityManager.root = world;
-    entityManager.addChildren(world, light);
 
     this.managers.entityManager = entityManager;
   }
 
+  initUpdateManager() {
+    this.managers.updateManager = new UpdateManager({
+      getData: () => ({
+        entities: this.props.entities,
+        canvasMap: this.props.canvasMap,
+        updateManager: this.props.updateManager
+      })
+    });
+  }
+
   initRenderManager() {
     this.managers.renderManager = new RenderManager({
-      /**
-       * Remove dependency on engine
-       */
-      engine: this,
-      syncData: (data) => DataStore.setData(data, 'renderManager'),
-      clearData: () => DataStore.clearData('renderManager'),
       getData: () => ({
-        ...this.props.renderManager,
-        ...this.props.core,
-        ...this.props.entityManager,
-        ...this.props.resourceManager
+        core: this.props.core,
+        entities: this.props.entities,
+        canvasMap: this.props.canvasMap,
+        renderManager: this.props.renderManager
       })
     });
   }
@@ -213,27 +202,30 @@ class Engine extends Base {
   }
 
   update(deltaTime) {
-    this.dispatchEvent(new Event('before_update'));
+    this.dispatchEvent(
+      new CustomEvent('before_update', { detail: { deltaTime } })
+    );
 
-    DataStore.setData((entityManager) => {
-      entityManager.entities.transform1.rotate += deltaTime / 10;
-      entityManager.entities.transform2.rotate += deltaTime / 10;
-    }, 'entityManager');
+    this.managers.updateManager.updateTree(
+      `world_${this.props.core.activeSceneId}`,
+      deltaTime
+    );
 
-    this.dispatchEvent(new Event('on_update'));
-    // this.dispatchEvent(
-    //   new CustomEvent('on_update', {
-    //     detail: { currTime, lastTime, deltaTime }
-    //   })
-    // );
+    this.dispatchEvent(new CustomEvent('on_update', { detail: { deltaTime } }));
   }
 
-  render() {
-    this.dispatchEvent(new Event('before_render'));
+  render(interpolationTime) {
+    this.dispatchEvent(
+      new CustomEvent('before_render', { detail: { interpolationTime } })
+    );
 
-    this.managers.renderManager.renderTree('world');
+    this.managers.renderManager.renderTree(
+      `world_${this.props.core.activeSceneId}`
+    );
 
-    this.dispatchEvent(new Event('on_render'));
+    this.dispatchEvent(
+      new CustomEvent('on_render', { detail: { interpolationTime } })
+    );
   }
 
   play() {
@@ -241,9 +233,9 @@ class Engine extends Base {
       core.gameState = 'PLAY';
     }, 'core');
 
-    DataStore.setData((timer) => {
-      timer.lastTime = (performance || Date).now();
-    }, 'timeManager');
+    DataStore.setData((timing) => {
+      timing.lastTime = (performance || Date).now();
+    }, 'timing');
 
     !this.autoPilotCycle && this.autoPilot();
   }
@@ -261,13 +253,6 @@ class Engine extends Base {
 
     this.pauseRenderCycle = setInterval(() => {
       this.currTick();
-      // DataStore.setData((data) => {
-      //   if (data.timeScale < 1) {
-      //     data.timeScale = 1;
-      //   } else {
-      //     data.timeScale = 0.05;
-      //   }
-      // }, 'timeManager');
     }, 200);
   }
 
@@ -282,17 +267,17 @@ class Engine extends Base {
   }
 
   rewind() {
-    DataStore.setData((timer) => {
-      timer.timeScale = -1;
-    }, 'timeManager');
+    DataStore.setData((timing) => {
+      timing.timeScale = -1;
+    }, 'timing');
 
     this.play();
   }
 
   forward() {
-    DataStore.setData((timer) => {
-      timer.timeScale = 1;
-    }, 'timeManager');
+    DataStore.setData((timing) => {
+      timing.timeScale = 1;
+    }, 'timing');
 
     this.play();
   }
@@ -303,12 +288,12 @@ class Engine extends Base {
 
   nextTick() {
     const currTime = (performance || Date).now();
-    this.tick(currTime, currTime + this.props.timeManager.timestep + 0.0001);
+    this.tick(currTime, currTime + this.props.timing.timestep + 0.0001);
   }
 
   prevTick() {
     const currTime = (performance || Date).now();
-    this.tick(currTime, currTime - this.props.timeManager.timestep - 0.0001);
+    this.tick(currTime, currTime - this.props.timing.timestep - 0.0001);
   }
 
   /**
@@ -321,18 +306,12 @@ class Engine extends Base {
   //   this.tick(toTime - this.props.timeManager.timestep - 0.0001, toTime);
   // }
 
-  getCanvasWrapper() {
-    const {
-      core: { key }
-    } = this.props;
-    return document.getElementById(`wrapper_canvas_${key}`);
+  changeActiveScene(id) {
+    this.managers.entityManager.activeScene = { id };
   }
 
-  getOverlaysWrapper() {
-    const {
-      core: { key }
-    } = this.props;
-    return document.getElementById(`wrapper_overlays_${key}`);
+  getActiveScene() {
+    return this.managers.entityManager.activeScene;
   }
 }
 

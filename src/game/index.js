@@ -3,7 +3,7 @@ import Engine from '../engine';
 
 const {
   DataStore,
-  EntityManager: { Body, Transform }
+  Entity: { Body, Transform }
 } = Engine;
 
 const WIDTH = window.innerWidth;
@@ -19,8 +19,11 @@ const engine = Engine.init({
 
 Editor.init(DataStore, engine);
 
-const { entityManager, renderManager } = engine.managers;
-const world = entityManager.root;
+const { entityManager } = engine.managers;
+
+// eslint-disable-next-line no-unused-vars
+const defaultScene = entityManager.createScene({ name: 'defaultScene' });
+const worldDefaultScene = entityManager.root;
 
 const transform1 = Transform.create({
   name: 'transform1',
@@ -72,8 +75,16 @@ const moon = Body.createArc({
 const bg = Body.createRectangle({
   name: 'bg',
   position: [0, 0],
-  width: WIDTH,
-  height: HEIGHT,
+  width: 1.5 * WIDTH,
+  height: 1.5 * HEIGHT,
+  debug: true
+});
+
+const bg1 = Body.createRectangle({
+  name: 'bg1',
+  position: [0, 0],
+  width: 1.5 * WIDTH,
+  height: 1.5 * HEIGHT,
   debug: true
 });
 
@@ -87,36 +98,52 @@ const runner = Body.createArc({
   debug: true
 });
 
-entityManager.addChildren(world, bg);
-entityManager.addChildren(world, transform1);
-entityManager.addChildren(world, runner);
+entityManager.addChildren(worldDefaultScene, bg);
+entityManager.addChildren(worldDefaultScene, transform1);
 entityManager.addChildren(transform1, sun);
 entityManager.addChildren(sun, transform2);
 entityManager.addChildren(transform2, earth);
 entityManager.addChildren(earth, moon);
 
+// eslint-disable-next-line no-unused-vars
+const defaultScene1 = entityManager.createScene({ name: 'defaultScene1' });
+const worldDefaultScene1 = entityManager.root;
+
+entityManager.addChildren(worldDefaultScene1, bg1);
+entityManager.addChildren(worldDefaultScene1, runner);
+
 engine.addEventListener('on_ready', () => {
   window.addEventListener('keydown', (evt) => {
     const { key } = evt;
 
-    DataStore.setData((data) => {
-      if (key === 'ArrowLeft') data.entities.runner.position.x -= 50;
-      if (key === 'ArrowRight') data.entities.runner.position.x += 50;
-      if (key === 'ArrowUp') data.entities.runner.position.y -= 50;
-      if (key === 'ArrowDown') data.entities.runner.position.y += 50;
-    }, 'entityManager');
+    DataStore.setData((entities) => {
+      if (key === 'ArrowLeft') entities.runner.position.x -= 50;
+      if (key === 'ArrowRight') entities.runner.position.x += 50;
+      if (key === 'ArrowUp') entities.runner.position.y -= 50;
+      if (key === 'ArrowDown') entities.runner.position.y += 50;
+    }, 'entities');
   });
+
   setInterval(() => {
-    DataStore.setData((data) => {
-      if (data.timeScale < 1) {
-        data.timeScale = 1;
+    DataStore.setData((timing) => {
+      if (timing.timeScale < 1) {
+        timing.timeScale = 1;
       } else {
-        data.timeScale = 0.05;
+        timing.timeScale = 0.05;
       }
-    }, 'timeManager');
+    }, 'timing');
   }, 1500);
 });
 
-renderManager.bindCamera(runner);
+engine.addEventListener('on_update', ({ detail }) => {
+  const { deltaTime } = detail;
+
+  DataStore.setData((entities) => {
+    entities.transform1.rotate += deltaTime / 10;
+    entities.transform2.rotate += deltaTime / 10;
+  }, 'entities');
+});
+
+entityManager.bindCamera(runner);
 
 console.log(engine);

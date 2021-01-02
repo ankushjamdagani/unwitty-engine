@@ -1,5 +1,7 @@
-import { RESOURCE_TYPE } from '../../constants';
-import { Base } from '../core';
+import { RESOURCE_TYPE } from '../constants';
+import { core, DataStore } from '../modules';
+
+const { Base } = core;
 
 class ResourceManager extends Base {
   constructor(props) {
@@ -8,7 +10,7 @@ class ResourceManager extends Base {
   }
 
   loadResources(resources = [], cb) {
-    const { resource: currResources } = this.props.getData();
+    const { resources: currResources } = this.props.getData();
     for (let i = 0; i < resources.length; i += 1) {
       const { type = RESOURCE_TYPE.IMAGE, key = Date.now(), src } = resources[
         i
@@ -28,35 +30,35 @@ class ResourceManager extends Base {
       if (type === RESOURCE_TYPE.AUDIO) {
         const ro = new Audio(src);
         ro.addEventListener('canplaythrough', () => {
-          this.props.syncData((resourceM) => {
-            resourceM.resources[key] = ro;
-          });
+          DataStore.setData((resources) => {
+            resources[key] = ro;
+          }, 'resources');
           cb && cb(key, ro);
         });
       } else if (type === RESOURCE_TYPE.IMAGE) {
         const ro = new Image();
         ro.src = src;
         ro.onload = () => {
-          this.props.syncData((resourceM) => {
-            resourceM.resources[key] = ro;
-          });
+          DataStore.setData((resources) => {
+            resources[key] = ro;
+          }, 'resources');
           cb && cb(key, ro);
         };
       }
     }
   }
 
-  removeResources(keys) {
-    this.props.syncData((resourceM) => {
+  static removeResources(keys) {
+    DataStore.setData((resources) => {
       for (let i = 0; i < keys.length; i += 1) {
         const key = keys[i];
-        delete resourceM.resources[key];
+        delete resources[key];
       }
-    });
+    }, 'resources');
   }
 
-  removeAll() {
-    this.props.clearData();
+  static removeAll() {
+    DataStore.clearData('resources');
   }
 }
 

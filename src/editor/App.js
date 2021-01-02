@@ -1,18 +1,32 @@
 import React from 'react';
-import { connect } from 'react-redux';
 
-import { FPSDebugger, GameStateController } from './components/organisms';
+import {
+  FPSDebugger,
+  GameStateController,
+  SceneGraph
+} from './components/organisms';
 import { FlexBox } from './components/atoms';
 
-const App = ({ timeManager: { fps }, engine }) => (
-  <FlexBox
-    flexDirection='column'
-    alignItems='flex-end'
-    justifyContent='space-between'
-    height='100%'
-  >
-    <FPSDebugger fps={fps} />
-    <GameStateController engine={engine} />
+// https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullScreen
+const App = ({ engine }) => (
+  <FlexBox justifyContent='space-between' height='100%' alignItems='flex-start'>
+    <FlexBox
+      flexDirection='column'
+      alignItems='flex-start'
+      justifyContent='space-between'
+      height='100%'
+    >
+      <SceneGraph engine={engine} />
+    </FlexBox>
+    <FlexBox
+      flexDirection='column'
+      alignItems='flex-end'
+      justifyContent='space-between'
+      height='100%'
+    >
+      <FPSDebugger />
+      <GameStateController engine={engine} />
+    </FlexBox>
   </FlexBox>
 );
-export default connect((state) => ({ timeManager: state.timeManager }))(App);
+export default App;

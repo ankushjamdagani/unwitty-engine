@@ -1,20 +1,25 @@
 import { enableMapSet } from 'immer';
 
+import * as Constants from './constants';
+import Engine from './Engine';
+
 import {
-  DataStore,
+  AudioManager,
+  DomManager,
   EntityManager,
   RenderManager,
   ResourceManager,
-  TimeManager
-} from './modules';
-import * as Constants from './constants/index';
-import Engine from './Engine';
+  TimeManager,
+  UpdateManager
+} from './managers';
+
+import { Entity, DataStore, core } from './modules';
 
 // for immer
 enableMapSet();
 // setAutoFreeze(false);
 
-// for resux store
+// for redux store
 DataStore.configureStore();
 
 Engine.init = (props) => {
@@ -25,9 +30,15 @@ Engine.init = (props) => {
 
 Engine.DataStore = DataStore;
 Engine.Constants = Constants;
+Engine.Entity = Entity;
+Engine.core = core;
+
+Engine.AudioManager = AudioManager;
+Engine.DomManager = DomManager;
 Engine.EntityManager = EntityManager;
 Engine.RenderManager = RenderManager;
 Engine.ResourceManager = ResourceManager;
 Engine.TimeManager = TimeManager;
+Engine.UpdateManager = UpdateManager;
 
 export default Engine;

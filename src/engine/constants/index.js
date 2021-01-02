@@ -47,13 +47,17 @@ export const RESOURCE_TYPE = {
 };
 
 export const ENTITY_NODE_TYPES = {
-  WORLD: 0,
-  LIGHT: 1,
-  BODY: 2,
-  PHYSICS_BODY: 3,
-  FLUID_BODY: 4,
-  TRANSFORM: 5,
-  LAYER: 6
+  SCENE: 'scene',
+  WORLD: 'world',
+  LIGHT: 'light',
+  CAMERA: 'camera',
+  LAYER: 'layer',
+  GRID: 'grid',
+  TILE_MAP: 'tile_map',
+  BODY: 'body',
+  PHYSICS_BODY: 'physics_body',
+  FLUID_BODY: 'fluid_body',
+  TRANSFORM: 'transform'
 };
 
 export const TRANSFORM_ORIGIN = {
@@ -63,3 +67,5 @@ export const TRANSFORM_ORIGIN = {
   RIGHT_BOTTOM: 3,
   LEFT_BOTTOM: 4
 };
+
+export const MID_CANVAS_KEY = 'base';
