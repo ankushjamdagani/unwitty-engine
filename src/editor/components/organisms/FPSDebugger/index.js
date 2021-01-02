@@ -6,6 +6,8 @@ import { FlexBox, Text } from '__COMPONENTS/atoms';
 
 const Wrapper = styled(FlexBox)`
   background: rgba(0, 0, 0, 0.1);
+  border-left: dashed 1px #ffffff38;
+  border-bottom: dashed 1px #ffffff38;
 `;
 
 const FPSDebugger = ({ fps }) => (

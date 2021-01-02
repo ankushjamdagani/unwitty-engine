@@ -5,6 +5,12 @@ import { themeGet } from '@styled-system/theme-get';
 
 import { FlexBox } from '__COMPONENTS/atoms';
 
+const Wrapper = styled(FlexBox)`
+  background: rgba(0, 0, 0, 0.1);
+  font-family: monospace;
+  border-right: dashed 1px #ffffff38;
+`;
+
 const NodeItem = styled(FlexBox)`
   border-bottom: dotted 1px ${themeGet('colors.white.4')};
 
@@ -49,12 +55,12 @@ const SceneGraph = ({ entities, activeSceneId, engine }) => {
   );
 
   return (
-    <FlexBox
+    <Wrapper
       p={4}
       alignItems='flex-start'
-      justifyContent='flex-end'
       zIndex='111'
       flexDirection='column'
+      height='100%'
     >
       {scenes.map((sc) => (
         <Node
@@ -67,7 +73,7 @@ const SceneGraph = ({ entities, activeSceneId, engine }) => {
           }}
         />
       ))}
-    </FlexBox>
+    </Wrapper>
   );
 };
 
