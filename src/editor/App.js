@@ -4,13 +4,14 @@ import {
   FPSDebugger,
   GameStateController,
   SceneGraph,
-  Grid
+  EditorCanvas
 } from './components/organisms';
 import { FlexBox } from './components/atoms';
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullScreen
 const App = ({ engine }) => {
   const [showGrid, setShowGrid] = useState(false);
+  const [dragEnabled, setDragEnabled] = useState(true);
 
   return (
     <FlexBox
@@ -36,10 +37,16 @@ const App = ({ engine }) => {
         <GameStateController
           engine={engine}
           showGrid={showGrid}
+          dragEnabled={dragEnabled}
           toggleGrid={() => setShowGrid(!showGrid)}
+          toggleDrag={() => setDragEnabled(!dragEnabled)}
         />
       </FlexBox>
-      {showGrid && <Grid engine={engine} />}
+      <EditorCanvas
+        engine={engine}
+        showGrid={showGrid}
+        dragEnabled={dragEnabled}
+      />
     </FlexBox>
   );
 };

@@ -11,6 +11,8 @@ import FlexBox from '../FlexBox';
 const BUTTON_STYLES = ['none', 'outline', 'filled'];
 
 const SIZES = ['sm', 'md', 'lg'];
+const SizeFontMap = { sm: 1, md: 2, lg: 3 };
+const SizeIconMap = { sm: 3, md: 4, lg: 5 };
 
 const ButtonTabWrapper = styled(FlexBox)`
   border-radius: ${themeGet('radii.1')};
@@ -55,6 +57,11 @@ const ButtonWrapper = styled.button`
   border: none;
   padding: 0;
 
+  ${(props) =>
+    props.hideVisually &&
+    css`
+      visibility: hidden;
+    `}
   ${(props) => css`
     &:focus ${ButtonTabWrapper} {
       border: solid 2px ${themeGet(`colors.${props.color}`)};
@@ -97,15 +104,25 @@ const Button = ({
       py={py}
       ac
     >
-      {text && <Text color={color}>{text}</Text>}
-      {icon && <FontIcon color={color} icon={icon} />}
+      {text && (
+        <Text fontSize={SizeFontMap[buttonSize]} color={color}>
+          {text}
+        </Text>
+      )}
+      {icon && (
+        <FontIcon
+          fontSize={SizeIconMap[buttonSize]}
+          color={color}
+          icon={icon}
+        />
+      )}
     </ButtonTabWrapper>
   </ButtonWrapper>
 );
 
 Button.defaultProps = {
   buttonStyle: BUTTON_STYLES[0],
-  buttonSize: SIZES[0]
+  buttonSize: SIZES[1]
 };
 
 Button.propTypes = {
