@@ -145,5 +145,4 @@ engine.addEventListener('on_update', ({ detail }) => {
 });
 
 entityManager.bindCamera(runner);
-
-console.log(engine);
+engine.changeActiveScene(defaultScene.id);

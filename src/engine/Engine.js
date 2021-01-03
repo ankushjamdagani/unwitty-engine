@@ -253,7 +253,7 @@ class Engine extends Base {
 
     this.pauseRenderCycle = setInterval(() => {
       this.currTick();
-    }, 200);
+    }, 60);
   }
 
   stop() {

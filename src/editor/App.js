@@ -10,7 +10,7 @@ import { FlexBox } from './components/atoms';
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullScreen
 const App = ({ engine }) => {
-  const [showGrid, setShowGrid] = useState(false);
+  const [showGrid, setShowGrid] = useState(true);
   const [dragEnabled, setDragEnabled] = useState(true);
 
   return (
