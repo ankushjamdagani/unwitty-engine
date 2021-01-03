@@ -117,10 +117,10 @@ engine.addEventListener('on_ready', () => {
     const { key } = evt;
 
     DataStore.setData((entities) => {
-      if (key === 'ArrowLeft') entities.runner.position.x -= 50;
-      if (key === 'ArrowRight') entities.runner.position.x += 50;
-      if (key === 'ArrowUp') entities.runner.position.y -= 50;
-      if (key === 'ArrowDown') entities.runner.position.y += 50;
+      if (key === 'ArrowLeft') entities.runner.position.x -= 61;
+      if (key === 'ArrowRight') entities.runner.position.x += 61;
+      if (key === 'ArrowUp') entities.runner.position.y -= 61;
+      if (key === 'ArrowDown') entities.runner.position.y += 61;
     }, 'entities');
   });
 

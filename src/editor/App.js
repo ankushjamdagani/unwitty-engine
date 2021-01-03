@@ -1,32 +1,46 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import {
   FPSDebugger,
   GameStateController,
-  SceneGraph
+  SceneGraph,
+  Grid
 } from './components/organisms';
 import { FlexBox } from './components/atoms';
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullScreen
-const App = ({ engine }) => (
-  <FlexBox justifyContent='space-between' height='100%' alignItems='flex-start'>
+const App = ({ engine }) => {
+  const [showGrid, setShowGrid] = useState(false);
+
+  return (
     <FlexBox
-      flexDirection='column'
+      justifyContent='space-between'
+      height='100%'
       alignItems='flex-start'
-      justifyContent='space-between'
-      height='100%'
     >
-      <SceneGraph engine={engine} />
+      <FlexBox
+        flexDirection='column'
+        alignItems='flex-start'
+        justifyContent='space-between'
+        height='100%'
+      >
+        <SceneGraph engine={engine} />
+      </FlexBox>
+      <FlexBox
+        flexDirection='column'
+        alignItems='flex-end'
+        justifyContent='space-between'
+        height='100%'
+      >
+        <FPSDebugger />
+        <GameStateController
+          engine={engine}
+          showGrid={showGrid}
+          toggleGrid={() => setShowGrid(!showGrid)}
+        />
+      </FlexBox>
+      {showGrid && <Grid engine={engine} />}
     </FlexBox>
-    <FlexBox
-      flexDirection='column'
-      alignItems='flex-end'
-      justifyContent='space-between'
-      height='100%'
-    >
-      <FPSDebugger />
-      <GameStateController engine={engine} />
-    </FlexBox>
-  </FlexBox>
-);
+  );
+};
 export default App;

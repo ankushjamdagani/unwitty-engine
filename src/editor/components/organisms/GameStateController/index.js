@@ -2,8 +2,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { FlexBox, Button } from '__COMPONENTS/atoms';
 
-const GameStateController = ({ gameState, engine }) => (
+const GameStateController = ({ gameState, engine, showGrid, toggleGrid }) => (
   <FlexBox p={4} alignItems='center' justifyContent='flex-end' zIndex='111'>
+    <Button
+      title='Toggle Grid'
+      icon={showGrid ? 'grid_on' : 'grid_off'}
+      onClick={toggleGrid}
+      mr={4}
+      color='text'
+    />
     <Button
       title='Previous tick'
       icon='undo'
