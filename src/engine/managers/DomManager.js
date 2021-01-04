@@ -59,14 +59,17 @@ class DomManager extends Base {
 
     const canvas = document.createElement('canvas');
     canvas.setAttribute('id', key);
-    canvas.width = width;
-    canvas.height = height;
+
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
 
     const context = canvas.getContext('2d');
     context.mozImageSmoothingEnabled = !!smoothImage;
     context.webkitImageSmoothingEnabled = !!smoothImage;
     context.msImageSmoothingEnabled = !!smoothImage;
     context.imageSmoothingEnabled = !!smoothImage;
+    context.scale(dpr, dpr);
 
     wrapper.appendChild(canvas);
 

@@ -1,87 +1,113 @@
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
 
-const Grid = ({
-  entities,
-  activeSceneId,
-  canvasMap,
-  engine,
-  width,
-  height
-}) => {
+const Grid = (
+  // { gridEnabled, rulerEnabled },
+  { entities, activeSceneId, canvasMap, engine, width, height }
+) => {
   useEffect(() => {
     const showGrid = () => {
       const camera = entities[`camera_${activeSceneId}`];
       const ctx = canvasMap.get('base').get('context');
 
+      const minorTickCount = 5;
       const gridMajorSize = 50;
-      const gridMinorSize = 10;
+
+      const gridMinorSize = gridMajorSize / minorTickCount;
       const rulerMajorSize = 12;
       const rulerMinorSize = 6;
 
-      const gridMinorTicksCount = gridMajorSize / gridMinorSize;
+      const minorTickStartX =
+        gridMinorSize - (camera.position.x % gridMinorSize);
+      const minorTickStartY =
+        gridMinorSize - (camera.position.y % gridMinorSize);
+      const majorTickStartX = -camera.position.x % gridMajorSize;
+      const majorTickStartY = -camera.position.y % gridMajorSize;
 
-      const startX = camera.position.x % gridMinorSize;
-      const startY = camera.position.y % gridMinorSize;
-
-      const columnCount = Math.floor(width / gridMinorSize);
-      const rowsCount = Math.floor(height / gridMinorSize);
+      const columnCount = Math.ceil(width / gridMinorSize);
+      const rowsCount = Math.ceil(height / gridMinorSize);
 
       ctx.save();
 
       ctx.beginPath();
-      ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+      // ctx.strokeStyle = 'rgba(119,119,119,0.13)';
+      ctx.strokeStyle = 'rgba(119,119,119,0.13)';
       for (let i = 0; i < columnCount; i += 1) {
-        const x = i * gridMinorSize;
-        ctx.moveTo(startX + x, startY);
-        ctx.lineTo(startX + x, height);
-        if (Math.floor(startX + i) % gridMinorTicksCount === 0) {
-          ctx.moveTo(startX + x, startY);
-          ctx.lineTo(startX + x, height);
+        const x = i * gridMinorSize - gridMinorSize;
+        ctx.moveTo(minorTickStartX + x, 0);
+        ctx.lineTo(minorTickStartX + x, height);
+
+        if (!(x % gridMajorSize)) {
+          ctx.moveTo(majorTickStartX + x + 1, 0);
+          ctx.lineTo(majorTickStartX + x + 1, height);
         }
       }
       for (let j = 0; j < rowsCount; j += 1) {
-        const y = j * gridMinorSize;
-        ctx.moveTo(startX, startY + y);
-        ctx.lineTo(width, startY + y);
+        const y = j * gridMinorSize - gridMinorSize;
+        ctx.moveTo(0, minorTickStartY + y);
+        ctx.lineTo(width, minorTickStartY + y);
 
-        if (Math.floor(startY + j) % gridMinorTicksCount === 0) {
-          ctx.moveTo(startX, startY + y);
-          ctx.lineTo(width, startY + y);
+        if (!(y % gridMajorSize)) {
+          ctx.moveTo(0, majorTickStartY + y + 1);
+          ctx.lineTo(width, majorTickStartY + y + 1);
         }
       }
       ctx.stroke();
       ctx.closePath();
 
       ctx.beginPath();
-      ctx.strokeStyle = 'rgba(255,255,255,1)';
+      ctx.strokeStyle = '#777';
 
-      ctx.font = '10px monospace';
-      ctx.fillStyle = 'white';
+      ctx.font = 'bold 10px sans-serif';
+      ctx.fillStyle = '#777';
+
       ctx.textAlign = 'center';
-
       for (let i = 0; i < columnCount; i += 1) {
-        const x = i * gridMinorSize;
-        const gridStartX = startX + x;
+        const x = i * gridMinorSize - gridMinorSize;
+        ctx.moveTo(minorTickStartX + x, 0);
+        ctx.lineTo(minorTickStartX + x, rulerMinorSize);
 
-        ctx.moveTo(gridStartX, 0);
-        ctx.lineTo(gridStartX, rulerMinorSize);
-        if (Math.floor(startX + i) % gridMinorTicksCount === 0) {
-          ctx.moveTo(gridStartX, rulerMinorSize);
-          ctx.lineTo(gridStartX, rulerMajorSize);
-          ctx.fillText(i, gridStartX, rulerMajorSize + 10);
+        const showMajorTick = !(x % gridMajorSize);
+        const showMajorTickLabel = !(
+          (camera.position.x + majorTickStartX + x) %
+          (2 * gridMajorSize)
+        );
+
+        if (showMajorTick) {
+          ctx.moveTo(majorTickStartX + x, rulerMinorSize);
+          ctx.lineTo(majorTickStartX + x, rulerMajorSize);
+        }
+        if (showMajorTickLabel) {
+          ctx.fillText(
+            camera.position.x + majorTickStartX + x,
+            majorTickStartX + x,
+            rulerMajorSize + 12
+          );
         }
       }
-      for (let j = 0; j < rowsCount; j += 1) {
-        const y = j * gridMinorSize;
-        const gridStartY = startY + y;
 
-        ctx.moveTo(0, gridStartY);
-        ctx.lineTo(rulerMinorSize, gridStartY);
-        if (Math.floor(startY + j) % gridMinorTicksCount === 0) {
-          ctx.moveTo(rulerMinorSize, gridStartY);
-          ctx.lineTo(rulerMajorSize, gridStartY);
-          ctx.fillText(j, rulerMajorSize + 10, gridStartY + 4);
+      ctx.textAlign = 'left';
+      for (let j = 0; j < rowsCount; j += 1) {
+        const y = j * gridMinorSize - gridMinorSize;
+        ctx.moveTo(0, minorTickStartY + y);
+        ctx.lineTo(rulerMinorSize, minorTickStartY + y);
+
+        const showMajorTick = !(y % gridMajorSize);
+        const showMajorTickLabel = !(
+          (camera.position.y + majorTickStartY + y) %
+          (2 * gridMajorSize)
+        );
+
+        if (showMajorTick) {
+          ctx.moveTo(rulerMinorSize, majorTickStartY + y);
+          ctx.lineTo(rulerMajorSize, majorTickStartY + y);
+        }
+        if (showMajorTickLabel) {
+          ctx.fillText(
+            camera.position.y + majorTickStartY + y,
+            rulerMajorSize + 5,
+            majorTickStartY + y + 3
+          );
         }
       }
       ctx.stroke();

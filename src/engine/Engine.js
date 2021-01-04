@@ -251,9 +251,11 @@ class Engine extends Base {
 
     this.autoPilotCycle = null;
 
+    /**
+     * @todo temporary jugaad */
     this.pauseRenderCycle = setInterval(() => {
       this.currTick();
-    }, 60);
+    }, 16.6);
   }
 
   stop() {
