@@ -11,6 +11,7 @@ import { FlexBox } from './components/atoms';
 // https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullScreen
 const App = ({ engine }) => {
   const [showGrid, setShowGrid] = useState(true);
+  const [showRuler, setShowRuler] = useState(true);
   const [dragEnabled, setDragEnabled] = useState(true);
 
   return (
@@ -36,15 +37,18 @@ const App = ({ engine }) => {
         <FPSDebugger />
         <GameStateController
           engine={engine}
+          showRuler={showRuler}
           showGrid={showGrid}
           dragEnabled={dragEnabled}
           toggleGrid={() => setShowGrid(!showGrid)}
+          toggleRuler={() => setShowRuler(!showRuler)}
           toggleDrag={() => setDragEnabled(!dragEnabled)}
         />
       </FlexBox>
       <EditorCanvas
         engine={engine}
         showGrid={showGrid}
+        showRuler={showRuler}
         dragEnabled={dragEnabled}
       />
     </FlexBox>

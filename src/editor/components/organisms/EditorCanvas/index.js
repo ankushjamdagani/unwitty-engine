@@ -10,12 +10,19 @@ const EditorCanvas = ({
   gameState,
   activeSceneId,
   showGrid,
+  showRuler,
   dragEnabled
 }) => {
   const gameNotPlaying = gameState !== 'PLAY';
   useCanvasDrag(dragEnabled && gameNotPlaying, { activeSceneId });
 
-  return <>{showGrid && gameNotPlaying && <Grid engine={engine} />}</>;
+  return (
+    <>
+      {gameNotPlaying && (
+        <Grid engine={engine} showRuler={showRuler} showGrid={showGrid} />
+      )}
+    </>
+  );
 };
 
 export default connect((state) => ({

@@ -5,6 +5,8 @@ import { FlexBox, Button } from '__COMPONENTS/atoms';
 const GameStateController = ({
   gameState,
   engine,
+  showRuler,
+  toggleRuler,
   showGrid,
   toggleGrid,
   dragEnabled,
@@ -14,18 +16,27 @@ const GameStateController = ({
   return (
     <FlexBox p={4} alignItems='center' justifyContent='flex-end' zIndex='111'>
       <Button
-        title='Toggle Drag'
-        icon={dragEnabled ? 'pan_tool' : 'do_not_touch'}
-        onClick={toggleDrag}
+        title='Toggle Grid'
+        icon={showGrid ? 'grid_on' : 'grid_off'}
+        onClick={toggleGrid}
         mr={4}
         color='text'
         hideVisually={gamePlaying}
         buttonSize='sm'
       />
       <Button
-        title='Toggle Grid'
-        icon={showGrid ? 'grid_on' : 'grid_off'}
-        onClick={toggleGrid}
+        title='Toggle Ruler'
+        icon={showRuler ? 'straighten' : 'subtitles_off'}
+        onClick={toggleRuler}
+        mr={4}
+        color='text'
+        hideVisually={gamePlaying}
+        buttonSize='md'
+      />
+      <Button
+        title='Toggle Drag'
+        icon={dragEnabled ? 'pan_tool' : 'do_not_touch'}
+        onClick={toggleDrag}
         mr={4}
         color='text'
         hideVisually={gamePlaying}
