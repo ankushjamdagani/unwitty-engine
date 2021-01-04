@@ -2,6 +2,7 @@
   background: #212121;
   background: #232a2e;
   background: #1e2528;
+  /* background: white; */
   position: relative;
 }
 
@@ -21,6 +22,10 @@
   right: 0;
   top: 0;
   bottom: 0;
+  font-smooth: never;
+  -webkit-font-smoothing: none;
+  height: 100%;
+  width: 100%;
 }
 
 .wrapper_overlays_unwitty_game {
