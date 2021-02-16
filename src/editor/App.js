@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Flex } from '@chakra-ui/react';
 
 import {
   FPSDebugger,
@@ -6,7 +7,6 @@ import {
   SceneGraph,
   EditorCanvas
 } from './components/organisms';
-import { FlexBox } from './components/atoms';
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullScreen
 const App = ({ engine }) => {
@@ -15,43 +15,45 @@ const App = ({ engine }) => {
   const [dragEnabled, setDragEnabled] = useState(true);
 
   return (
-    <FlexBox
-      justifyContent='space-between'
-      height='100%'
-      alignItems='flex-start'
-    >
-      <FlexBox
-        flexDirection='column'
+    <>
+      <Flex
+        justifyContent='space-between'
+        height='100%'
         alignItems='flex-start'
-        justifyContent='space-between'
-        height='100%'
       >
-        <SceneGraph engine={engine} />
-      </FlexBox>
-      <FlexBox
-        flexDirection='column'
-        alignItems='flex-end'
-        justifyContent='space-between'
-        height='100%'
-      >
-        <FPSDebugger />
-        <GameStateController
-          engine={engine}
-          showRuler={showRuler}
-          showGrid={showGrid}
-          dragEnabled={dragEnabled}
-          toggleGrid={() => setShowGrid(!showGrid)}
-          toggleRuler={() => setShowRuler(!showRuler)}
-          toggleDrag={() => setDragEnabled(!dragEnabled)}
-        />
-      </FlexBox>
+        <Flex
+          flexDirection='column'
+          alignItems='flex-start'
+          justifyContent='space-between'
+          height='100%'
+        >
+          <SceneGraph engine={engine} />
+        </Flex>
+        <Flex
+          flexDirection='column'
+          alignItems='flex-end'
+          justifyContent='space-between'
+          height='100%'
+        >
+          <FPSDebugger />
+          <GameStateController
+            engine={engine}
+            showRuler={showRuler}
+            showGrid={showGrid}
+            dragEnabled={dragEnabled}
+            toggleGrid={() => setShowGrid(!showGrid)}
+            toggleRuler={() => setShowRuler(!showRuler)}
+            toggleDrag={() => setDragEnabled(!dragEnabled)}
+          />
+        </Flex>
+      </Flex>
       <EditorCanvas
         engine={engine}
         showGrid={showGrid}
         showRuler={showRuler}
         dragEnabled={dragEnabled}
       />
-    </FlexBox>
+    </>
   );
 };
 export default App;

@@ -1,11 +1,33 @@
-import color from './__color';
-import font from './__font';
-import layout from './__layout';
-import general from './__general';
+import { extendTheme } from '@chakra-ui/react';
 
-export default {
+import color from './temp/color';
+import font from './temp/font';
+import layout from './temp/layout';
+import general from './temp/general';
+
+/**
+ * Gloabl Overrides
+ * ===================
+ */
+import global from './global';
+
+/**
+ * Component Overrides
+ * ===================
+ */
+import Button from './components/Button';
+
+export const _theme = {
   ...color,
   ...layout,
   ...font,
   ...general
 };
+
+export default extendTheme({
+  config: { initialColorMode: 'dark', useSystemColorMode: false },
+  global,
+  components: {
+    Button
+  }
+});

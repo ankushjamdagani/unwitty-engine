@@ -7,9 +7,9 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 module.exports = {
   mode: 'development',
   entry: {
-    game: './src/game/index.js',
-    engine: './src/engine/index.js',
-    editor: './src/editor/index.js'
+    game: './src/game/index.js'
+    // engine: './src/engine/index.js',
+    // editor: './src/editor/index.js'
   },
   output: {
     filename: '[name].bundle.js',

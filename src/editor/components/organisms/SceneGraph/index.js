@@ -1,51 +1,41 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import styled, { css } from 'styled-components';
-import { themeGet } from '@styled-system/theme-get';
+import { Text, Box, Stack } from '@chakra-ui/react';
 
-import { FlexBox } from '__COMPONENTS/atoms';
-
-const Wrapper = styled(FlexBox)`
-  background: rgba(0, 0, 0, 0.1);
-  font-family: monospace;
-  border-right: dashed 1px #ffffff38;
-`;
-
-const NodeItem = styled(FlexBox)`
-  border-bottom: dotted 1px ${themeGet('colors.white.4')};
-
-  ${(props) =>
-    props.active &&
-    css`
-      color: ${themeGet('colors.background')};
-      background: ${themeGet('colors.text')};
-    `}
-
-  ${(props) =>
-    props.showCursor &&
-    css`
-      cursor: pointer;
-    `}
-`;
+import Panel from '../../molecules/Panel';
 
 const Node = ({ nodeId, entities, active, onClick }) => {
   const activeNode = entities[nodeId];
   return (
-    <>
-      <NodeItem showCursor={!!onClick} active={active} onClick={onClick}>
-        {activeNode.label}
-      </NodeItem>
-      <FlexBox
-        pl={4}
-        alignItems='flex-start'
-        justifyContent='flex-end'
-        flexDirection='column'
+    <Box pl={4}>
+      <Box
+        as='button'
+        onClick={onClick}
+        className={`${onClick ? 'showCursor' : ''} ${active ? 'active' : ''} `}
+        sx={{
+          borderBottom: 'dotted 1px white',
+          pointerEvents: 'none',
+          cursor: 'pointer',
+          '&.active': {
+            color: 'black',
+            background: 'white'
+          },
+          '&.showCursor': {
+            pointerEvents: 'all'
+          }
+        }}
       >
-        {activeNode.children.map((id) => (
-          <Node key={id} nodeId={id} entities={entities} />
-        ))}
-      </FlexBox>
-    </>
+        <Text>{activeNode.label}</Text>
+      </Box>
+
+      {activeNode.children && (
+        <>
+          {activeNode.children.map((id) => (
+            <Node key={id} nodeId={id} entities={entities} />
+          ))}
+        </>
+      )}
+    </Box>
   );
 };
 
@@ -55,25 +45,30 @@ const SceneGraph = ({ entities, activeSceneId, engine }) => {
   );
 
   return (
-    <Wrapper
-      p={4}
-      alignItems='flex-start'
-      zIndex='111'
-      flexDirection='column'
-      height='100%'
-    >
-      {scenes.map((sc) => (
-        <Node
-          key={sc.id}
-          nodeId={sc.id}
-          entities={entities}
-          active={activeSceneId === sc.id}
-          onClick={() => {
-            engine.changeActiveScene(sc.id);
-          }}
-        />
-      ))}
-    </Wrapper>
+    <Panel height='100%'>
+      <Stack
+        p={4}
+        pl={0}
+        h='100%'
+        w='250px'
+        align='flex-start'
+        background='rgba(0, 0, 0, 0.1)'
+        fontFamily='monospace'
+        borderRight='dashed 1px #ffffff38'
+      >
+        {scenes.map((sc) => (
+          <Node
+            key={sc.id}
+            nodeId={sc.id}
+            entities={entities}
+            active={activeSceneId === sc.id}
+            onClick={() => {
+              engine.changeActiveScene(sc.id);
+            }}
+          />
+        ))}
+      </Stack>
+    </Panel>
   );
 };
 

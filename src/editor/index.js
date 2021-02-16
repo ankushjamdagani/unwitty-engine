@@ -1,24 +1,16 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
 import { Provider } from 'react-redux';
-import { ThemeProvider } from 'styled-components';
+import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
+
+import theme from './styles/theme';
+import DataStoreContext from './context/datoStore';
 
 import App from './App';
 
-import CommonStyle from './styles/common';
-import ResetStyle from './styles/reset';
-import theme from './styles/theme';
-
-import DataStoreContext from './context/datoStore';
-
 /**
- * ICONS ::  https://material.io/resources/icons/?style=baseline
- */
-
-/**
- * Dynamic Reducers - https://tylergaw.com/articles/dynamic-redux-reducers/
- * or
- * Just use DataStore.setData
+ * - ICONS - https://material.io/resources/icons/?style=baseline
+ * - Dynamic Reducers - https://tylergaw.com/articles/dynamic-redux-reducers/ or Just use DataStore.setData
  */
 
 const Editor = {
@@ -38,15 +30,12 @@ const Editor = {
     wrapper.prepend(overlaysWrapper);
     ReactDOM.render(
       <Provider store={store}>
-        <ThemeProvider theme={theme}>
+        <ChakraProvider theme={theme}>
           <DataStoreContext.Provider value={{ DataStore }}>
-            <>
-              <ResetStyle />
-              <CommonStyle />
-              <App engine={engine} />
-            </>
+            <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+            <App engine={engine} />
           </DataStoreContext.Provider>
-        </ThemeProvider>
+        </ChakraProvider>
       </Provider>,
       document.getElementById(`wrapper_overlays_${key}`)
     );
