@@ -12,6 +12,8 @@ import {
 
 import { DataStore, core } from './modules';
 
+import { GAME_STATES } from './constants';
+
 const { Base } = core;
 
 // --------------- GAME LOOP STARTS
@@ -64,7 +66,7 @@ class Engine extends Base {
         height,
         aspectRatio: width / height,
         smoothImage,
-        gameState: 'PLAY'
+        gameState: GAME_STATES.PLAY
       },
       'core'
     );
@@ -230,7 +232,7 @@ class Engine extends Base {
 
   play() {
     DataStore.setData((core) => {
-      core.gameState = 'PLAY';
+      core.gameState = GAME_STATES.PLAY;
     }, 'core');
 
     DataStore.setData((timing) => {
@@ -244,7 +246,7 @@ class Engine extends Base {
     this.pauseRenderCycle && clearInterval(this.pauseRenderCycle);
 
     DataStore.setData((core) => {
-      core.gameState = 'PAUSE';
+      core.gameState = GAME_STATES.PAUSE;
     }, 'core');
 
     cancelAnimationFrame(this.autoPilotCycle);
@@ -260,7 +262,7 @@ class Engine extends Base {
 
   stop() {
     DataStore.setData((core) => {
-      core.gameState = 'STOP';
+      core.gameState = GAME_STATES.STOP;
     }, 'core');
 
     cancelAnimationFrame(this.autoPilotCycle);

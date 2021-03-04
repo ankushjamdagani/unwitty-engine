@@ -1,4 +1,4 @@
-import { SYNC, CLEAR } from './core.actionTypes';
+import { SYNC, CLEAR } from './actionTypes';
 
 const INITIAL_STATE = {
   core: {},
@@ -15,7 +15,7 @@ const INITIAL_STATE = {
   UpdateManager: {}
 };
 
-export default function coreReducer(state = INITIAL_STATE, action) {
+export default function reducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case SYNC: {
       return {

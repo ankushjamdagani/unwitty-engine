@@ -4,22 +4,22 @@ import { Provider } from 'react-redux';
 import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
 
 import theme from './styles/theme';
-import DataStoreContext from './context/datoStore';
+import DataStoreContext from './dataStore/context';
+import reducer from './dataStore/reducers';
 
 import App from './App';
 
 /**
  * - ICONS - https://material.io/resources/icons/?style=baseline
- * - Dynamic Reducers - https://tylergaw.com/articles/dynamic-redux-reducers/ or Just use DataStore.setData
  */
 
 const Editor = {
   init: (DataStore, engine) => {
-    const store = DataStore.getStore();
+    DataStore.reducerManager.add('editor', reducer);
 
     const {
       core: { key }
-    } = store.getState();
+    } = DataStore.getData();
 
     const wrapper = document.getElementById(`wrapper_${key}`);
 
@@ -29,7 +29,7 @@ const Editor = {
 
     wrapper.prepend(overlaysWrapper);
     ReactDOM.render(
-      <Provider store={store}>
+      <Provider store={DataStore.store}>
         <ChakraProvider theme={theme}>
           <DataStoreContext.Provider value={{ DataStore }}>
             <ColorModeScript initialColorMode={theme.config.initialColorMode} />

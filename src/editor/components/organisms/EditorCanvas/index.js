@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import { GAME_STATES } from '../../../constants';
+
 import useCanvasDrag from '../../../helperHooks/useCanvasDrag';
 
 import Grid from './Grid';
@@ -13,7 +15,7 @@ const EditorCanvas = ({
   showRuler,
   dragEnabled
 }) => {
-  const gameNotPlaying = gameState !== 'PLAY';
+  const gameNotPlaying = gameState !== GAME_STATES.PLAY;
   useCanvasDrag(dragEnabled && gameNotPlaying, { activeSceneId });
 
   return (
@@ -26,6 +28,6 @@ const EditorCanvas = ({
 };
 
 export default connect((state) => ({
-  activeSceneId: state.core.activeSceneId,
-  gameState: state.core.gameState
+  activeSceneId: state.engine.core.activeSceneId,
+  gameState: state.engine.core.gameState
 }))(EditorCanvas);

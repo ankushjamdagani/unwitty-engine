@@ -1,5 +1,5 @@
 import { useEffect, useContext } from 'react';
-import DataStoreContext from '../context/datoStore';
+import DataStoreContext from '../dataStore/context';
 
 const useCanvasDrag = (enabled, { activeSceneId }) => {
   const { DataStore } = useContext(DataStoreContext);
