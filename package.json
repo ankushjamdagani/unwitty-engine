@@ -33,7 +33,7 @@
     "react-redux": "^7.2.2",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",
-    "snyk": "^1.439.0"
+    "snyk": "^1.456.0"
   },
   "devDependencies": {
     "@babel/core": "^7.10.5",
