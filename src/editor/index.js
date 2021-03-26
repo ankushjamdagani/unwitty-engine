@@ -21,13 +21,13 @@ const Editor = {
       core: { key }
     } = DataStore.getData();
 
-    const wrapper = document.getElementById(`wrapper_${key}`);
-
     const overlaysWrapper = document.createElement('div');
     overlaysWrapper.setAttribute('class', `wrapper_overlays_unwitty_game`);
     overlaysWrapper.setAttribute('id', `wrapper_overlays_${key}`);
 
+    const wrapper = document.getElementById(`wrapper_${key}`);
     wrapper.prepend(overlaysWrapper);
+
     ReactDOM.render(
       <Provider store={DataStore.store}>
         <ChakraProvider theme={theme}>

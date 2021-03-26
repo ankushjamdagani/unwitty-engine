@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useContext, useCallback } from 'react';
 import { connect } from 'react-redux';
 
 import { GAME_STATES } from '../../../constants';
 
-import useCanvasDrag from '../../../helperHooks/useCanvasDrag';
+import DataStoreContext from '../../../dataStore/context';
+
+import useMouseDrag from '../../../helperHooks/useMouseDrag';
 
 import Grid from './Grid';
 
@@ -16,7 +18,19 @@ const EditorCanvas = ({
   dragEnabled
 }) => {
   const gameNotPlaying = gameState !== GAME_STATES.PLAY;
-  useCanvasDrag(dragEnabled && gameNotPlaying, { activeSceneId });
+  const { DataStore } = useContext(DataStoreContext);
+
+  const onDragChange = useCallback(({ deltaX, deltaY }) => {
+    DataStore.setData((entities) => {
+      entities[`camera_${activeSceneId}`].position.x -= deltaX;
+      entities[`camera_${activeSceneId}`].position.y -= deltaY;
+    }, 'entities');
+  });
+
+  useMouseDrag(dragEnabled && gameNotPlaying, {
+    activeSceneId,
+    onChange: onDragChange
+  });
 
   return (
     <>
