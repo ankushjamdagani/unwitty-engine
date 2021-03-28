@@ -16,15 +16,20 @@ class DomManager extends Base {
 
   initCoreStructure({ key, width, height }) {
     const wrapper = document.createElement('div');
-    wrapper.setAttribute('class', `wrapper_unwitty_game`);
-    wrapper.setAttribute('id', `wrapper_${key}`);
+    wrapper.setAttribute('class', `unwitty_game_wrapper`);
+    wrapper.setAttribute('id', `${key}_wrapper`);
     wrapper.style.width = `${width}px`;
     wrapper.style.height = `${height}px`;
 
-    const canvasWrapper = document.createElement('div');
-    canvasWrapper.setAttribute('class', `wrapper_canvas_unwitty_game`);
-    canvasWrapper.setAttribute('id', `wrapper_canvas_${key}`);
+    const overlaysWrapper = document.createElement('div');
+    overlaysWrapper.setAttribute('class', `unwitty_game_overlays_wrapper`);
+    overlaysWrapper.setAttribute('id', `${key}_overlays_wrapper`);
 
+    const canvasWrapper = document.createElement('div');
+    canvasWrapper.setAttribute('class', `unwitty_game_canvas_wrapper`);
+    canvasWrapper.setAttribute('id', `${key}_canvas_wrapper`);
+
+    wrapper.appendChild(overlaysWrapper);
     wrapper.appendChild(canvasWrapper);
 
     (document.getElementById(key) || document.body).appendChild(wrapper);
@@ -36,14 +41,7 @@ class DomManager extends Base {
     const {
       core: { key }
     } = this.props.getData();
-    return document.getElementById(`wrapper_canvas_${key}`);
-  }
-
-  getOverlaysWrapper() {
-    const {
-      core: { key }
-    } = this.props.getData();
-    return document.getElementById(`wrapper_overlays_${key}`);
+    return document.getElementById(`${key}_canvas_wrapper`);
   }
 
   addCanvas(key) {
@@ -58,7 +56,8 @@ class DomManager extends Base {
     const wrapper = this.getCanvasWrapper();
 
     const canvas = document.createElement('canvas');
-    canvas.setAttribute('id', key);
+    canvas.setAttribute('class', 'unwitty_game_canvas');
+    canvas.setAttribute('id', `unwitty_game_canvas_${key}`);
 
     const dpr = window.devicePixelRatio || 1;
     canvas.width = width * dpr;

@@ -1,4 +1,4 @@
-.wrapper_unwitty_game {
+.unwitty_game_wrapper {
   background: #212121;
   background: #232a2e;
   background: #1e2528;
@@ -6,13 +6,13 @@
   position: relative;
 }
 
-.wrapper_canvas_unwitty_game {
+.unwitty_game_canvas_wrapper {
   height: 100%;
   width: 100%;
   position: relative;
 }
 
-.wrapper_canvas_unwitty_game canvas {
+.unwitty_game_canvas_wrapper canvas {
   background: transparent;
   margin: 0 auto;
   display: block;
@@ -28,7 +28,7 @@
   width: 100%;
 }
 
-.wrapper_overlays_unwitty_game {
+.unwitty_game_overlays_wrapper {
   height: 100%;
   width: 100%;
   position: absolute;

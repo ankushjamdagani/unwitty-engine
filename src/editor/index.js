@@ -3,6 +3,9 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
 
+// eslint-disable-next-line import/no-named-as-default-member
+import './styles/main.css';
+
 import theme from './styles/theme';
 import DataStoreContext from './dataStore/context';
 import reducer from './dataStore/reducers';
@@ -21,12 +24,19 @@ const Editor = {
       core: { key }
     } = DataStore.getData();
 
-    const overlaysWrapper = document.createElement('div');
-    overlaysWrapper.setAttribute('class', `wrapper_overlays_unwitty_game`);
-    overlaysWrapper.setAttribute('id', `wrapper_overlays_${key}`);
+    const editorWrapper = document.createElement('div');
+    editorWrapper.setAttribute('class', 'unwitty_editor_wrapper');
+    editorWrapper.setAttribute('id', 'unwitty_editor_wrapper');
 
-    const wrapper = document.getElementById(`wrapper_${key}`);
-    wrapper.prepend(overlaysWrapper);
+    editorWrapper.innerHTML = `
+      <div id="unwitty_editor_app_wrapper"></div>
+      <div id="unwitty_editor_canvas_wrapper">
+        <canvas id="unwitty_editor_canvas_base" class="unwitty_editor_canvas"></canvas>
+      </div>
+    `;
+
+    const wrapper = document.getElementById(`${key}_wrapper`).parentElement;
+    wrapper.prepend(editorWrapper);
 
     ReactDOM.render(
       <Provider store={DataStore.store}>
@@ -37,7 +47,7 @@ const Editor = {
           </DataStoreContext.Provider>
         </ChakraProvider>
       </Provider>,
-      document.getElementById(`wrapper_overlays_${key}`)
+      document.getElementById(`unwitty_editor_app_wrapper`)
     );
   }
 };
