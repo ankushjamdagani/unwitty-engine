@@ -5,6 +5,7 @@ import {
   DomManager,
   EntityManager,
   RenderManager,
+  GridManager,
   ResourceManager,
   TimeManager,
   UpdateManager
@@ -45,7 +46,8 @@ class Engine extends Base {
       height = window.innerHeight,
       smoothImage = false,
       timeScale = 1,
-      fps = 100
+      fps = 100,
+      gridSize = 50
     } = props || {};
 
     this.props = {};
@@ -72,9 +74,10 @@ class Engine extends Base {
     );
 
     this.initDomManager();
-    this.initTimeManager({ timeScale, fps });
     this.initResourceManager();
     this.initEntityManager();
+    this.initGridManager({ gridSize });
+    this.initTimeManager({ timeScale, fps });
     this.initUpdateManager();
     this.initRenderManager();
 
@@ -144,6 +147,18 @@ class Engine extends Base {
     });
 
     this.managers.entityManager = entityManager;
+  }
+
+  initGridManager(props) {
+    const gridManager = new GridManager({
+      data: props,
+      getData: () => ({
+        core: this.props.core,
+        gridManager: this.props.gridManager
+      })
+    });
+
+    this.managers.gridManager = gridManager;
   }
 
   initUpdateManager() {

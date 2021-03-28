@@ -1,21 +1,8 @@
 import { SYNC, CLEAR } from './actionTypes';
 
-const INITIAL_STATE = {
-  core: {},
-  timing: {},
-  resources: {},
-  entities: {},
-  canvasMap: new Map(),
-  AudioManager: {},
-  DomManager: {},
-  EntityManager: {},
-  RenderManager: {},
-  ResourceManager: {},
-  TimeManager: {},
-  UpdateManager: {}
-};
+import initialState from './initialState';
 
-export default function reducer(state = INITIAL_STATE, action) {
+export default function reducer(state = initialState, action) {
   switch (action.type) {
     case SYNC: {
       return {
@@ -27,9 +14,9 @@ export default function reducer(state = INITIAL_STATE, action) {
       return action.context
         ? {
             ...state,
-            [action.context]: INITIAL_STATE[action.context]
+            [action.context]: initialState[action.context]
           }
-        : INITIAL_STATE;
+        : initialState;
     }
     default: {
       return state;
