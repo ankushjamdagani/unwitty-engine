@@ -12,7 +12,7 @@ class GridManager extends Base {
   }
 
   changeGridSize(gridSize) {
-    if (!gridSize) throw Error(`No gridSize - ${gridSize}`);
+    if (!gridSize) throw Error(`Invalid gridSize - ${gridSize}`);
 
     DataStore.setData((core) => {
       core.gridSize = gridSize;
@@ -26,8 +26,8 @@ class GridManager extends Base {
       core: { gridSize }
     } = this.props.getData();
 
-    const xPos = Math.floor(gridSize / pos.x);
-    const yPos = Math.floor(gridSize / pos.y);
+    const xPos = Math.floor(pos.x / gridSize);
+    const yPos = Math.floor(pos.y / gridSize);
 
     return core.Vector2D.create([xPos, yPos]);
   }
@@ -37,8 +37,8 @@ class GridManager extends Base {
       core: { gridSize }
     } = this.props.getData();
 
-    const xPos = gridSize * pos.x;
-    const yPos = gridSize * pos.y;
+    const xPos = pos.x * gridSize;
+    const yPos = pos.y * gridSize;
 
     return core.Vector2D.create([xPos, yPos]);
   }

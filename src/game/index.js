@@ -3,7 +3,7 @@ import Engine from '../engine';
 
 const {
   DataStore,
-  Entity: { Body, Transform }
+  Entity: { Body, Transform, Camera }
 } = Engine;
 
 const WIDTH = window.innerWidth;
@@ -19,7 +19,7 @@ const engine = Engine.init({
 
 Editor.init(DataStore, engine);
 
-const { entityManager } = engine.managers;
+const { entityManager, gridManager } = engine.managers;
 
 // eslint-disable-next-line no-unused-vars
 const defaultScene = entityManager.createScene({ name: 'defaultScene' });
@@ -121,6 +121,31 @@ engine.addEventListener('on_ready', () => {
       if (key === 'ArrowRight') entities.runner.position.x += 61;
       if (key === 'ArrowUp') entities.runner.position.y -= 61;
       if (key === 'ArrowDown') entities.runner.position.y += 61;
+    }, 'entities');
+  });
+
+  window.addEventListener('mousemove', (evt) => {
+    const { clientX, clientY } = evt;
+
+    const {
+      core: { activeSceneId },
+      entities
+    } = DataStore.getData();
+
+    const camera = entities[`camera_${activeSceneId}`];
+
+    DataStore.setData((entities) => {
+      entities.runner.position = gridManager.getPixelPositionFromGrid(
+        gridManager.getGridPositionFromPixel(
+          Camera.getAbsolutePosition(
+            {
+              x: clientX,
+              y: clientY
+            },
+            camera
+          )
+        )
+      );
     }, 'entities');
   });
 
