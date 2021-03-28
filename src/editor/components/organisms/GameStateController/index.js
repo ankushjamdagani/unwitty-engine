@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { connect } from 'react-redux';
 import {
   chakra,
@@ -7,6 +7,9 @@ import {
   ButtonGroup,
   Divider
 } from '@chakra-ui/react';
+
+import { GAME_STATES } from '../../../constants';
+import DataStoreContext from '../../../dataStore/context';
 
 import Panel from '../../molecules/Panel';
 
@@ -18,7 +21,6 @@ const Icon = ({ type, size }) => (
 
 const GameStateController = ({
   gameState,
-  engine,
   showRuler,
   toggleRuler,
   showGrid,
@@ -26,7 +28,8 @@ const GameStateController = ({
   dragEnabled,
   toggleDrag
 }) => {
-  const gamePlaying = gameState === 'PLAY';
+  const gamePlaying = gameState === GAME_STATES.PLAY;
+  const { engine } = useContext(DataStoreContext);
 
   return (
     <Panel>
@@ -91,7 +94,8 @@ const GameStateController = ({
             isDisabled={gamePlaying}
             borderRadius='none'
           />
-          {(gameState === 'STOP' || gameState === 'PAUSE') && (
+          {(gameState === GAME_STATES.STOP ||
+            gameState === GAME_STATES.PAUSE) && (
             <IconButton
               aria-label='Play'
               icon={<Icon type='play_arrow' size='2xl' />}
@@ -101,7 +105,7 @@ const GameStateController = ({
               borderRadius='none'
             />
           )}
-          {gameState === 'PLAY' && (
+          {gameState === GAME_STATES.PLAY && (
             <IconButton
               aria-label='Pause'
               icon={<Icon type='pause' size='2xl' />}
@@ -131,5 +135,5 @@ const GameStateController = ({
 };
 
 export default connect((state) => ({
-  gameState: state.core.gameState
+  gameState: state.engine_state.core.gameState
 }))(GameStateController);

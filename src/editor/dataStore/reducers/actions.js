@@ -1,4 +1,4 @@
-import { SYNC, CLEAR } from './core.actionTypes';
+import { SYNC, CLEAR } from './actionTypes';
 
 function setData(data, context) {
   return {

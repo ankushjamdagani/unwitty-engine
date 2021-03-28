@@ -3,41 +3,56 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
 
+// eslint-disable-next-line import/no-named-as-default-member
+import './styles/main.css';
+
 import theme from './styles/theme';
-import DataStoreContext from './context/datoStore';
+import DataStoreContext from './dataStore/context';
+import reducer from './dataStore/reducers';
 
 import App from './App';
 
 /**
  * - ICONS - https://material.io/resources/icons/?style=baseline
- * - Dynamic Reducers - https://tylergaw.com/articles/dynamic-redux-reducers/ or Just use DataStore.setData
  */
 
 const Editor = {
   init: (DataStore, engine) => {
-    const store = DataStore.getStore();
+    if (document.getElementById(`unwitty_editor_wrapper`)) {
+      // already initialised
+      return;
+    }
+
+    DataStore.reducerManager.add('editor_state', reducer);
 
     const {
       core: { key }
-    } = store.getState();
+    } = DataStore.getData();
 
-    const wrapper = document.getElementById(`wrapper_${key}`);
+    const editorWrapper = document.createElement('div');
+    editorWrapper.setAttribute('class', 'unwitty_editor_wrapper');
+    editorWrapper.setAttribute('id', 'unwitty_editor_wrapper');
 
-    const overlaysWrapper = document.createElement('div');
-    overlaysWrapper.setAttribute('class', `wrapper_overlays_unwitty_game`);
-    overlaysWrapper.setAttribute('id', `wrapper_overlays_${key}`);
+    editorWrapper.innerHTML = `
+      <div id="unwitty_editor_app_wrapper"></div>
+      <div id="unwitty_editor_canvas_wrapper">
+        <canvas id="unwitty_editor_canvas_base" class="unwitty_editor_canvas"></canvas>
+      </div>
+    `;
 
-    wrapper.prepend(overlaysWrapper);
+    const wrapper = document.getElementById(`${key}_wrapper`).parentElement;
+    wrapper.prepend(editorWrapper);
+
     ReactDOM.render(
-      <Provider store={store}>
+      <Provider store={DataStore.store}>
         <ChakraProvider theme={theme}>
-          <DataStoreContext.Provider value={{ DataStore }}>
+          <DataStoreContext.Provider value={{ DataStore, engine }}>
             <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-            <App engine={engine} />
+            <App />
           </DataStoreContext.Provider>
         </ChakraProvider>
       </Provider>,
-      document.getElementById(`wrapper_overlays_${key}`)
+      document.getElementById(`unwitty_editor_app_wrapper`)
     );
   }
 };

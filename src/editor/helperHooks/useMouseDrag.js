@@ -1,8 +1,6 @@
-import { useEffect, useContext } from 'react';
-import DataStoreContext from '../context/datoStore';
+import { useEffect } from 'react';
 
-const useCanvasDrag = (enabled, { activeSceneId }) => {
-  const { DataStore } = useContext(DataStoreContext);
+const useMouseDrag = (enabled, { activeSceneId, onChange }) => {
   useEffect(() => {
     if (!enabled) {
       return;
@@ -26,10 +24,10 @@ const useCanvasDrag = (enabled, { activeSceneId }) => {
         lastX = evt.clientX;
         lastY = evt.clientY;
 
-        DataStore.setData((entities) => {
-          entities[`camera_${activeSceneId}`].position.x -= deltaX;
-          entities[`camera_${activeSceneId}`].position.y -= deltaY;
-        }, 'entities');
+        onChange({
+          deltaX,
+          deltaY
+        });
       }
     };
 
@@ -44,4 +42,4 @@ const useCanvasDrag = (enabled, { activeSceneId }) => {
   }, [enabled, activeSceneId]);
 };
 
-export default useCanvasDrag;
+export default useMouseDrag;

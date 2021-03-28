@@ -1,20 +1,35 @@
-import React from 'react';
+import React, { useContext, useCallback } from 'react';
 import { connect } from 'react-redux';
 
-import useCanvasDrag from '../../../helperHooks/useCanvasDrag';
+import { GAME_STATES } from '../../../constants';
+
+import DataStoreContext from '../../../dataStore/context';
+
+import useMouseDrag from '../../../helperHooks/useMouseDrag';
 
 import Grid from './Grid';
 
 const EditorCanvas = ({
-  engine,
   gameState,
   activeSceneId,
   showGrid,
   showRuler,
   dragEnabled
 }) => {
-  const gameNotPlaying = gameState !== 'PLAY';
-  useCanvasDrag(dragEnabled && gameNotPlaying, { activeSceneId });
+  const gameNotPlaying = gameState !== GAME_STATES.PLAY;
+  const { DataStore, engine } = useContext(DataStoreContext);
+
+  const onDragChange = useCallback(({ deltaX, deltaY }) => {
+    DataStore.setData((entities) => {
+      entities[`camera_${activeSceneId}`].position.x -= deltaX;
+      entities[`camera_${activeSceneId}`].position.y -= deltaY;
+    }, 'entities');
+  });
+
+  useMouseDrag(dragEnabled && gameNotPlaying, {
+    activeSceneId,
+    onChange: onDragChange
+  });
 
   return (
     <>
@@ -26,6 +41,6 @@ const EditorCanvas = ({
 };
 
 export default connect((state) => ({
-  activeSceneId: state.core.activeSceneId,
-  gameState: state.core.gameState
+  activeSceneId: state.engine_state.core.activeSceneId,
+  gameState: state.engine_state.core.gameState
 }))(EditorCanvas);
