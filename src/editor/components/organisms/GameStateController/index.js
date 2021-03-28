@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { connect } from 'react-redux';
 import {
   chakra,
@@ -9,6 +9,7 @@ import {
 } from '@chakra-ui/react';
 
 import { GAME_STATES } from '../../../constants';
+import DataStoreContext from '../../../dataStore/context';
 
 import Panel from '../../molecules/Panel';
 
@@ -20,7 +21,6 @@ const Icon = ({ type, size }) => (
 
 const GameStateController = ({
   gameState,
-  engine,
   showRuler,
   toggleRuler,
   showGrid,
@@ -29,6 +29,7 @@ const GameStateController = ({
   toggleDrag
 }) => {
   const gamePlaying = gameState === GAME_STATES.PLAY;
+  const { engine } = useContext(DataStoreContext);
 
   return (
     <Panel>
@@ -134,5 +135,5 @@ const GameStateController = ({
 };
 
 export default connect((state) => ({
-  gameState: state.engine.core.gameState
+  gameState: state.game_state.core.gameState
 }))(GameStateController);

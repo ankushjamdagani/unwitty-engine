@@ -9,7 +9,7 @@ import {
 } from './components/organisms';
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullScreen
-const App = ({ engine }) => {
+const App = () => {
   const [showGrid, setShowGrid] = useState(true);
   const [showRuler, setShowRuler] = useState(true);
   const [dragEnabled, setDragEnabled] = useState(true);
@@ -27,7 +27,7 @@ const App = ({ engine }) => {
           justifyContent='space-between'
           height='100%'
         >
-          <SceneGraph engine={engine} />
+          <SceneGraph />
         </Flex>
         <Flex
           flexDirection='column'
@@ -37,7 +37,6 @@ const App = ({ engine }) => {
         >
           <FPSDebugger />
           <GameStateController
-            engine={engine}
             showRuler={showRuler}
             showGrid={showGrid}
             dragEnabled={dragEnabled}
@@ -48,7 +47,6 @@ const App = ({ engine }) => {
         </Flex>
       </Flex>
       <EditorCanvas
-        engine={engine}
         showGrid={showGrid}
         showRuler={showRuler}
         dragEnabled={dragEnabled}

@@ -10,7 +10,6 @@ import useMouseDrag from '../../../helperHooks/useMouseDrag';
 import Grid from './Grid';
 
 const EditorCanvas = ({
-  engine,
   gameState,
   activeSceneId,
   showGrid,
@@ -18,7 +17,7 @@ const EditorCanvas = ({
   dragEnabled
 }) => {
   const gameNotPlaying = gameState !== GAME_STATES.PLAY;
-  const { DataStore } = useContext(DataStoreContext);
+  const { DataStore, engine } = useContext(DataStoreContext);
 
   const onDragChange = useCallback(({ deltaX, deltaY }) => {
     DataStore.setData((entities) => {
@@ -42,6 +41,6 @@ const EditorCanvas = ({
 };
 
 export default connect((state) => ({
-  activeSceneId: state.engine.core.activeSceneId,
-  gameState: state.engine.core.gameState
+  activeSceneId: state.game_state.core.activeSceneId,
+  gameState: state.game_state.core.gameState
 }))(EditorCanvas);

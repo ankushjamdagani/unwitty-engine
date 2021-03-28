@@ -18,7 +18,12 @@ import App from './App';
 
 const Editor = {
   init: (DataStore, engine) => {
-    DataStore.reducerManager.add('editor', reducer);
+    if (document.getElementById(`unwitty_editor_wrapper`)) {
+      // already initialised
+      return;
+    }
+
+    DataStore.reducerManager.add('editor_state', reducer);
 
     const {
       core: { key }
@@ -41,9 +46,9 @@ const Editor = {
     ReactDOM.render(
       <Provider store={DataStore.store}>
         <ChakraProvider theme={theme}>
-          <DataStoreContext.Provider value={{ DataStore }}>
+          <DataStoreContext.Provider value={{ DataStore, engine }}>
             <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-            <App engine={engine} />
+            <App />
           </DataStoreContext.Provider>
         </ChakraProvider>
       </Provider>,

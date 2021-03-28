@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { connect } from 'react-redux';
 import { Text, Box, Stack } from '@chakra-ui/react';
+
+import DataStoreContext from '../../../dataStore/context';
 
 import Panel from '../../molecules/Panel';
 
@@ -39,7 +41,9 @@ const Node = ({ nodeId, entities, active, onClick }) => {
   );
 };
 
-const SceneGraph = ({ entities, activeSceneId, engine }) => {
+const SceneGraph = ({ entities, activeSceneId }) => {
+  const { engine } = useContext(DataStoreContext);
+
   const scenes = Object.values(entities).filter(
     (node) => node.type === 'scene'
   );
@@ -73,6 +77,6 @@ const SceneGraph = ({ entities, activeSceneId, engine }) => {
 };
 
 export default connect((state) => ({
-  entities: state.engine.entities,
-  activeSceneId: state.engine.core.activeSceneId
+  entities: state.game_state.entities,
+  activeSceneId: state.game_state.core.activeSceneId
 }))(SceneGraph);
