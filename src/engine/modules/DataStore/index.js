@@ -16,13 +16,13 @@ const DataStore = {
   store: null,
   reducerManager: null,
 
-  getData(context, reducer = 'game_state') {
+  getData(context, reducer = 'engine_state') {
     return context
       ? this.store.getState()[reducer][context]
       : this.store.getState()[reducer];
   },
 
-  setData(dataGetter, context, reducer = 'game_state') {
+  setData(dataGetter, context, reducer = 'engine_state') {
     if (typeof dataGetter === 'function') {
       const _data = produce(DataStore.getData(context, reducer), dataGetter);
       this.store.dispatch(Actions.setData(_data, context, reducer));
@@ -42,7 +42,7 @@ const DataStore = {
     const middlewareEnhancer = applyMiddleware(...middlewares);
     const composedEnhancers = composeWithDevTools(middlewareEnhancer);
 
-    const reducerManager = createReducerManager({ game_state: reducer });
+    const reducerManager = createReducerManager({ engine_state: reducer });
 
     // Create a store with the root reducer function being the one exposed by the manager.
     this.store = createStore(
@@ -60,7 +60,7 @@ const DataStore = {
     return this.store;
   },
 
-  observeStore(select, onChange, reducer = 'game_state') {
+  observeStore(select, onChange, reducer = 'engine_state') {
     const _this = this;
     let currentState;
 

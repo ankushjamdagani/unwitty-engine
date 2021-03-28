@@ -135,9 +135,9 @@ const Grid = ({
 };
 
 export default connect((state) => ({
-  entities: state.game_state.entities,
-  activeSceneId: state.game_state.core.activeSceneId,
-  width: state.game_state.core.width,
-  height: state.game_state.core.height,
-  canvasMap: state.game_state.canvasMap
+  entities: state.engine_state.entities,
+  activeSceneId: state.engine_state.core.activeSceneId,
+  width: state.engine_state.core.width,
+  height: state.engine_state.core.height,
+  canvasMap: state.engine_state.canvasMap
 }))(Grid);

@@ -41,6 +41,6 @@ const EditorCanvas = ({
 };
 
 export default connect((state) => ({
-  activeSceneId: state.game_state.core.activeSceneId,
-  gameState: state.game_state.core.gameState
+  activeSceneId: state.engine_state.core.activeSceneId,
+  gameState: state.engine_state.core.gameState
 }))(EditorCanvas);

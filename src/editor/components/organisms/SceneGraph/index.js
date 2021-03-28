@@ -77,6 +77,6 @@ const SceneGraph = ({ entities, activeSceneId }) => {
 };
 
 export default connect((state) => ({
-  entities: state.game_state.entities,
-  activeSceneId: state.game_state.core.activeSceneId
+  entities: state.engine_state.entities,
+  activeSceneId: state.engine_state.core.activeSceneId
 }))(SceneGraph);

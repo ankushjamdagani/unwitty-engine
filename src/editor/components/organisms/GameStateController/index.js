@@ -135,5 +135,5 @@ const GameStateController = ({
 };
 
 export default connect((state) => ({
-  gameState: state.game_state.core.gameState
+  gameState: state.engine_state.core.gameState
 }))(GameStateController);
