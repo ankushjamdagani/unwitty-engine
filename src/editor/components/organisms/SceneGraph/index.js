@@ -42,7 +42,9 @@ const Node = ({ nodeId, entities, active, onClick }) => {
 };
 
 const SceneGraph = ({ entities, activeSceneId }) => {
-  const { engine } = useContext(DataStoreContext);
+  const {
+    Engine: { instance: engine }
+  } = useContext(DataStoreContext);
 
   const scenes = Object.values(entities).filter(
     (node) => node.type === 'scene'

@@ -17,7 +17,7 @@ const engine = Engine.init({
   debug: true
 });
 
-Editor.init(DataStore, engine);
+Editor.init(Engine);
 
 const { entityManager, gridManager } = engine.managers;
 
@@ -80,6 +80,17 @@ const bg = Body.createRectangle({
   debug: true
 });
 
+entityManager.addChildren(worldDefaultScene, bg);
+entityManager.addChildren(worldDefaultScene, transform1);
+entityManager.addChildren(transform1, sun);
+entityManager.addChildren(sun, transform2);
+entityManager.addChildren(transform2, earth);
+entityManager.addChildren(earth, moon);
+
+// eslint-disable-next-line no-unused-vars
+const defaultScene1 = entityManager.createScene({ name: 'defaultScene1' });
+const worldDefaultScene1 = entityManager.root;
+
 const bg1 = Body.createRectangle({
   name: 'bg1',
   position: [0, 0],
@@ -97,17 +108,6 @@ const runner = Body.createArc({
   },
   debug: true
 });
-
-entityManager.addChildren(worldDefaultScene, bg);
-entityManager.addChildren(worldDefaultScene, transform1);
-entityManager.addChildren(transform1, sun);
-entityManager.addChildren(sun, transform2);
-entityManager.addChildren(transform2, earth);
-entityManager.addChildren(earth, moon);
-
-// eslint-disable-next-line no-unused-vars
-const defaultScene1 = entityManager.createScene({ name: 'defaultScene1' });
-const worldDefaultScene1 = entityManager.root;
 
 entityManager.addChildren(worldDefaultScene1, bg1);
 entityManager.addChildren(worldDefaultScene1, runner);
@@ -170,4 +170,4 @@ engine.addEventListener('on_update', ({ detail }) => {
 });
 
 entityManager.bindCamera(runner);
-engine.changeActiveScene(defaultScene.id);
+engine.changeActiveScene(defaultScene1.id);

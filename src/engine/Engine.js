@@ -154,7 +154,6 @@ class Engine extends Base {
       data: props,
       getData: () => ({
         core: this.props.core,
-        entities: this.props.entities,
         gridManager: this.props.gridManager
       })
     });

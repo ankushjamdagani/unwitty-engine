@@ -87,21 +87,17 @@ const Camera = {
   },
 
   getRelativePosition(pos, camera) {
-    return pos
-      ? {
-          x: Commons.roundOff(pos.x - camera.position.x),
-          y: Commons.roundOff(pos.y - camera.position.y)
-        }
-      : {};
+    return {
+      x: Commons.roundOff(pos.x - camera.position.x),
+      y: Commons.roundOff(pos.y - camera.position.y)
+    };
   },
 
   getAbsolutePosition(pos, camera) {
-    return pos
-      ? {
-          x: Commons.roundOff(pos.x + camera.position.x),
-          y: Commons.roundOff(pos.y + camera.position.y)
-        }
-      : {};
+    return {
+      x: Commons.roundOff(pos.x + camera.position.x),
+      y: Commons.roundOff(pos.y + camera.position.y)
+    };
   },
 
   getDebugMessage(body) {

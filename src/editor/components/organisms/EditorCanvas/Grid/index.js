@@ -1,27 +1,30 @@
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
 
+const minorTickCount = 5;
+const rulerMajorSize = 12;
+const rulerMinorSize = 6;
+
 const Grid = ({
   showRuler,
   showGrid,
   entities,
   activeSceneId,
+  gridSize,
   canvasMap,
   engine,
   width,
   height
 }) => {
+  const { instance } = engine;
+
   useEffect(() => {
     const mountGrid = () => {
       const camera = entities[`camera_${activeSceneId}`];
       const ctx = canvasMap.get('base').get('context');
 
-      const minorTickCount = 5;
-      const gridMajorSize = 50;
-
+      const gridMajorSize = gridSize;
       const gridMinorSize = gridMajorSize / minorTickCount;
-      const rulerMajorSize = 12;
-      const rulerMinorSize = 6;
 
       const minorTickStartX =
         gridMinorSize - (camera.position.x % gridMinorSize);
@@ -89,8 +92,8 @@ const Grid = ({
           if (showMajorTickLabel) {
             ctx.fillText(
               camera.position.x + majorTickStartX + x,
-              majorTickStartX + x,
-              rulerMajorSize + 12
+              majorTickStartX + x + 12,
+              rulerMajorSize + 6
             );
           }
         }
@@ -114,8 +117,8 @@ const Grid = ({
           if (showMajorTickLabel) {
             ctx.fillText(
               camera.position.y + majorTickStartY + y,
-              rulerMajorSize + 5,
-              majorTickStartY + y + 3
+              rulerMajorSize,
+              majorTickStartY + y + 12
             );
           }
         }
@@ -125,9 +128,9 @@ const Grid = ({
 
       ctx.restore();
     };
-    engine.addEventListener('on_render', mountGrid);
+    instance.addEventListener('on_render', mountGrid);
     return () => {
-      engine.removeEventListener('on_render', mountGrid);
+      instance.removeEventListener('on_render', mountGrid);
     };
   }, [entities, showGrid, showRuler]);
 
@@ -137,6 +140,7 @@ const Grid = ({
 export default connect((state) => ({
   entities: state.engine_state.entities,
   activeSceneId: state.engine_state.core.activeSceneId,
+  gridSize: state.engine_state.core.gridSize,
   width: state.engine_state.core.width,
   height: state.engine_state.core.height,
   canvasMap: state.engine_state.canvasMap

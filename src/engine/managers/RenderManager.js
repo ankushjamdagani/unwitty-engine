@@ -63,10 +63,14 @@ class RenderManager extends Base {
 
     const context = canvasObj.get('context');
     const { origin } = element;
-    const localCoords = Entity.Camera.getRelativePosition(
-      Array.isArray(origin) ? { x: origin[0], y: origin[1] } : element.position,
-      camera
-    );
+    const localCoords =
+      element.position &&
+      Entity.Camera.getRelativePosition(
+        Array.isArray(origin)
+          ? { x: origin[0], y: origin[1] }
+          : element.position,
+        camera
+      );
 
     EntityManager.preRender(element, { context, resources, localCoords });
 

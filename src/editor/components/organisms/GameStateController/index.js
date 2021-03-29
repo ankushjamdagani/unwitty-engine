@@ -29,7 +29,9 @@ const GameStateController = ({
   toggleDrag
 }) => {
   const gamePlaying = gameState === GAME_STATES.PLAY;
-  const { engine } = useContext(DataStoreContext);
+  const {
+    Engine: { instance: engine }
+  } = useContext(DataStoreContext);
 
   return (
     <Panel>
