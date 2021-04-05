@@ -2,6 +2,8 @@ import produce from 'immer';
 
 import { ENTITY_NODE_TYPES } from '../../constants';
 
+import { Commons } from '../core';
+
 import Node from './_node';
 
 const Camera = {
@@ -82,6 +84,20 @@ const Camera = {
     }
 
     return { ...camera, position: newPosition };
+  },
+
+  getRelativePosition(pos, camera) {
+    return {
+      x: Commons.roundOff(pos.x - camera.position.x),
+      y: Commons.roundOff(pos.y - camera.position.y)
+    };
+  },
+
+  getAbsolutePosition(pos, camera) {
+    return {
+      x: Commons.roundOff(pos.x + camera.position.x),
+      y: Commons.roundOff(pos.y + camera.position.y)
+    };
   },
 
   getDebugMessage(body) {

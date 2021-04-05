@@ -17,7 +17,8 @@ const EditorCanvas = ({
   dragEnabled
 }) => {
   const gameNotPlaying = gameState !== GAME_STATES.PLAY;
-  const { DataStore, engine } = useContext(DataStoreContext);
+  const { Engine } = useContext(DataStoreContext);
+  const { DataStore } = Engine;
 
   const onDragChange = useCallback(({ deltaX, deltaY }) => {
     DataStore.setData((entities) => {
@@ -34,7 +35,7 @@ const EditorCanvas = ({
   return (
     <>
       {gameNotPlaying && (
-        <Grid engine={engine} showRuler={showRuler} showGrid={showGrid} />
+        <Grid engine={Engine} showRuler={showRuler} showGrid={showGrid} />
       )}
     </>
   );

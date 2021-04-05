@@ -72,6 +72,9 @@ class EntityManager extends Base {
       rotation: 0,
       width,
       height,
+      /**
+       * @todo: remove hardcoding
+       */
       minPosition: [-100, -100], // -buffer
       maxPosition: [width * 1.5 + 100 - width, height * 1.5 + 100 - height] // (map size + buffer) - width
     });

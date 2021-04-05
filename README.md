@@ -8,6 +8,8 @@
   - data management from user's side
 - multiple canvas support
   - zIndex and layerIndex
+- multiple workers
+  - less than (navigator.hardwareConcurrency || 4)
 - offscreen canvas
 - scenes / screens
 - inactive node and inactive canvas

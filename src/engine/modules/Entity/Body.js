@@ -29,7 +29,7 @@ const Body = {
       startAngle,
       endAngle,
       vertices,
-      eddges,
+      edges,
 
       position = defaultState.position,
 
@@ -54,7 +54,7 @@ const Body = {
       startAngle,
       endAngle,
       vertices,
-      eddges,
+      edges,
       position: Vector2D.create(position),
       styles,
       canvasId,
@@ -196,7 +196,7 @@ const Body = {
     context.stroke();
   },
 
-  createPolygon({ vertices, eddges, position, ...restProps }) {
+  createPolygon({ vertices, edges, position, ...restProps }) {
     let minX = 0;
     let minY = 0;
 
@@ -216,7 +216,7 @@ const Body = {
       height: maxY - minY,
       position,
       vertices,
-      eddges,
+      edges,
       ...restProps
     });
   },

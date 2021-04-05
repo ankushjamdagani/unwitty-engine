@@ -7,6 +7,7 @@ import {
   AudioManager,
   DomManager,
   EntityManager,
+  GridManager,
   RenderManager,
   ResourceManager,
   TimeManager,
@@ -22,23 +23,26 @@ enableMapSet();
 // for redux store
 DataStore.configureStore();
 
-Engine.init = (props) => {
-  const _engine = new Engine(props);
-  window.__UNWITTY_ENGINE__ = _engine;
-  return _engine;
+const EngineWrapper = {
+  init: function init(props) {
+    const engine = new Engine(props);
+    this.instance = engine;
+    window.__UNWITTY_ENGINE__ = engine;
+    return engine;
+  },
+
+  DataStore,
+  Constants,
+  Entity,
+  core,
+  AudioManager,
+  DomManager,
+  EntityManager,
+  GridManager,
+  RenderManager,
+  ResourceManager,
+  TimeManager,
+  UpdateManager
 };
 
-Engine.DataStore = DataStore;
-Engine.Constants = Constants;
-Engine.Entity = Entity;
-Engine.core = core;
-
-Engine.AudioManager = AudioManager;
-Engine.DomManager = DomManager;
-Engine.EntityManager = EntityManager;
-Engine.RenderManager = RenderManager;
-Engine.ResourceManager = ResourceManager;
-Engine.TimeManager = TimeManager;
-Engine.UpdateManager = UpdateManager;
-
-export default Engine;
+export default EngineWrapper;

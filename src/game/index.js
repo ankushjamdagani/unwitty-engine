@@ -3,7 +3,7 @@ import Engine from '../engine';
 
 const {
   DataStore,
-  Entity: { Body, Transform }
+  Entity: { Body, Transform, Camera }
 } = Engine;
 
 const WIDTH = window.innerWidth;
@@ -14,12 +14,13 @@ const engine = Engine.init({
   fps: 60,
   width: WIDTH,
   height: HEIGHT,
-  debug: true
+  debug: true,
+  gridSize: 80
 });
 
-Editor.init(DataStore, engine);
+Editor.init(Engine);
 
-const { entityManager } = engine.managers;
+const { entityManager, gridManager } = engine.managers;
 
 // eslint-disable-next-line no-unused-vars
 const defaultScene = entityManager.createScene({ name: 'defaultScene' });
@@ -80,6 +81,17 @@ const bg = Body.createRectangle({
   debug: true
 });
 
+entityManager.addChildren(worldDefaultScene, bg);
+entityManager.addChildren(worldDefaultScene, transform1);
+entityManager.addChildren(transform1, sun);
+entityManager.addChildren(sun, transform2);
+entityManager.addChildren(transform2, earth);
+entityManager.addChildren(earth, moon);
+
+// eslint-disable-next-line no-unused-vars
+const defaultScene1 = entityManager.createScene({ name: 'defaultScene1' });
+const worldDefaultScene1 = entityManager.root;
+
 const bg1 = Body.createRectangle({
   name: 'bg1',
   position: [0, 0],
@@ -98,17 +110,6 @@ const runner = Body.createArc({
   debug: true
 });
 
-entityManager.addChildren(worldDefaultScene, bg);
-entityManager.addChildren(worldDefaultScene, transform1);
-entityManager.addChildren(transform1, sun);
-entityManager.addChildren(sun, transform2);
-entityManager.addChildren(transform2, earth);
-entityManager.addChildren(earth, moon);
-
-// eslint-disable-next-line no-unused-vars
-const defaultScene1 = entityManager.createScene({ name: 'defaultScene1' });
-const worldDefaultScene1 = entityManager.root;
-
 entityManager.addChildren(worldDefaultScene1, bg1);
 entityManager.addChildren(worldDefaultScene1, runner);
 
@@ -121,6 +122,31 @@ engine.addEventListener('on_ready', () => {
       if (key === 'ArrowRight') entities.runner.position.x += 61;
       if (key === 'ArrowUp') entities.runner.position.y -= 61;
       if (key === 'ArrowDown') entities.runner.position.y += 61;
+    }, 'entities');
+  });
+
+  window.addEventListener('mousemove', (evt) => {
+    const { clientX, clientY } = evt;
+
+    const {
+      core: { activeSceneId },
+      entities
+    } = DataStore.getData();
+
+    const camera = entities[`camera_${activeSceneId}`];
+
+    DataStore.setData((entities) => {
+      entities.runner.position = gridManager.getPixelPositionFromGrid(
+        gridManager.getGridPositionFromPixel(
+          Camera.getAbsolutePosition(
+            {
+              x: clientX,
+              y: clientY
+            },
+            camera
+          )
+        )
+      );
     }, 'entities');
   });
 
@@ -145,4 +171,4 @@ engine.addEventListener('on_update', ({ detail }) => {
 });
 
 entityManager.bindCamera(runner);
-engine.changeActiveScene(defaultScene.id);
+engine.changeActiveScene(defaultScene1.id);

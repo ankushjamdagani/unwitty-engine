@@ -1,5 +1,5 @@
 import { SHAPES, MID_CANVAS_KEY } from '../constants';
-import { core } from '../modules';
+import { core, Entity } from '../modules';
 
 /**
  * @todo:: access dom manager here
@@ -7,7 +7,7 @@ import { core } from '../modules';
 import EntityManager from './EntityManager';
 import DomManager from './DomManager';
 
-const { Base, Commons } = core;
+const { Base } = core;
 
 // DOC ::  https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial
 
@@ -30,15 +30,6 @@ class RenderManager extends Base {
   constructor(props) {
     super(props);
     this.props = props;
-  }
-
-  getScreenPosition(pos, camera) {
-    return pos
-      ? {
-          x: Commons.roundOff(pos.x - camera.position.x),
-          y: Commons.roundOff(pos.y - camera.position.y)
-        }
-      : {};
   }
 
   renderTree(root) {
@@ -72,10 +63,14 @@ class RenderManager extends Base {
 
     const context = canvasObj.get('context');
     const { origin } = element;
-    const localCoords = this.getScreenPosition(
-      Array.isArray(origin) ? { x: origin[0], y: origin[1] } : element.position,
-      camera
-    );
+    const localCoords =
+      element.position &&
+      Entity.Camera.getRelativePosition(
+        Array.isArray(origin)
+          ? { x: origin[0], y: origin[1] }
+          : element.position,
+        camera
+      );
 
     EntityManager.preRender(element, { context, resources, localCoords });
 
