@@ -21,26 +21,34 @@ class GridManager extends Base {
     return this;
   }
 
-  getGridPositionFromPixel(pos) {
+  gridToPixel(grid) {
     const {
       core: { gridSize }
     } = this.props.getData();
 
-    const xPos = Math.floor(pos.x / gridSize);
-    const yPos = Math.floor(pos.y / gridSize);
+    return grid * gridSize;
+  }
 
-    return core.Vector2D.create([xPos, yPos]);
+  pixelToGrid(grid) {
+    const {
+      core: { gridSize }
+    } = this.props.getData();
+
+    return Math.floor(grid / gridSize);
+  }
+
+  getGridPositionFromPixel(pos) {
+    return core.Vector2D.create([
+      this.pixelToGrid(pos.x),
+      this.pixelToGrid(pos.y)
+    ]);
   }
 
   getPixelPositionFromGrid(pos) {
-    const {
-      core: { gridSize }
-    } = this.props.getData();
-
-    const xPos = pos.x * gridSize;
-    const yPos = pos.y * gridSize;
-
-    return core.Vector2D.create([xPos, yPos]);
+    return core.Vector2D.create([
+      this.gridToPixel(pos.x),
+      this.gridToPixel(pos.y)
+    ]);
   }
 
   isOutOfBound(pos, unit = 'grid') {
@@ -50,15 +58,15 @@ class GridManager extends Base {
   // done w.r.t screen position
   isOutOfBoundX(pos, unit = 'grid') {
     const {
-      core: { gridSize, width }
+      core: { width }
     } = this.props.getData();
 
     if (unit === 'grid') {
-      return pos.x < 0 || pos.x * gridSize > width;
+      return pos.x < 0 || this.gridToPixel(pos.x) > width;
     }
 
     if (unit === 'px') {
-      return pos.x < 0 || pos.x / gridSize > width;
+      return pos.x < 0 || pos.x > width;
     }
 
     return false;
@@ -67,15 +75,15 @@ class GridManager extends Base {
   // done w.r.t screen position
   isOutOfBoundY(pos, unit = 'grid') {
     const {
-      core: { gridSize, height }
+      core: { height }
     } = this.props.getData();
 
     if (unit === 'grid') {
-      return pos.y < 0 || pos.y * gridSize > height;
+      return pos.y < 0 || this.gridToPixel(pos.y) > height;
     }
 
     if (unit === 'px') {
-      return pos.y < 0 || pos.y / gridSize > height;
+      return pos.y < 0 || pos.y > height;
     }
 
     return false;

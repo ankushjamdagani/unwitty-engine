@@ -14,7 +14,8 @@ const engine = Engine.init({
   fps: 60,
   width: WIDTH,
   height: HEIGHT,
-  debug: true
+  debug: true,
+  gridSize: 80
 });
 
 Editor.init(Engine);
