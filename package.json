@@ -20,7 +20,8 @@
     "build:engine": "lerna run build --scope=@unwitty/engine",
     "test": "lerna run test",
     "snyk-monitor": "snyk monitor --all-projects",
-    "snyk-protect": "snyk protect --all-projects"
+    "snyk-protect": "snyk protect --all-projects",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@babel/core": "^7.13.14",
