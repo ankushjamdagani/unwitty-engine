@@ -6,9 +6,10 @@ module.exports = {
   },
   plugins: [
     '@snowpack/plugin-react-refresh',
-    '@snowpack/plugin-babel'
+    // For JSX Transform support - https://github.com/snowpackjs/snowpack/discussions/1681
+    '@snowpack/plugin-babel',
+    ['@snowpack/plugin-typescript', { tsc: 'tsc' }]
     // '@snowpack/plugin-dotenv',
-    // '@snowpack/plugin-typescript'
   ],
   routes: [
     /* Enable an SPA Fallback in development: */
