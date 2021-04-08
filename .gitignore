@@ -63,3 +63,6 @@ buck-out/
 .env
 
 # more
+lerna-debug.log
+yarn.lock
+package-lock.json

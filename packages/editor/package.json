@@ -1,0 +1,43 @@
+{
+  "name": "@unwitty/editor",
+  "version": "0.1.0",
+  "description": "Unwitty Engine GUI game editor",
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ankushjamdagani/unwitty-engine.git",
+    "directory": "packages/editor"
+  },
+  "keywords": [
+    "unwitty-engine"
+  ],
+  "homepage": "https://unwitty-engine.vercel.app/",
+  "author": "AnkushJ <anqush.jamdagani@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@chakra-ui/react": "^1.5.0",
+    "@emotion/react": "^11.1.5",
+    "@emotion/styled": "^11.1.5",
+    "@unwitty/core": "^0.1.0",
+    "@unwitty/engine": "^0.1.0",
+    "framer-motion": "^4.1.3",
+    "immer": "^9.0.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-redux": "^7.2.3",
+    "redux": "^4.0.5"
+  },
+  "peerDependencies": {
+    "@chakra-ui/react": "^1.5.0",
+    "@emotion/react": "^11.1.5",
+    "@emotion/styled": "^11.1.5",
+    "@unwitty/core": "^0.1.0",
+    "@unwitty/engine": "^0.1.0",
+    "framer-motion": "^4.1.3",
+    "immer": "^9.0.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-redux": "^7.2.3",
+    "redux": "^4.0.5"
+  }
+}

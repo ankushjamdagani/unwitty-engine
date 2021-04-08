@@ -1,0 +1,23 @@
+{
+  "name": "@unwitty/engine",
+  "version": "0.1.0",
+  "description": "Unwitty Engine game library",
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ankushjamdagani/unwitty-engine.git",
+    "directory": "packages/engine"
+  },
+  "keywords": [
+    "unwitty-engine"
+  ],
+  "homepage": "https://unwitty-engine.vercel.app/",
+  "author": "AnkushJ <anqush.jamdagani@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@unwitty/core": "^0.1.0"
+  },
+  "peerDependencies": {
+    "@unwitty/core": "^0.1.0"
+  }
+}
