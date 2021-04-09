@@ -5,9 +5,7 @@
     "plugin:compat/recommended",
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
-    "prettier",
-    "prettier/react",
-    "airbnb-typescript"
+    "plugin:prettier/recommended"
   ],
   "plugins": ["@typescript-eslint", "react", "prettier", "react-hooks"],
   "env": {
@@ -17,7 +15,7 @@
     "jest": true
   },
   "rules": {
-    "@typescript-eslint/rule-name": "error",
+    // "@typescript-eslint/rule-name": "error",
     "prettier/prettier": ["error"],
     "react/jsx-filename-extension": [
       "error",

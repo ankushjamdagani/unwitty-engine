@@ -2,13 +2,32 @@
   "version": "0.1.0",
   "npmClient": "yarn",
   "useWorkspaces": true,
-  "packages": [
-    "packages/*"
-  ],
+  "stream": true,
+  "packages": ["packages/*"],
+  "changelog": {
+    "repo": "ankushjamdagani/unwitty",
+    "cacheDir": ".changelog",
+    "labels": {
+      "build": ":construction_worker: Build",
+      "chore": ":white_medium_small_square: Chore",
+      "docs": ":memo: Documentation",
+      "feat": ":rocket: Feature",
+      "fix": ":bug: Bug Fix",
+      "perf": ":running_woman: Performance",
+      "refactor": ":hammer: Refactor",
+      "revert": ":leftwards_arrow_with_hook: Revert",
+      "style": ":nail_care: Polish",
+      "test": ":white_check_mark: Tests"
+    }
+  },
   "command": {
-    "publish": {
+    "version": {
       "conventionalCommits": true,
-      "yes": true
+      "allowBranch": ["master", "release/*"],
+      "message": "chore: publish release %s"
+    },
+    "publish": {
+      "conventionalCommits": true
     }
   }
 }
