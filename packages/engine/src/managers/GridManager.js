@@ -1,4 +1,5 @@
-import { core, DataStore } from '../modules';
+import { DataStore } from '@unwitty/core';
+import { core } from '../modules';
 
 const { Base } = core;
 
@@ -14,7 +15,7 @@ class GridManager extends Base {
   changeGridSize(gridSize) {
     if (!gridSize) throw Error(`Invalid gridSize - ${gridSize}`);
 
-    DataStore.setData((core) => {
+    DataStore.setData(core => {
       core.gridSize = gridSize;
     }, 'core');
 

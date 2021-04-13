@@ -15,7 +15,13 @@
     "jest": true
   },
   "rules": {
-    // "@typescript-eslint/rule-name": "error",
+    "@typescript-eslint/no-this-alias": [
+      "error",
+      {
+        "allowDestructuring": true, // Allow `const { props, state } = this`; false by default
+        "allowedNames": ["self"] // Allow `const self = this`; `[]` by default
+      }
+    ],
     "prettier/prettier": ["error"],
     "react/jsx-filename-extension": [
       "error",

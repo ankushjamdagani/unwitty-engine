@@ -1,16 +1,13 @@
 import React, { useContext, useCallback } from 'react';
 import { connect } from 'react-redux';
 
-import { constants } from '@unwitty/core';
-import Engine from '@unwitty/engine';
+import { constants, DataStore } from '@unwitty/core';
 
 import DataStoreContext from '../../../dataStore/context';
 
 import useMouseDrag from '../../../helperHooks/useMouseDrag';
 
 import Grid from './Grid';
-
-const { DataStore } = Engine;
 
 const EditorCanvas = ({
   gameState,

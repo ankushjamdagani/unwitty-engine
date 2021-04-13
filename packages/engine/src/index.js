@@ -1,6 +1,6 @@
 import { enableMapSet } from 'immer';
 
-import { constants } from '@unwitty/core';
+import { constants, DataStore } from '@unwitty/core';
 import Engine from './Engine';
 
 import {
@@ -14,13 +14,14 @@ import {
   UpdateManager
 } from './managers';
 
-import { Entity, DataStore, core } from './modules';
+import { Entity, core } from './modules';
 
 // for immer
 enableMapSet();
 // setAutoFreeze(false);
 
 // for redux store
+console.log(DataStore);
 DataStore.configureStore();
 
 const EngineWrapper = {

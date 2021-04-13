@@ -1,6 +1,6 @@
-import { constants } from '@unwitty/core';
+import { constants, DataStore } from '@unwitty/core';
 
-import { core, DataStore } from '../modules';
+import { core } from '../modules';
 
 const { MID_CANVAS_KEY } = constants;
 const { Base } = core;

@@ -1,22 +1,22 @@
-export const BODY_TYPE = {
+const BODY_TYPE = {
   STATIC: 0,
   KINEMATIC: 1,
   DYNAMIC: 2
 };
 
-export const GRADIENT_TYPES = {
+const GRADIENT_TYPES = {
   LINEAR: 0,
   RADIAL: 1
 };
 
-export const SHAPE_STYLES = {
+const SHAPE_STYLES = {
   NONE: 0,
   NORMAL: 1,
   GRADIENT: 2,
   PATTERN: 3
 };
 
-export const SHAPES = {
+const SHAPES = {
   TRIANGLE: 0,
   RECTANGLE: 1,
   PENTAGON: 2,
@@ -25,14 +25,14 @@ export const SHAPES = {
   POLYGON: 5
 };
 
-export const GAME_STATES = {
+const GAME_STATES = {
   HOME: 0,
   PLAY: 1,
   PAUSE: 2,
   END: 3
 };
 
-export const KEY_CODES = {
+const KEY_CODES = {
   ESC: 'escape',
   SPACE: ' ',
   LEFT: 'arrowleft',
@@ -41,12 +41,12 @@ export const KEY_CODES = {
   M: 'm'
 };
 
-export const RESOURCE_TYPE = {
+const RESOURCE_TYPE = {
   IMAGE: 1,
   AUDIO: 2
 };
 
-export const ENTITY_NODE_TYPES = {
+const ENTITY_NODE_TYPES = {
   SCENE: 'scene',
   WORLD: 'world',
   LIGHT: 'light',
@@ -60,7 +60,7 @@ export const ENTITY_NODE_TYPES = {
   TRANSFORM: 'transform'
 };
 
-export const TRANSFORM_ORIGIN = {
+const TRANSFORM_ORIGIN = {
   CENTER: 0,
   LEFT_TOP: 1,
   RIGHT_TOP: 2,
@@ -68,4 +68,17 @@ export const TRANSFORM_ORIGIN = {
   LEFT_BOTTOM: 4
 };
 
-export const MID_CANVAS_KEY = 'base';
+const MID_CANVAS_KEY = 'base';
+
+export default {
+  BODY_TYPE,
+  GRADIENT_TYPES,
+  SHAPE_STYLES,
+  SHAPES,
+  GAME_STATES,
+  KEY_CODES,
+  RESOURCE_TYPE,
+  ENTITY_NODE_TYPES,
+  TRANSFORM_ORIGIN,
+  MID_CANVAS_KEY
+};

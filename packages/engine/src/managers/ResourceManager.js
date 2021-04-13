@@ -1,5 +1,5 @@
-import { constants } from '@unwitty/core';
-import { core, DataStore } from '../modules';
+import { constants, DataStore } from '@unwitty/core';
+import { core } from '../modules';
 
 const { RESOURCE_TYPE } = constants;
 const { Base } = core;

@@ -20,7 +20,7 @@ export default function createReducerManager(initialReducers) {
       if (keysToRemove.length > 0) {
         state = { ...state };
 
-        keysToRemove.map((key) => delete state[key]);
+        keysToRemove.map(key => delete state[key]);
 
         keysToRemove = [];
       }
@@ -43,7 +43,7 @@ export default function createReducerManager(initialReducers) {
     },
 
     // Removes a reducer with the specified key
-    remove: (key) => {
+    remove: key => {
       if (!key || !reducers[key]) {
         return;
       }

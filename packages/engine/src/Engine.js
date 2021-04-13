@@ -10,9 +10,9 @@ import {
   UpdateManager
 } from './managers';
 
-import { DataStore, core } from './modules';
+import { core } from './modules';
 
-import { constants } from '@unwitty/core';
+import { constants, DataStore } from '@unwitty/core';
 const { GAME_STATES } = constants;
 
 const { Base } = core;

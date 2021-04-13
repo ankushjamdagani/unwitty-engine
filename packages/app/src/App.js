@@ -2,11 +2,9 @@ import React, { useRef, useEffect } from 'react';
 
 import Editor from '@unwitty/editor';
 import Engine from '@unwitty/engine';
+import { DataStore } from '@unwitty/core';
 
-const {
-  DataStore,
-  Entity: { Body, Transform, Camera }
-} = Engine;
+const { Body, Transform, Camera } = Engine.Entity;
 
 const WIDTH = window.innerWidth;
 const HEIGHT = window.innerHeight;

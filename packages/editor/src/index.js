@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
 import Engine from '@unwitty/engine';
+import { DataStore } from '@unwitty/core';
 
-// eslint-disable-next-line import/no-named-as-default-member
 import './styles/main.css';
 
 import theme from './styles/theme';
@@ -12,8 +12,6 @@ import DataStoreContext from './dataStore/context';
 import reducer from './dataStore/reducers';
 
 import App from './App';
-
-const { DataStore } = Engine;
 
 /**
  * - ICONS - https://material.io/resources/icons/?style=baseline

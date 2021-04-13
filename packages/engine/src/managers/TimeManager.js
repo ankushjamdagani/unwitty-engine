@@ -1,4 +1,5 @@
-import { core, DataStore } from '../modules';
+import { DataStore } from '@unwitty/core';
+import { core } from '../modules';
 
 const { Base, Commons } = core;
 
@@ -82,7 +83,7 @@ class TimeManager extends Base {
       deltaTime = deltaTime < 0 ? 0 : deltaTime;
       lastTime = currTime - (deltaTime % 10);
 
-      DataStore.setData((timing) => {
+      DataStore.setData(timing => {
         timing.lastTime = lastTime;
         timing.fps = fps;
         timing.fpsLastTick = fpsLastTick;

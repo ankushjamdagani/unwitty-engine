@@ -57,18 +57,18 @@ const DataStore = {
   },
 
   observeStore(select, onChange, reducer = 'engine_state') {
-    const _this = this;
+    const self = this;
     let currentState;
 
     function handleChange() {
-      const nextState = select(_this.store.getState()[reducer]);
+      const nextState = select(self.store.getState()[reducer]);
       if (nextState !== currentState) {
         currentState = nextState;
         onChange(currentState);
       }
     }
 
-    const unsubscribe = _this.store.subscribe(handleChange);
+    const unsubscribe = self.store.subscribe(handleChange);
     handleChange();
     return unsubscribe;
   }

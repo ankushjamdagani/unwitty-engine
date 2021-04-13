@@ -1,4 +1,5 @@
-import { core, DataStore } from '../modules';
+import { DataStore } from '@unwitty/core';
+import { core } from '../modules';
 
 import Entity from '../modules/Entity';
 
@@ -20,7 +21,7 @@ class EntityManager extends Base {
   }
 
   set activeScene({ id }) {
-    DataStore.setData((core) => {
+    DataStore.setData(core => {
       core.activeSceneId = id; // make it array to support multiple active scenes
     }, 'core');
   }
@@ -79,7 +80,7 @@ class EntityManager extends Base {
       maxPosition: [width * 1.5 + 100 - width, height * 1.5 + 100 - height] // (map size + buffer) - width
     });
 
-    DataStore.setData((entities) => {
+    DataStore.setData(entities => {
       entities[scene.id] = scene;
     }, 'entities');
 
@@ -112,7 +113,7 @@ class EntityManager extends Base {
       _parent = Comp.onAddChildren(_parent, _children);
     }
 
-    DataStore.setData((entities) => {
+    DataStore.setData(entities => {
       entities[_parent.id] = _parent;
       entities[_children.id] = _children;
     }, 'entities');
@@ -130,7 +131,7 @@ class EntityManager extends Base {
     const _children = undefined;
     _parent = {
       ..._parent,
-      children: _parent.children.filter((nd) => nd.id !== children.id)
+      children: _parent.children.filter(nd => nd.id !== children.id)
     };
 
     const Comp = Entity.get(_parent.type);
@@ -138,7 +139,7 @@ class EntityManager extends Base {
       _parent = Comp.onRemoveChildren(_parent, _children);
     }
 
-    DataStore.setData((entities) => {
+    DataStore.setData(entities => {
       entities[_parent.id] = _parent;
       delete entities[_children.id];
     }, 'entities');
@@ -150,7 +151,7 @@ class EntityManager extends Base {
     const {
       core: { activeSceneId }
     } = this.props.getData();
-    DataStore.setData((entities) => {
+    DataStore.setData(entities => {
       entities[`camera_${activeSceneId}`] = Entity.Camera.bindTarget(
         entities[`camera_${activeSceneId}`],
         target

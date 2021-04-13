@@ -1,4 +1,5 @@
-import { core, DataStore } from '../modules';
+import { DataStore } from '@unwitty/core';
+import { core } from '../modules';
 import EntityManager from './EntityManager';
 
 const { Base } = core;
@@ -26,11 +27,11 @@ class UpdateManager extends Base {
     const updatedEntity = EntityManager.update(element, envProps);
 
     updatedEntity &&
-      DataStore.setData((entities) => {
+      DataStore.setData(entities => {
         entities[elementId] = updatedEntity;
       }, 'entities');
 
-    element.children.forEach((el) => {
+    element.children.forEach(el => {
       this.updateNode(el, envProps);
     });
 
