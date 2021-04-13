@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../build/app",
+    "declaration": true,
+    "jsx": "preserve"
+  },
+  "include": ["src"]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "@unwitty/core",
+  "version": "0.1.0",
+  "description": "Shared modules between unwitty editor and engine components",
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ankushjamdagani/unwitty-engine.git",
+    "directory": "packages/core"
+  },
+  "keywords": [
+    "unwitty-engine"
+  ],
+  "homepage": "https://unwitty-engine.vercel.app/",
+  "author": "AnkushJ <anqush.jamdagani@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "snowpack build"
+  }
+}

@@ -1,0 +1,10 @@
+.git
+package.json
+lerna.json
+yarn.lock
+
+node_modules
+packages/*/node_modules
+
+build
+packages/*/build

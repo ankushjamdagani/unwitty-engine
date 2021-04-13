@@ -1,5 +1,9 @@
 # Game
 
+## Setup
+
+- run `bash setup.sh`
+
 ## Next Steps
 
 - Time management - control speed, etc.
