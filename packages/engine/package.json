@@ -14,6 +14,9 @@
   "homepage": "https://unwitty-engine.vercel.app/",
   "author": "AnkushJ <anqush.jamdagani@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "build": "snowpack build"
+  },
   "devDependencies": {
     "@unwitty/core": "^0.1.0"
   },

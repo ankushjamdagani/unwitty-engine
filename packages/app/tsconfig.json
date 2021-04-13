@@ -1,9 +1,9 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "rootDir": ".",
-    "outDir": "build",
-    "declaration": true
+    "outDir": "../../build/app",
+    "declaration": true,
+    "jsx": "preserve"
   },
-  "include": ["src/**/*"]
+  "include": ["src"]
 }

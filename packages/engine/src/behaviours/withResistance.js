@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { maximum, minimum } from '../helpers/Math';
+import { maximum, minimum } from '../modules/core/Commons';
 
 function withResistance(ObjectModel) {
   function isNumberSmall(num) {
