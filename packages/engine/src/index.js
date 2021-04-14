@@ -21,11 +21,11 @@ enableMapSet();
 // setAutoFreeze(false);
 
 // for redux store
-console.log(DataStore);
-DataStore.configureStore();
 
 const EngineWrapper = {
   init: function init(props) {
+    !DataStore.store && DataStore.configureStore();
+
     const engine = new Engine(props);
 
     this.seInstance(engine);

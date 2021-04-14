@@ -3,7 +3,11 @@
 module.exports = {
   mount: {
     public: { url: '/', static: true },
-    src: { url: '/dist' }
+    src: { url: '/dist' },
+    '../../node_modules/@fontsource/raleway/files': '/files',
+    '../../node_modules/@fontsource/open-sans/files': '/files',
+    '../../node_modules/@fontsource/press-start-2p/files': '/files',
+    '../../node_modules/@fontsource/roboto-mono/files': '/files'
   },
   plugins: [
     ['@snowpack/plugin-dotenv', { dir: '../../' }],

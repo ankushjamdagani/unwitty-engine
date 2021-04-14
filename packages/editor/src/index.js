@@ -25,8 +25,10 @@ const Editor = {
       return;
     }
 
-    const engine = Engine.getInstance(key);
+    !DataStore.store && DataStore.configureStore();
     DataStore.reducerManager.add('editor_state', reducer);
+
+    const engine = Engine.getInstance(key);
 
     const editorWrapper = document.createElement('div');
     editorWrapper.setAttribute('class', 'unwitty_editor_wrapper');

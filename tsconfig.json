@@ -27,6 +27,8 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
 
+    "types": ["snowpack-env"],
+
     "rootDir": ".",
     "baseUrl": "./packages",
     "paths": {

@@ -23,7 +23,8 @@
     "release": "lerna version --conventional-commits --create-release $GITHUB_TOKEN",
     "snyk-monitor": "snyk monitor --all-projects",
     "snyk-protect": "snyk protect --all-projects",
-    "postinstall": "husky install"
+    "postinstall": "husky install",
+    "install-root:dev": "yarn add -D -W"
   },
   "devDependencies": {
     "@babel/core": "^7.13.14",
@@ -40,6 +41,7 @@
     "@snowpack/plugin-typescript": "^1.2.1",
     "@types/react": "^17.0.3",
     "@types/react-dom": "^17.0.3",
+    "@types/snowpack-env": "^2.3.3",
     "@typescript-eslint/eslint-plugin": "^4.21.0",
     "@typescript-eslint/parser": "^4.21.0",
     "eslint": "^7.23.0",
