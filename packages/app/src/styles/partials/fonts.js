@@ -1,5 +1,5 @@
 const fonts = {
-  heading: 'Roboto Mono',
+  heading: 'Raleway',
   body: 'Raleway',
   retro: 'Press Start 2P',
   mono: 'Roboto Mono'

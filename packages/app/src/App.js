@@ -2,7 +2,7 @@ import { useRef, useEffect } from 'react';
 
 import { Box } from '@chakra-ui/react';
 
-import { Home } from './components/organisms';
+import { Home } from './components/modules';
 
 function App() {
   return <Home />;
