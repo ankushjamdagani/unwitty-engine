@@ -1,8 +1,4 @@
-import { useRef, useEffect } from 'react';
-
-import { Box } from '@chakra-ui/react';
-
-import { Home } from './components/modules';
+import { Home } from './modules';
 
 function App() {
   return <Home />;
