@@ -7,9 +7,9 @@ function ExistingProject({ id, name, color, thumbnail, onClick }) {
     <Box
       maxW='sm'
       p='2'
-      borderWidth='1px'
+      borderWidth='2px'
       rounded='md'
-      borderColor={`${color}.700`}
+      borderColor={`${color}.400`}
       overflow='hidden'
       backgroundPosition='center'
       background={`url("${thumbnail}")`}

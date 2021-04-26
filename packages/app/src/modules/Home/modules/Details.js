@@ -1,17 +1,12 @@
-import { Heading, Text, Grid, Box, Flex, Link } from '@chakra-ui/react';
-
-import { Icon } from '../../../components';
-
-import NewProject from '../components/NewProject';
-import ExistingProject from '../components/ExistingProject';
+import { Heading, Text, Box, Flex, Link } from '@chakra-ui/react';
 
 import Emoji from 'a11y-react-emoji';
 
-function Details() {
-  const onClick = key => {
-    console.log(key);
-  };
+import { Icon } from '../../../components';
 
+import ProjectsList from '../components/ProjectsList';
+
+function Details() {
   return (
     <Flex flexDirection='column' height='100%'>
       <Heading mb={4}>
@@ -52,27 +47,7 @@ function Details() {
         overflow='hidden'
         flexDirection='column'
       >
-        <Heading size='md' mb={4}>
-          Select Project
-        </Heading>
-        <Box flex={1} overflow='auto'>
-          <Grid
-            templateColumns='repeat(auto-fill, minmax(200px, 1fr))'
-            gridGap={4}
-          >
-            <NewProject onClick={onClick} />
-            {Array.from(new Array(4)).map((val, key) => (
-              <ExistingProject
-                key={key}
-                id={key}
-                name={`${key + Math.floor(Math.random() * 1000)} Test Project`}
-                color='red'
-                thumbnail='https://i.pinimg.com/236x/77/6d/47/776d471a75cd57ab23d63c893852cb4a.jpg'
-                onClick={onClick}
-              />
-            ))}
-          </Grid>
-        </Box>
+        <ProjectsList />
       </Flex>
 
       <Flex alignItems='center' px={[null, null, 12]}>
