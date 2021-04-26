@@ -1,21 +1,17 @@
-import {
-  Heading,
-  Text,
-  Tag,
-  TagLabel,
-  Box,
-  Flex,
-  Link
-} from '@chakra-ui/react';
-
-import NoteAddIcon from '@material-ui/icons/NoteAdd';
-import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
+import { Heading, Text, Grid, Box, Flex, Link } from '@chakra-ui/react';
 
 import { Icon } from '../../../components';
+
+import NewProject from '../components/NewProject';
+import ExistingProject from '../components/ExistingProject';
 
 import Emoji from 'a11y-react-emoji';
 
 function Details() {
+  const onClick = key => {
+    console.log(key);
+  };
+
   return (
     <Flex flexDirection='column' height='100%'>
       <Heading mb={4}>
@@ -49,30 +45,35 @@ function Details() {
         </Text>
       </Box>
 
-      <Box mb={8} px={[null, null, 12]} flex={1} overflow='hidden'>
+      <Flex
+        mb={8}
+        pl={[null, null, 12]}
+        flex={1}
+        overflow='hidden'
+        flexDirection='column'
+      >
         <Heading size='md' mb={4}>
           Select Project
         </Heading>
-        <Box flex={1} overflow='auto' h='100%' minHeight={0}>
-          <Box>
-            <Tag py={2} mb={4} borderRadius='1' variant='subtle'>
-              <Link href='#'>
-                <NoteAddIcon style={{ fontSize: 16 }} />
-                <TagLabel ml={1}>Create New</TagLabel>
-              </Link>
-            </Tag>
-
+        <Box flex={1} overflow='auto'>
+          <Grid
+            templateColumns='repeat(auto-fill, minmax(200px, 1fr))'
+            gridGap={4}
+          >
+            <NewProject onClick={onClick} />
             {Array.from(new Array(4)).map((val, key) => (
-              <Box mb={4} key={key}>
-                <InsertDriveFileIcon style={{ fontSize: 16 }} />
-                <Link href='#' ml={1}>
-                  {key + Math.floor(Math.random() * 1000)} Test Project
-                </Link>
-              </Box>
+              <ExistingProject
+                key={key}
+                id={key}
+                name={`${key + Math.floor(Math.random() * 1000)} Test Project`}
+                color='red'
+                thumbnail='https://i.pinimg.com/236x/77/6d/47/776d471a75cd57ab23d63c893852cb4a.jpg'
+                onClick={onClick}
+              />
             ))}
-          </Box>
+          </Grid>
         </Box>
-      </Box>
+      </Flex>
 
       <Flex alignItems='center' px={[null, null, 12]}>
         <Link
