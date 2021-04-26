@@ -17,7 +17,7 @@ function ColorRadioButton(props) {
         bg={`${props.value}.400`}
         title={props.value}
         _checked={{
-          borderColor: `${props.value}.100`
+          borderColor: `white`
         }}
         mr={2}
         mb={2}

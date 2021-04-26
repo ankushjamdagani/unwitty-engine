@@ -12,11 +12,11 @@ function NewProject({ onClick }) {
       bg='gray.800'
       cursor='pointer'
       onClick={() => onClick()}
+      overflow='hidden'
     >
       <Flex
         h='120px'
         w='100%'
-        rounded='md'
         _hover={{ bg: 'gray.900' }}
         alignItems='center'
         justifyContent='center'

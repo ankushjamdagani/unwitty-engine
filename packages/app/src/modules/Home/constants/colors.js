@@ -1,14 +1,14 @@
 const COLORS = [
-  'gray',
   'red',
   'orange',
   'yellow',
   'green',
-  'teal',
+  // 'teal',
   'blue',
-  'cyan',
+  // 'cyan',
   'purple',
-  'pink'
+  'gray'
+  // 'pink'
 ];
 
 export default COLORS;
