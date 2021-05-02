@@ -2,6 +2,7 @@ import { enableMapSet } from 'immer';
 
 import { constants, DataStore } from '@unwitty/core';
 import Engine from './Engine';
+import reducer from './reducer';
 
 import {
   AudioManager,
@@ -24,7 +25,11 @@ enableMapSet();
 
 const EngineWrapper = {
   init: function init(props) {
-    !DataStore.store && DataStore.configureStore();
+    !DataStore.store
+      ? DataStore.configureStore({ engine_state: reducer })
+      : DataStore.reducerManager.add('engine_state', reducer);
+
+    DataStore.defaultReducer = 'engine_state';
 
     const engine = new Engine(props);
 

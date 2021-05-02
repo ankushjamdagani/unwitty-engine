@@ -5,9 +5,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 // import loggerMiddleware from './middleware/Logger';
 import createReducerManager from './createReducerManager';
 
-import reducer from './reducers';
-
-import * as Actions from './reducers/actions';
+import * as Actions from './actions';
 
 /**
  * - Dynamic Reducers - https://tylergaw.com/articles/dynamic-redux-reducers/ or Just use DataStore.setData
@@ -15,7 +13,7 @@ import * as Actions from './reducers/actions';
 const DataStore = {
   store: null,
   reducerManager: null,
-  defaultReducer: 'engine_state',
+  defaultReducer: null,
 
   getData(context, reducer) {
     const _reducer = reducer || this.defaultReducer;
@@ -34,18 +32,19 @@ const DataStore = {
     }
   },
 
-  clearData(data, context) {
-    this.store.dispatch(Actions.clearData(data, context));
+  clearData(data, context, reducer) {
+    const _reducer = reducer || this.defaultReducer;
+    this.store.dispatch(Actions.clearData(data, context, _reducer));
   },
 
-  configureStore(preloadedState) {
+  configureStore(preloadedState, defaultReducer) {
     const middlewares = [
       // loggerMiddleware
     ];
     const middlewareEnhancer = applyMiddleware(...middlewares);
     const composedEnhancers = composeWithDevTools(middlewareEnhancer);
 
-    const reducerManager = createReducerManager({ engine_state: reducer });
+    const reducerManager = createReducerManager(defaultReducer);
 
     // Create a store with the root reducer function being the one exposed by the manager.
     this.store = createStore(

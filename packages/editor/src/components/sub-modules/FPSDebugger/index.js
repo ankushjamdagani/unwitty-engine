@@ -33,7 +33,7 @@ const FPSDebugger = ({ fps, timeScale, gameState }) => (
 );
 
 export default connect(state => ({
-  fps: state.engine_state.timing.fps,
-  timeScale: state.engine_state.timing.timeScale,
-  gameState: state.engine_state.core.gameState
+  fps: state.engine_state?.timing.fps,
+  timeScale: state.engine_state?.timing.timeScale,
+  gameState: state.engine_state?.core.gameState
 }))(FPSDebugger);

@@ -10,7 +10,9 @@ import Node from './Node';
 const SceneGraph = ({ entities, activeSceneId }) => {
   const { engine } = useContext(DataStoreContext);
 
-  const scenes = Object.values(entities).filter(node => node.type === 'scene');
+  const scenes = Object.values(entities || []).filter(
+    node => node.type === 'scene'
+  );
 
   return (
     <Panel height='100%'>
@@ -41,6 +43,6 @@ const SceneGraph = ({ entities, activeSceneId }) => {
 };
 
 export default connect(state => ({
-  entities: state.engine_state.entities,
-  activeSceneId: state.engine_state.core.activeSceneId
+  entities: state.engine_state?.entities,
+  activeSceneId: state.engine_state?.core.activeSceneId
 }))(SceneGraph);

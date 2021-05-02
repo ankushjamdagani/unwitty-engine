@@ -34,7 +34,7 @@ const EditorCanvas = ({
 
   return (
     <>
-      {gameNotPlaying && (
+      {gameNotPlaying && engine && (
         <Grid
           gameKey={key}
           showRuler={showRuler}
@@ -47,6 +47,6 @@ const EditorCanvas = ({
 };
 
 export default connect(state => ({
-  activeSceneId: state.engine_state.core.activeSceneId,
-  gameState: state.engine_state.core.gameState
+  activeSceneId: state.engine_state?.core.activeSceneId,
+  gameState: state.engine_state?.core.gameState
 }))(EditorCanvas);

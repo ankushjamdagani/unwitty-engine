@@ -17,10 +17,11 @@ import '../styles/main.css';
 import { DataStore } from '@unwitty/core';
 
 import theme from '../styles/theme';
-import reducer from '../dataStore/reducers';
+import reducer from '../dataStore/reducer';
 
-!DataStore.store && DataStore.configureStore();
-DataStore.reducerManager.add('app_state', reducer);
+!DataStore.store
+  ? DataStore.configureStore({}, { app_state: reducer })
+  : DataStore.reducerManager.add('app_state', reducer);
 
 export default function MyApp({ Component, pageProps }) {
   return (
