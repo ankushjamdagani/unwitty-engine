@@ -1,1 +1,1 @@
-# @unwitty/editor
+# @unwitty/app

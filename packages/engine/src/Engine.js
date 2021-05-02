@@ -1,5 +1,3 @@
-import './styles.css';
-
 import {
   DomManager,
   EntityManager,
@@ -39,13 +37,8 @@ class Engine extends Base {
   constructor(props) {
     super(props);
 
-    const {
-      key,
-      smoothImage = false,
-      timeScale = 1,
-      fps = 100,
-      gridSize = 50
-    } = props || {};
+    const { key, smoothImage = false, timeScale = 1, fps = 60, gridSize = 50 } =
+      props || {};
 
     for (const rp of REQUIRED_PROPS) {
       if (!props.hasOwnProperty(rp)) {

@@ -17,6 +17,12 @@ import global from './global';
  */
 import Button from './components/Button';
 
+/**
+ * Partials Overrides
+ * ===================
+ */
+import fonts from './partials/fonts';
+
 export const _theme = {
   ...color,
   ...layout,
@@ -29,5 +35,6 @@ export default extendTheme({
   global,
   components: {
     Button
-  }
+  },
+  fonts
 });

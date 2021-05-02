@@ -28,12 +28,12 @@ const EngineWrapper = {
 
     const engine = new Engine(props);
 
-    this.seInstance(engine);
+    this.setInstance(engine);
 
     return engine;
   },
 
-  seInstance: function (engine) {
+  setInstance: function (engine) {
     if (!this.instances) {
       this.instances = {};
       window.__UNWITTY_INSTANCE__ = {};

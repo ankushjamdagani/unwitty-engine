@@ -15,19 +15,22 @@ import * as Actions from './reducers/actions';
 const DataStore = {
   store: null,
   reducerManager: null,
+  defaultReducer: 'engine_state',
 
-  getData(context, reducer = 'engine_state') {
+  getData(context, reducer) {
+    const _reducer = reducer || this.defaultReducer;
     return context
-      ? this.store.getState()[reducer][context]
-      : this.store.getState()[reducer];
+      ? this.store.getState()[_reducer][context]
+      : this.store.getState()[_reducer];
   },
 
-  setData(dataGetter, context, reducer = 'engine_state') {
+  setData(dataGetter, context, reducer) {
+    const _reducer = reducer || this.defaultReducer;
     if (typeof dataGetter === 'function') {
-      const _data = produce(DataStore.getData(context, reducer), dataGetter);
-      this.store.dispatch(Actions.setData(_data, context, reducer));
+      const _data = produce(DataStore.getData(context, _reducer), dataGetter);
+      this.store.dispatch(Actions.setData(_data, context, _reducer));
     } else {
-      this.store.dispatch(Actions.setData(dataGetter, context, reducer));
+      this.store.dispatch(Actions.setData(dataGetter, context, _reducer));
     }
   },
 
@@ -56,12 +59,13 @@ const DataStore = {
     return this.store;
   },
 
-  observeStore(select, onChange, reducer = 'engine_state') {
+  observeStore(select, onChange, reducer) {
     const self = this;
     let currentState;
+    const _reducer = reducer || this.defaultReducer;
 
     function handleChange() {
-      const nextState = select(self.store.getState()[reducer]);
+      const nextState = select(self.store.getState()[_reducer]);
       if (nextState !== currentState) {
         currentState = nextState;
         onChange(currentState);

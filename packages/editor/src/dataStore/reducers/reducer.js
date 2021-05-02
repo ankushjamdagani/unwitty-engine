@@ -1,6 +1,6 @@
 import { SYNC, CLEAR } from './actionTypes';
 
-const INITIAL_STATE = {};
+const INITIAL_STATE = { test: 1 };
 
 export default function reducer(state = INITIAL_STATE, action) {
   switch (action.type) {

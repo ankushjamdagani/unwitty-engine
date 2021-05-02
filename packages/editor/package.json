@@ -1,7 +1,7 @@
 {
   "name": "@unwitty/editor",
   "version": "0.1.0",
-  "description": "Unwitty Engine GUI game editor",
+  "description": "Unwitty editor web app",
   "main": "src/index.js",
   "repository": {
     "type": "git",
@@ -15,32 +15,27 @@
   "author": "AnkushJ <anqush.jamdagani@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "snowpack build"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
   },
-  "devDependencies": {
+  "dependencies": {
     "@chakra-ui/react": "^1.5.0",
     "@emotion/react": "^11.1.5",
     "@emotion/styled": "^11.1.5",
-    "@unwitty/core": "^0.1.0",
-    "@unwitty/engine": "^0.1.0",
+    "@fontsource/open-sans": "^4.2.2",
+    "@fontsource/press-start-2p": "^4.2.2",
+    "@fontsource/raleway": "^4.2.2",
+    "@fontsource/roboto-mono": "^4.2.2",
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
+    "a11y-react-emoji": "^1.1.3",
     "framer-motion": "^4.1.3",
     "immer": "^9.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.3",
-    "redux": "^4.0.5"
-  },
-  "peerDependencies": {
-    "@chakra-ui/react": "^1.5.0",
-    "@emotion/react": "^11.1.5",
-    "@emotion/styled": "^11.1.5",
-    "@unwitty/core": "^0.1.0",
-    "@unwitty/engine": "^0.1.0",
-    "framer-motion": "^4.1.3",
-    "immer": "^9.0.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-redux": "^7.2.3",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "next": "latest"
   }
 }

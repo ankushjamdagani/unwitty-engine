@@ -1,8 +1,11 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../build/editor",
-    "declaration": true
+    "outDir": "../../build/app",
+    "declaration": true,
+    "jsx": "preserve",
+    "lib": ["dom", "dom.iterable", "esnext"]
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["node_modules"]
 }

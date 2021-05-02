@@ -15,6 +15,16 @@ class DomManager extends Base {
     this.initCoreStructure(data);
   }
 
+  /**
+   * DOM structure
+   * =============
+   * key
+   *    .unwitty_game_wrapper
+   *        .unwitty_game_overlays_wrapper
+   *        .unwitty_game_canvas_wrapper
+   *            .unwitty_game_canvas
+   */
+
   initCoreStructure({ key }) {
     const gameWrapper = document.getElementById(key) || document.body;
     const { width, height } = gameWrapper.getBoundingClientRect();
@@ -35,6 +45,51 @@ class DomManager extends Base {
 
     wrapper.appendChild(overlaysWrapper);
     wrapper.appendChild(canvasWrapper);
+
+    const style = document.createElement('style');
+    // style.sheet.insertRule(`
+    style.innerHTML = `
+      .unwitty_game_wrapper {
+        // background: #212121;
+        // background: #232a2e;
+        // background: #1e2528;
+        // /* background: white; */
+        position: relative;
+      }
+      
+      .unwitty_game_canvas_wrapper {
+        height: 100%;
+        width: 100%;
+        position: relative;
+      }
+      
+      .unwitty_game_canvas_wrapper canvas {
+        background: transparent;
+        margin: 0 auto;
+        display: block;
+        cursor: crosshair;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        font-smooth: never;
+        -webkit-font-smoothing: none;
+        height: 100%;
+        width: 100%;
+      }
+      
+      .unwitty_game_overlays_wrapper {
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+      }
+    `;
+    document.head.appendChild(style);
 
     DataStore.setData(core => {
       core.width = width;
