@@ -24,14 +24,17 @@ enableMapSet();
 // for redux store
 
 const EngineWrapper = {
-  init: function init(props) {
+  init: function init(initialState) {
     !DataStore.store
-      ? DataStore.configureStore({ engine_state: reducer })
+      ? DataStore.configureStore(
+          { engine_state: initialState },
+          { engine_state: reducer }
+        )
       : DataStore.reducerManager.add('engine_state', reducer);
 
     DataStore.defaultReducer = 'engine_state';
 
-    const engine = new Engine(props);
+    const engine = new Engine(initialState);
 
     this.setInstance(engine);
 

@@ -1,11 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 import { Heading, Grid, Box, Flex, Tag } from '@chakra-ui/react';
 import ClearIcon from '@material-ui/icons/Clear';
 
+import ProjectAPI from '../../../api/project';
+
 import { ColorRadioSelect } from '../../_shared';
 import NewProject from './New';
+import LoadingProject from './Loading';
 import ExistingProject from './Existing';
 
 import colors from '../../../constants/colors';
@@ -13,12 +16,13 @@ import colors from '../../../constants/colors';
 function ProjectsList() {
   const router = useRouter();
   const [selectedColor, setSelectedColor] = useState('');
-  const [projects] = useState([
-    { id: 1619442850092, name: 'Project 1', color: 'gray', thumb: null },
-    { id: 1619442851703, name: 'Project 2', color: 'red', thumb: null },
-    { id: 1619442853552, name: 'Project 3', color: 'green', thumb: null },
-    { id: 1619443195452, name: 'asdasd', color: 'gray', thumb: null }
-  ]);
+  const [projects, setProjects] = useState(null);
+
+  useEffect(() => {
+    ProjectAPI.listProjects().then(resp => {
+      setProjects(resp.data || []);
+    });
+  }, []);
 
   const onSelectProject = key => {
     router.push('/project/' + (key || ''));
@@ -26,7 +30,7 @@ function ProjectsList() {
 
   const filteredProjects = !selectedColor
     ? projects
-    : projects.filter(p => p.color === selectedColor);
+    : projects?.filter(p => p.color === selectedColor);
 
   return (
     <>
@@ -59,19 +63,23 @@ function ProjectsList() {
           gridGap={4}
         >
           <NewProject onClick={onSelectProject} />
-          {filteredProjects.map(proj => (
-            <ExistingProject
-              key={proj.id}
-              id={proj.id}
-              name={proj.name}
-              color={proj.color}
-              thumbnail={
-                proj.thumb ||
-                'https://i.pinimg.com/236x/77/6d/47/776d471a75cd57ab23d63c893852cb4a.jpg'
-              }
-              onClick={onSelectProject}
-            />
-          ))}
+          {filteredProjects ? (
+            filteredProjects.map(proj => (
+              <ExistingProject
+                key={proj.slug}
+                id={proj.slug}
+                name={proj.name}
+                color={proj.color}
+                thumbnail={
+                  proj.thumb ||
+                  'https://i.pinimg.com/236x/77/6d/47/776d471a75cd57ab23d63c893852cb4a.jpg'
+                }
+                onClick={onSelectProject}
+              />
+            ))
+          ) : (
+            <LoadingProject />
+          )}
         </Grid>
       </Box>
     </>

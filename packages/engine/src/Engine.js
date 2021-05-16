@@ -37,11 +37,17 @@ class Engine extends Base {
   constructor(props) {
     super(props);
 
-    const { key, smoothImage = false, timeScale = 1, fps = 60, gridSize = 50 } =
-      props || {};
+    const coreProps = (props || {}).core || {};
+    const {
+      key,
+      smoothImage = false,
+      timeScale = 1,
+      fps = 60,
+      gridSize = 50
+    } = coreProps;
 
     for (const rp of REQUIRED_PROPS) {
-      if (!props.hasOwnProperty(rp)) {
+      if (!coreProps.hasOwnProperty(rp)) {
         throw new Error(`Missing mandatory prop - ${rp}`);
       }
     }

@@ -20,6 +20,16 @@ import colors from '../../constants/colors';
 
 import ProjectAPI from '../../api/project';
 
+const defaultProjectConfig = {
+  core: {
+    smoothImage: false,
+    timeScale: 1,
+    fps: 60,
+    debug: true,
+    gridSize: 50
+  }
+};
+
 export default function AddProjectPage() {
   const initialRef = useRef();
   const [name, setName] = useState('');
@@ -39,14 +49,25 @@ export default function AddProjectPage() {
         throw new Error('Project name empty or same name already exists.');
       }
 
+      const slug = name.toLowerCase().replaceAll(' ', '-');
       const resp = await ProjectAPI.saveProject({
-        key: name.toLowerCase().replaceAll(' ', '-'),
+        slug,
         name,
         color,
-        thumb: null
+        thumb: null,
+        config: {
+          engine: {
+            ...defaultProjectConfig,
+            core: {
+              key: slug,
+              ...defaultProjectConfig.core
+            }
+          },
+          editor: {}
+        }
       });
 
-      router.push({ pathname: '/project/' + resp.key });
+      router.push({ pathname: '/project/' + resp.data.slug });
     } catch (error) {
       setError(error.message);
     }

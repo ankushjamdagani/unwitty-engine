@@ -3,7 +3,7 @@ import Engine from '@unwitty/engine';
 
 const { Body, Transform, Camera } = Engine.Entity;
 
-export default function mountGame(engine, config) {
+export default function mountGame(engine) {
   const { entityManager, gridManager } = engine.managers;
   const width = window.innerWidth;
   const height = window.innerHeight;

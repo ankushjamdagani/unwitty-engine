@@ -1,35 +1,35 @@
-import { useEffect, useRef } from 'react';
+import React from 'react';
 import Engine from '@unwitty/engine';
 
-import mountGame from './mountGame';
+import mountGame from './../../../helperHooks/mountGame';
 
-export default function EngineComp({ key, config, onReady: cb }) {
-  const engine = useRef();
+class EngineWrapper extends React.Component {
+  componentDidMount() {
+    const { config, setEngine } = this.props;
 
-  useEffect(() => {
-    const onReady = () => {
-      console.log('------------ ENGINE READY ------------');
-      mountGame(engine.current, config);
-      cb(engine.current);
-    };
+    const instance = Engine.init(config);
 
-    Engine.init({
-      key,
-      smoothImage: false,
-      timeScale: 1,
-      fps: 60,
-      debug: true,
-      gridSize: 80
+    instance.addEventListener('on_ready', () => {
+      mountGame(instance);
+      setEngine(instance);
+      console.log('-> ENGINE READY');
     });
+  }
 
-    engine.current = Engine.getInstance(key);
+  componentWillUnmount() {
+    this.props?.engine?.destroy();
+  }
 
-    engine.current.addEventListener('on_ready', onReady);
-
-    return () => {
-      engine.current.removeEventListener('on_ready', onReady);
-    };
-  }, [key, config, cb]);
-
-  return null;
+  render() {
+    const { projectId } = this.props;
+    return (
+      <div
+        id={`${projectId}_wrapper`}
+        className='unwitty_game_wrapper'
+        ref={el => (this.el = el)}
+      />
+    );
+  }
 }
+
+export default EngineWrapper;

@@ -18,9 +18,10 @@ import { DataStore } from '@unwitty/core';
 
 import theme from '../styles/theme';
 import reducer from '../dataStore/reducer';
+import initialState from '../dataStore/reducer/initialState';
 
 !DataStore.store
-  ? DataStore.configureStore({}, { app_state: reducer })
+  ? DataStore.configureStore(initialState, { app_state: reducer })
   : DataStore.reducerManager.add('app_state', reducer);
 
 export default function MyApp({ Component, pageProps }) {

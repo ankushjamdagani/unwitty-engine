@@ -29,75 +29,88 @@ class DomManager extends Base {
     const gameWrapper = document.getElementById(key) || document.body;
     const { width, height } = gameWrapper.getBoundingClientRect();
 
-    const wrapper = document.createElement('div');
-    wrapper.setAttribute('class', `unwitty_game_wrapper`);
-    wrapper.setAttribute('id', `${key}_wrapper`);
+    let wrapper = gameWrapper.querySelector(`${key}_wrapper`);
+    if (!wrapper) {
+      wrapper = document.createElement('div');
+      wrapper.setAttribute('id', `${key}_wrapper`);
+      wrapper.setAttribute('class', `unwitty_game_wrapper`);
+      gameWrapper.appendChild(wrapper);
+    }
     wrapper.style.width = `${width}px`;
     wrapper.style.height = `${height}px`;
 
-    const overlaysWrapper = document.createElement('div');
-    overlaysWrapper.setAttribute('class', `unwitty_game_overlays_wrapper`);
-    overlaysWrapper.setAttribute('id', `${key}_overlays_wrapper`);
+    let overlaysWrapper = gameWrapper.querySelector(`${key}_overlays_wrapper`);
+    if (!overlaysWrapper) {
+      overlaysWrapper = document.createElement('div');
+      overlaysWrapper.setAttribute('class', `unwitty_game_overlays_wrapper`);
+      overlaysWrapper.setAttribute('id', `${key}_overlays_wrapper`);
+      wrapper.appendChild(overlaysWrapper);
+    }
 
-    const canvasWrapper = document.createElement('div');
-    canvasWrapper.setAttribute('class', `unwitty_game_canvas_wrapper`);
-    canvasWrapper.setAttribute('id', `${key}_canvas_wrapper`);
+    let canvasWrapper = gameWrapper.querySelector(`${key}_canvas_wrapper`);
+    if (!canvasWrapper) {
+      canvasWrapper = document.createElement('div');
+      canvasWrapper.setAttribute('class', `unwitty_game_canvas_wrapper`);
+      canvasWrapper.setAttribute('id', `${key}_canvas_wrapper`);
+      wrapper.appendChild(canvasWrapper);
+    }
 
-    wrapper.appendChild(overlaysWrapper);
-    wrapper.appendChild(canvasWrapper);
-
-    const style = document.createElement('style');
-    // style.sheet.insertRule(`
-    style.innerHTML = `
-      .unwitty_game_wrapper {
-        // background: #212121;
-        // background: #232a2e;
-        // background: #1e2528;
-        // /* background: white; */
-        position: relative;
-      }
-      
-      .unwitty_game_canvas_wrapper {
-        height: 100%;
-        width: 100%;
-        position: relative;
-      }
-      
-      .unwitty_game_canvas_wrapper canvas {
-        background: transparent;
-        margin: 0 auto;
-        display: block;
-        cursor: crosshair;
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        font-smooth: never;
-        -webkit-font-smoothing: none;
-        height: 100%;
-        width: 100%;
-      }
-      
-      .unwitty_game_overlays_wrapper {
-        height: 100%;
-        width: 100%;
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
-      }
-    `;
-    document.head.appendChild(style);
+    let style = document.getElementById('unwitty_engine_styles');
+    if (!style) {
+      style = document.createElement('style');
+      style.setAttribute('id', `unwitty_engine_styles`);
+      // style.sheet.insertRule(`
+      style.innerHTML = `
+        .unwitty_game_wrapper {
+          position: relative;
+          /* 
+            background: #212121;
+            background: #232a2e;
+            background: #1e2528;
+            background: white;
+          */
+        }
+        
+        .unwitty_game_canvas_wrapper {
+          height: 100%;
+          width: 100%;
+          position: relative;
+        }
+        
+        .unwitty_game_canvas_wrapper canvas {
+          background: transparent;
+          margin: 0 auto;
+          display: block;
+          cursor: crosshair;
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 0;
+          bottom: 0;
+          font-smooth: never;
+          -webkit-font-smoothing: none;
+          height: 100%;
+          width: 100%;
+        }
+        
+        .unwitty_game_overlays_wrapper {
+          height: 100%;
+          width: 100%;
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 0;
+          bottom: 0;
+        }
+      `;
+      document.head.appendChild(style);
+    }
 
     DataStore.setData(core => {
       core.width = width;
       core.height = height;
       core.aspectRatio = width / height;
     }, 'core');
-
-    gameWrapper.appendChild(wrapper);
 
     this.addCanvas(MID_CANVAS_KEY);
   }

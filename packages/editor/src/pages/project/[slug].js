@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
-import useEngine from '../../helperHooks/useEngine';
+import usePrevious from '../../helperHooks/usePrevious';
 import ProjectAPI from '../../api/project';
 
-import { Editor } from '../../components/modules';
+import { Editor, Engine } from '../../components/modules';
 import { LoaderBasic } from '../../components/_shared';
 
 const defaultStyles = {
@@ -17,31 +17,41 @@ const defaultStyles = {
 
 export default function ProjectPage() {
   const router = useRouter();
+
+  const [loading, setLoading] = useState();
+
   const [projectId, setProjectId] = useState();
-  const [loading, setLoaading] = useState();
-  const [engine, mountEngine] = useEngine();
+  const prevProjectId = usePrevious(projectId);
+
+  const [projectConfig, setProjectConfig] = useState();
+
+  const [engine, setEngine] = useState();
 
   useEffect(() => {
-    if (loading || !projectId || engine) {
+    if (prevProjectId === projectId) {
       return;
     }
 
-    setLoaading(true);
+    setLoading(true);
     ProjectAPI.loadProject(projectId).then(res => {
-      mountEngine(res.data);
-      setTimeout(() => {
-        setLoaading(false);
-      }, 0);
+      if (!res.data) {
+        router.push('/');
+      } else {
+        setProjectConfig(res.data.config);
+        setTimeout(() => {
+          setLoading(false);
+        }, 0);
+      }
     });
-  }, [loading, projectId, mountEngine, engine]);
+  }, [router, projectId, prevProjectId]);
 
   useEffect(() => {
     if (router.isReady) {
-      setProjectId(router.query.id);
+      setProjectId(router.query.slug);
     }
-  }, [router.isReady, router.query.id]);
+  }, [router.isReady, router.query.slug]);
 
-  return projectId ? (
+  return projectId && !loading ? (
     <div
       id={projectId}
       style={{
@@ -56,7 +66,13 @@ export default function ProjectPage() {
         style={defaultStyles}
       >
         <div id='unwitty_editor_app_wrapper' style={defaultStyles}>
-          <Editor projectId={projectId} engine={engine} />
+          {projectConfig && (
+            <Editor
+              projectId={projectId}
+              engine={engine}
+              config={projectConfig.editor}
+            />
+          )}
         </div>
         <div id='unwitty_editor_canvas_wrapper' style={defaultStyles}>
           <canvas
@@ -66,6 +82,14 @@ export default function ProjectPage() {
           ></canvas>
         </div>
       </div>
+      {projectConfig && (
+        <Engine
+          engine={engine}
+          projectId={projectId}
+          config={projectConfig.engine}
+          setEngine={setEngine}
+        />
+      )}
     </div>
   ) : (
     <LoaderBasic />
