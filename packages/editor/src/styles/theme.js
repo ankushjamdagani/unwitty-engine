@@ -16,6 +16,7 @@ import global from './global';
  * ===================
  */
 import Button from './components/Button';
+import Heading from './components/Heading';
 
 /**
  * Partials Overrides
@@ -34,7 +35,8 @@ export default extendTheme({
   config: { initialColorMode: 'dark', useSystemColorMode: false },
   global,
   components: {
-    Button
+    Button,
+    Heading
   },
   fonts
 });

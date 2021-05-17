@@ -37,7 +37,7 @@ export default function ProjectPage() {
       if (!res.data) {
         router.push('/');
       } else {
-        setProjectConfig(res.data.config);
+        setProjectConfig(res.data);
         setTimeout(() => {
           setLoading(false);
         }, 0);
@@ -70,7 +70,7 @@ export default function ProjectPage() {
             <Editor
               projectId={projectId}
               engine={engine}
-              config={projectConfig.editor}
+              config={projectConfig}
             />
           )}
         </div>
@@ -86,7 +86,7 @@ export default function ProjectPage() {
         <Engine
           engine={engine}
           projectId={projectId}
-          config={projectConfig.engine}
+          config={projectConfig.config.engine}
           setEngine={setEngine}
         />
       )}

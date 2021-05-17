@@ -1,6 +1,6 @@
 const global = {
   'html, body': {
-    fontSize: 'md',
+    fontSize: 'sm',
     color: 'white',
     lineHeight: 'tall',
     scrollBehavior: 'smooth',

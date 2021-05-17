@@ -1,10 +1,10 @@
 const Heading = {
   variants: {
     normal: {
-      fontFamily: 'Open Sans'
+      fontFamily: 'Raleway'
     },
     otherNormal: {
-      fontFamily: 'Raleway'
+      fontFamily: 'Open Sans'
     },
     mono: {
       fontFamily: 'Roboto Mono'

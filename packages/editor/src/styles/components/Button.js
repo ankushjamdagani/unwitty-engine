@@ -1,18 +1,24 @@
 const Button = {
   // The styles all button have in common
   baseStyle: {
-    fontWeight: 'bold',
-    textTransform: 'uppercase'
+    fontWeight: 'semiBold',
+    borderRadius: 'sm'
   },
-  // Two sizes: sm and md
   sizes: {
-    sm: {
+    xs: {
       fontSize: '12px',
-      padding: '16px'
+      padding: '4px 8px',
+      height: '24px'
+    },
+    sm: {
+      fontSize: '15px',
+      padding: '4px 8px',
+      height: '32px'
     },
     md: {
-      fontSize: '16px',
-      padding: '24px'
+      fontSize: '15px',
+      padding: '8px 16px',
+      height: '36px'
     }
   },
   // Two variants: outline and solid

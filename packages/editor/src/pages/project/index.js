@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 
 import {
@@ -31,7 +31,6 @@ const defaultProjectConfig = {
 };
 
 export default function AddProjectPage() {
-  const initialRef = useRef();
   const [name, setName] = useState('');
   const [color, setColor] = useState(colors[0]);
   const [error, setError] = useState('');
@@ -98,7 +97,6 @@ export default function AddProjectPage() {
                   <FormLabel isRequired>Name</FormLabel>
                   <Input
                     type='text'
-                    ref={initialRef}
                     placeholder='Project Name'
                     value={name}
                     onChange={e => setName(e.target.value)}
@@ -121,13 +119,11 @@ export default function AddProjectPage() {
                   />
                 </FormControl>
               </Box>
-              <Flex flexDirection='row-reverse'>
-                <Button onClick={onCancel} size='sm'>
+              <Flex flexDirection='row' justifyContent='flex-end'>
+                <Button variant='ghost' onClick={onCancel} mr={2}>
                   Cancel
                 </Button>
-                <Button colorScheme='white' mr={3} size='sm' type='submit'>
-                  Save
-                </Button>
+                <Button type='submit'>Save</Button>
               </Flex>
             </form>
           </Box>

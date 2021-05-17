@@ -21,7 +21,10 @@ import reducer from '../dataStore/reducer';
 import initialState from '../dataStore/reducer/initialState';
 
 !DataStore.store
-  ? DataStore.configureStore(initialState, { app_state: reducer })
+  ? DataStore.configureStore(
+      { app_state: initialState },
+      { app_state: reducer }
+    )
   : DataStore.reducerManager.add('app_state', reducer);
 
 export default function MyApp({ Component, pageProps }) {

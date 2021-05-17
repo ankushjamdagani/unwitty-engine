@@ -106,7 +106,7 @@ export default function IndexPage() {
           <List spacing={3}>
             {DOCS_LINKS.map(dl => (
               <ListItem key={dl.label}>
-                <LaunchIcon style={{ fontSize: 16 }} />
+                <LaunchIcon style={{ fontSize: 18 }} />
                 <Link href={dl.url} ml={2}>
                   {dl.label}
                 </Link>

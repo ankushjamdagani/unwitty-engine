@@ -158,7 +158,7 @@ export default function mountGame(engine) {
   });
 
   entityManager.bindCamera(runner);
-  engine.changeActiveScene(defaultScene1.id);
+  engine.changeActiveScene(defaultScene.id);
 
   engine.addEventListener('before_destroy', () => {
     clearTimeout(intervalId);
