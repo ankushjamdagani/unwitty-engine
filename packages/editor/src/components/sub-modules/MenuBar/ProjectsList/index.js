@@ -1,15 +1,19 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 
-import { Box, Text, Flex, Spinner, Tag, Input, Button } from '@chakra-ui/react';
-import FolderIcon from '@material-ui/icons/Folder';
-import FolderOpenIcon from '@material-ui/icons/FolderOpen';
+import {
+  Box,
+  Text,
+  Flex,
+  Spinner,
+  Tag,
+  Input,
+  Button,
+  IconButton
+} from '@chakra-ui/react';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ClearIcon from '@material-ui/icons/Clear';
-import ReplayIcon from '@material-ui/icons/Replay';
-import NoteAddIcon from '@material-ui/icons/NoteAdd';
 
-import { Popover, ColorRadioSelect } from '../../../_shared';
+import { Popover, ColorRadioSelect, Icon } from '../../../_shared';
 
 import ProjectAPI from '../../../../api/project';
 import colors from '../../../../constants/colors';
@@ -51,18 +55,22 @@ const ProjectsList = ({ activeProjectId, ...props }) => {
       placement='bottom-start'
       initialFocusRef={initialRef}
       trigger={
-        <Flex
-          alignItems='center'
+        <IconButton
+          size='sm'
+          variant='ghost'
+          aria-label='Preferences Menu'
+          icon={
+            isOpen ? (
+              <Icon type='folder' size='lg' />
+            ) : (
+              <Icon type='folder_open' size='lg' />
+            )
+          }
+          isActive={isOpen}
+          borderRadius='none'
           onClick={() => setOpen(true)}
-          cursor='pointer'
           {...props}
-        >
-          {isOpen ? (
-            <FolderIcon style={{ fontSize: 18 }} />
-          ) : (
-            <FolderOpenIcon style={{ fontSize: 18 }} />
-          )}
-        </Flex>
+        />
       }
       content={
         <Flex maxHeight='60vh' minHeight='240px' py='2'>
@@ -84,7 +92,7 @@ const ProjectsList = ({ activeProjectId, ...props }) => {
                 title='New Project'
                 onClick={() => onSelectProject(null)}
               >
-                <NoteAddIcon style={{ fontSize: 18 }} />
+                <Icon type='note_add' size='xl' />
               </Button>
             </Flex>
 
@@ -97,7 +105,7 @@ const ProjectsList = ({ activeProjectId, ...props }) => {
                 title='Reload Projects'
                 onClick={() => setProjects(null)}
               >
-                <ReplayIcon style={{ fontSize: 18 }} />
+                <Icon type='replay' size='xl' />
               </Button>
             </Flex>
           </Flex>
@@ -116,7 +124,7 @@ const ProjectsList = ({ activeProjectId, ...props }) => {
                     size='sm'
                     px='1'
                   >
-                    <ClearIcon style={{ fontSize: 12 }} />
+                    <Icon type='clear' size='sm' />
                   </Tag>
                 )}
                 <ColorRadioSelect
@@ -153,7 +161,7 @@ const ProjectsList = ({ activeProjectId, ...props }) => {
                   right='6'
                   top='6px'
                 >
-                  <ClearIcon style={{ fontSize: 12 }} />
+                  <Icon type='clear' size='sm' />
                 </Tag>
               )}
             </Box>

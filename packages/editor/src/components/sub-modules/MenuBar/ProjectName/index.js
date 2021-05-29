@@ -9,9 +9,8 @@ import {
   Button,
   Input
 } from '@chakra-ui/react';
-import EditIcon from '@material-ui/icons/Edit';
 
-import Popover from '../../../_shared/Popover';
+import { Icon, Popover } from '../../../_shared';
 
 const ProjectName = ({ name, setName }) => {
   const [editing, setEditing] = useState(false);
@@ -25,21 +24,21 @@ const ProjectName = ({ name, setName }) => {
       onClose={() => setEditing(false)}
       placement='bottom-start'
       trigger={
-        <Flex alignItems='center' onClick={() => setEditing(true)}>
-          <Text
-            _hover={{ textDecoration: 'underline', cursor: 'pointer' }}
-            textDecoration={editing ? 'underline' : 'initial'}
-          >
-            {name}
-          </Text>
-        </Flex>
+        <Button
+          onClick={() => setEditing(true)}
+          variant='link'
+          size='sm'
+          textDecoration={editing ? 'underline' : 'initial'}
+        >
+          {name}
+        </Button>
       }
       content={
         <Box p='4'>
           <FormControl isInvalid={error}>
             <FormLabel>
               <Flex alignItems='center'>
-                <EditIcon style={{ fontSize: 18 }} />
+                <Icon type='edit' size='lg' />
                 <Text ml='1'>Edit Name</Text>
               </Flex>
             </FormLabel>
