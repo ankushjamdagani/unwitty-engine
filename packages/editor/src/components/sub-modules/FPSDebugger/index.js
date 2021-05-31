@@ -7,7 +7,7 @@ import { Panel } from '../../_shared';
 
 const { GAME_STATES } = constants;
 
-const FPSDebugger = ({ fps, timeScale, gameState }) => (
+const FPSDebugger = ({ fps, timeScale, gameState, isLoading }) => (
   <Panel>
     <StatGroup
       p={4}
@@ -18,16 +18,24 @@ const FPSDebugger = ({ fps, timeScale, gameState }) => (
       flexShrink={0}
       width='180px'
     >
-      <Stat>
-        <StatLabel fontSize='xs'>FPS</StatLabel>
-        <StatNumber>{gameState === GAME_STATES.PLAY ? fps : '-'}</StatNumber>
-      </Stat>
-      <Stat>
-        <StatLabel fontSize='xs'>Time Scale</StatLabel>
-        <StatNumber>
-          {gameState === GAME_STATES.PLAY ? timeScale : '-'}
-        </StatNumber>
-      </Stat>
+      {isLoading ? (
+        'Loading...'
+      ) : (
+        <>
+          <Stat>
+            <StatLabel fontSize='xs'>FPS</StatLabel>
+            <StatNumber>
+              {gameState === GAME_STATES.PLAY ? fps : '-'}
+            </StatNumber>
+          </Stat>
+          <Stat>
+            <StatLabel fontSize='xs'>Time Scale</StatLabel>
+            <StatNumber>
+              {gameState === GAME_STATES.PLAY ? timeScale : '-'}
+            </StatNumber>
+          </Stat>
+        </>
+      )}
     </StatGroup>
   </Panel>
 );

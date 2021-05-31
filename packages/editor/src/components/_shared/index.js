@@ -5,5 +5,6 @@ export { default as ColorRadioSelect } from './ColorRadioSelect';
 
 export { default as Popover } from './Popover';
 
+export { default as LayoutDropArea } from './LayoutDropArea';
 export { default as Panel } from './Panel';
 export { default as LoaderBasic } from './LoaderBasic';

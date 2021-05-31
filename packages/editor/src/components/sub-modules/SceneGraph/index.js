@@ -7,7 +7,7 @@ import DataStoreContext from '../../../dataStore/context';
 import { Panel } from '../../_shared';
 import Node from './Node';
 
-const SceneGraph = ({ entities, activeSceneId }) => {
+const SceneGraph = ({ entities, activeSceneId, isLoading }) => {
   const { engine } = useContext(DataStoreContext);
 
   const scenes = Object.values(entities || []).filter(
@@ -26,17 +26,19 @@ const SceneGraph = ({ entities, activeSceneId }) => {
         fontFamily='monospace'
         borderRight='dashed 1px #ffffff38'
       >
-        {scenes.map(sc => (
-          <Node
-            key={sc.id}
-            nodeId={sc.id}
-            entities={entities}
-            active={activeSceneId === sc.id}
-            onClick={() => {
-              engine.changeActiveScene(sc.id);
-            }}
-          />
-        ))}
+        {isLoading
+          ? 'Loading...'
+          : scenes.map(sc => (
+              <Node
+                key={sc.id}
+                nodeId={sc.id}
+                entities={entities}
+                active={activeSceneId === sc.id}
+                onClick={() => {
+                  engine.changeActiveScene(sc.id);
+                }}
+              />
+            ))}
       </Stack>
     </Panel>
   );

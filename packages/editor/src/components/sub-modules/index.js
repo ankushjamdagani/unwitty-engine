@@ -1,5 +1,6 @@
-export { default as StatusBar } from './StatusBar';
 export { default as MenuBar } from './MenuBar';
+export { default as ControlsBar } from './ControlsBar';
+export { default as StatusBar } from './StatusBar';
 
 export { default as EditorCanvas } from './EditorCanvas';
 export { default as FPSDebugger } from './FPSDebugger';

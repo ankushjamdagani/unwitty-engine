@@ -29,6 +29,7 @@ const ProjectName = ({ name, setName }) => {
           variant='link'
           size='sm'
           textDecoration={editing ? 'underline' : 'initial'}
+          height='32px'
         >
           {name}
         </Button>

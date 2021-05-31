@@ -1,4 +1,4 @@
-const SYNC = 'EDITOR_SYNC';
-const CLEAR = 'EDITOR_CLEAR';
+const SYNC = 'APP_SYNC';
+const CLEAR = 'APP_CLEAR';
 
 export { SYNC, CLEAR };
