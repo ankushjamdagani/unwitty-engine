@@ -26,6 +26,18 @@ export default {
     succss: PALLETE.green[0],
     disabled: PALLETE.black[4],
     loading: PALLETE.black[4],
-    background: PALLETE.black[0]
+    // --- new ---
+    background: PALLETE.black[0],
+    bgPrimary: '#2D3748',
+    bgSecondary: '#4A5568',
+    borderPrimary: '#718096',
+    borderSecondary: '#4A5568',
+    bgRed: '#F56565',
+    bgOrange: '#ED8936',
+    bgYellow: '#ECC94B',
+    bgGreen: '#48BB78',
+    bgBlue: '#4299E1',
+    bgPurple: '#9F7AEA',
+    bgGray: '#A0AEC0'
   }
 };

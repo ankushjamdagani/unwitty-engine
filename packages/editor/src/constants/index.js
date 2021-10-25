@@ -1,6 +1,11 @@
 export const LAYOUT_AREAS = {
-  TOP: 0,
-  RIGHT: 1,
-  BOTTOM: 2,
-  LEFT: 3
+  TOP: 1,
+  RIGHT: 2,
+  BOTTOM: 3,
+  LEFT: 4
+};
+
+export const ORIENTATION = {
+  HORIZONTAL: 1,
+  VERTICAL: 2
 };

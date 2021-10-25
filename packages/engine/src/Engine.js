@@ -84,16 +84,16 @@ class Engine extends Base {
     this.pause();
 
     setTimeout(() => {
-      this.dispatchEvent(new Event('on_ready'));
+      this.emit(new Event('on_ready'));
     });
   }
 
   destroy() {
-    this.dispatchEvent(new Event('before_destroy'));
+    this.emit(new Event('before_destroy'));
     cancelAnimationFrame(this.autoPilotCycle);
     this.autoPilotCycle = null;
     DataStore.clearData();
-    this.dispatchEvent(new Event('on_destroy'));
+    this.emit(new Event('on_destroy'));
   }
 
   initDomManager() {
@@ -189,10 +189,8 @@ class Engine extends Base {
   }
 
   tick(fromTime, toTime) {
-    const [
-      shouldUpdate,
-      { updateCount, fixedDelta, interpolationTime } = {}
-    ] = this.managers.timeManager.update(fromTime, toTime);
+    const [shouldUpdate, { updateCount, fixedDelta, interpolationTime } = {}] =
+      this.managers.timeManager.update(fromTime, toTime);
 
     if (shouldUpdate) {
       /**
@@ -219,20 +217,18 @@ class Engine extends Base {
   }
 
   update(deltaTime) {
-    this.dispatchEvent(
-      new CustomEvent('before_update', { detail: { deltaTime } })
-    );
+    this.emit(new CustomEvent('before_update', { detail: { deltaTime } }));
 
     this.managers.updateManager.updateTree(
       `world_${this.props.core.activeSceneId}`,
       deltaTime
     );
 
-    this.dispatchEvent(new CustomEvent('on_update', { detail: { deltaTime } }));
+    this.emit(new CustomEvent('on_update', { detail: { deltaTime } }));
   }
 
   render(interpolationTime) {
-    this.dispatchEvent(
+    this.emit(
       new CustomEvent('before_render', { detail: { interpolationTime } })
     );
 
@@ -240,9 +236,7 @@ class Engine extends Base {
       `world_${this.props.core.activeSceneId}`
     );
 
-    this.dispatchEvent(
-      new CustomEvent('on_render', { detail: { interpolationTime } })
-    );
+    this.emit(new CustomEvent('on_render', { detail: { interpolationTime } }));
   }
 
   play() {

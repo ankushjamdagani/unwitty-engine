@@ -9,7 +9,7 @@ export default function useEngine(props) {
   const mountEngine = useCallback(initialState => {
     const instance = Engine.init(initialState);
 
-    instance.addEventListener('on_ready', () => {
+    instance.on('on_ready', () => {
       mountGame(instance);
       setEngine(instance);
       console.log('-> ENGINE READY');

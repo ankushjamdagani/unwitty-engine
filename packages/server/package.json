@@ -1,0 +1,30 @@
+{
+  "name": "@unwitty/server",
+  "version": "0.1.0",
+  "description": "Unwitty editor server app",
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ankushjamdagani/unwitty-engine.git",
+    "directory": "packages/server"
+  },
+  "keywords": [
+    "unwitty-engine"
+  ],
+  "homepage": "https://unwitty-engine.vercel.app/",
+  "author": "AnkushJ <anqush.jamdagani@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongodb": "^4.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}

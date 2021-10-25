@@ -1,13 +1,13 @@
 const COLORS = [
-  'red',
-  'orange',
-  'yellow',
-  'green',
+  'Red',
+  'Orange',
+  'Yellow',
+  'Green',
   // 'teal',
-  'blue',
+  'Blue',
   // 'cyan',
-  'purple',
-  'gray'
+  'Purple',
+  'Gray'
   // 'pink'
 ];
 

@@ -1,18 +1,5 @@
-const EventTarget =
-  typeof window === 'undefined'
-    ? class MockEventTarget {
-        addEventListener() {
-          return this;
-        }
-        removeEventListener() {
-          return this;
-        }
-        dispatchEvent() {
-          return this;
-        }
-      }
-    : window.EventTarget;
+import { EventEmitter } from '@unwitty/core';
 
-class Base extends EventTarget {}
+class Base extends EventEmitter {}
 
 export default Base;

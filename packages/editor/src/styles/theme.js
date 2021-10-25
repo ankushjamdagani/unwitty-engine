@@ -38,5 +38,6 @@ export default extendTheme({
     Button,
     Heading
   },
-  fonts
+  fonts,
+  ...color
 });

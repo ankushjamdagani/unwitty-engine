@@ -160,7 +160,7 @@ export default function mountGame(engine) {
   entityManager.bindCamera(runner);
   engine.changeActiveScene(defaultScene.id);
 
-  engine.addEventListener('before_destroy', () => {
+  engine.on('before_destroy', () => {
     clearTimeout(intervalId);
     window.removeEventListener('keydown', onKeyDown);
     window.removeEventListener('mousemove', onMouseMove);
